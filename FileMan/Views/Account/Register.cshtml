@@ -1,0 +1,57 @@
+﻿@model FileMan.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = null;
+}
+@Styles.Render("~/Content/css")
+<style>
+    input {
+        max-width: 100%;
+    }
+</style>
+<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
+<link href="~/Content/LoginStyling.css" rel="stylesheet" />
+<div class="container">
+    <section id="content">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <h1>FileMan</h1>
+            <p>Create a new account.</p>
+            <br />
+            <div>
+                <div class="col-md-12">
+                    @Html.TextBoxFor(m => m.Email, new { @type = "text", placeholder = "Email...", @required = "" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                <div class="col-md-12">
+                    @Html.PasswordFor(m => m.Password, new { @type = "password", placeholder = "Password...", @required = "" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
+                <div class="col-md-12">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @type = "password", placeholder = "Confirm password...", @required = "" })
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+            <p>
+                @Html.ActionLink("< return to login", "Login")
+            </p>
+            <br />
+            @* Enable this once you have account confirmation enabled for password reset functionality
+            <p>
+                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+            </p>*@
+        }
+    </section><!-- content -->
+</div><!-- container -->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
