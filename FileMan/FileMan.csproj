@@ -217,10 +217,11 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Classes\HelperService.cs" />
+    <Compile Include="Classes\FileService.cs" />
     <Compile Include="Classes\ItemService.cs" />
     <Compile Include="Context\DatabaseCtx.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FileRevisionsController.cs" />
     <Compile Include="Controllers\FoldersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -362,6 +363,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\FileRevisions\" />
     <Folder Include="Views\Folders\" />
   </ItemGroup>
   <ItemGroup>

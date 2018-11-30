@@ -1,4 +1,5 @@
 ﻿@model FileMan.Models.ViewModels.MasterFileViewModel
+@using FileMan.Models
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
 @{
@@ -37,9 +38,9 @@
     <div class="input-group" style="margin-bottom:10px;">
         <span class="input-group-addon" id="sizing-addon1">Actions</span>
         <span class="input-group-btn" style="float:left">
-            <button class="btn btn-default" type="button">Add files</button>
-            <button class="btn btn-default" type="button">Edit</button>
-            <button class="btn btn-default" type="button">Delete</button>
+            <button class="btn btn-sm btn-default" type="button">Add files</button>
+            <button class="btn btn-sm btn-default" type="button">Edit</button>
+            <button class="btn btn-sm btn-default" type="button">Delete</button>
         </span>
     </div>
 </div>
@@ -91,49 +92,41 @@
     </div>
 
     <div class="panel panel-primary">
-        <div class="panel-heading">Files</div>
-        <table class="table table-striped table-hover table-condensed">
-            <thead>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Number</td>
-                    <td> @Html.DisplayFor(model => model.Current.Number)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Name</td>
-                    <td> @Html.DisplayFor(model => model.Current.Name)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Path</td>
-                    <td> @Html.DisplayFor(model => model.Current.Path)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Extension</td>
-                    <td> @Html.DisplayFor(model => model.Current.Extension)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Description</td>
-                    <td> @Html.DisplayFor(model => model.Current.Description)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Comment</td>
-                    <td> @Html.DisplayFor(model => model.Current.Comment)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Changelog</td>
-                    <td><span style="white-space: pre-line">@Model.Current.Changelog</span> </td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Added</td>
-                    <td> @Html.DisplayFor(model => model.Current.Added)</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:900; width:100px;" align="right">Edited</td>
-                    <td> @Html.DisplayFor(model => model.Current.Edited)</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="panel-heading">@Model.RevisionName (files: @Model.RevisionsCount, latest: @Model.LatestRevision) </div>
+        @if (Model.RevisionsCount > 0)
+        {
+            using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
+            {
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="font-weight:900; width:15px;" align="right">#</th>
+                            <th style="font-weight:900; width:250px;" align="right">Path</th>
+                            <th style="font-weight:900; width:100px;" align="right">Rev</th>
+                            <th style="font-weight:900; width:130px;" align="right">Added</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int counter = 0;}
+                        @foreach (FileRevision rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
+                        {
+                        <tr>
+                            
+                            <td>
+                                <input type="hidden" name="revisions.Index" value="@counter" />
+                                <input type="checkbox" name="revisions[@counter]" value=@rev.Id />
+                            </td>
+                            <td>@rev.FullPath</td>
+                            <td>@rev.Revision</td>
+                            <td>@rev.Added</td>
+                        </tr>
+                            counter++;
+                        }
+                    </tbody>
+                </table>
+                <button type="submit" name="action" value="csv" class="btn btn-sm btn-success">Go</button>
+            }
+        }
     </div>
 </div>
 

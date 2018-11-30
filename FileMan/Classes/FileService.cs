@@ -5,7 +5,8 @@ using System.Web;
 
 namespace FileMan.Classes
 {
-    public class HelperService
+    public class FileService
     {
+
     }
 }

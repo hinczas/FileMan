@@ -14,5 +14,9 @@ namespace FileMan.Models.ViewModels
     {
         public MasterFile Current { get; set; }
         public List<Folder> Breadcrumbs { get; set; }
+        public long LatestRevision { get; set; }
+        public long LatestRevisionId { get; set; }
+        public int RevisionsCount { get; set; }
+        public string RevisionName { get; set; }
     }
 }

@@ -131,5 +131,16 @@ namespace FileMan.Controllers
 
             return Redirect(Request.UrlReferrer.ToString());
         }
+
+        public ActionResult GetFile(long id)
+        {
+            FileRevision rev = _db.FileRevision.Find(id);
+
+            string path = rev.FullPath;
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            string fileName = rev.Name;
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);   
+
+        }
     }
 }

@@ -51,10 +51,20 @@ namespace FileMan.Classes
         public MasterFileViewModel GetMasterFileViewModel(long id)
         {
             var item = _db.MasterFile.Find(id);
+            var revisions = item.Revisions;
+            var latRev = revisions.Count == 0 ? 0 : revisions.Select(a => a.Revision).Max();
+            var revId = revisions.Count == 0 ? 0 : revisions.OrderByDescending(a => a.Revision).Take(1).Select(b => b.Id).FirstOrDefault();
+            var revNam = revisions.Count == 0 ? "N/A" : revisions.Where(a => a.Id == revId).FirstOrDefault().Name;
+            var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
+
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
-                Breadcrumbs = GetFileBreadcrumbs((long)item.FolderId)
+                Breadcrumbs = GetFileBreadcrumbs((long)item.FolderId),
+                LatestRevision = latRev,
+                LatestRevisionId = revId,
+                RevisionName = revNam,
+                RevisionsCount = revCnt
             };
             return file;
         }

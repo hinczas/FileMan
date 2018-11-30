@@ -17,5 +17,6 @@ namespace FileMan.Models.ViewModels
         public List<MasterFile> ChildrenFiles { get; set; }
         public List<Folder> Breadcrumbs { get; set; }
 
+
     }
 }
