@@ -138,3 +138,5 @@ C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.casc
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.newModels.resources
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.deleteItems.resources
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.csprojAssemblyReference.cache
+C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.revComment.resources
+C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.issueDraft.resources

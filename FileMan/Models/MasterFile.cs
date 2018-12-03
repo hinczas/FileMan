@@ -28,6 +28,7 @@ namespace FileMan.Models
         public string Changelog { get; set; }
         public DateTime? Added { get; set; }
         public DateTime? Edited { get; set; }
+        public long? Issue { get; set; }
 
         public virtual List<FileRevision> Revisions { get; set; }
     }

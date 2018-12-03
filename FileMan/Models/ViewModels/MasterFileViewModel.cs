@@ -18,5 +18,8 @@ namespace FileMan.Models.ViewModels
         public long LatestRevisionId { get; set; }
         public int RevisionsCount { get; set; }
         public string RevisionName { get; set; }
+        public string DraftVersion { get; set; }
+        public FileRevision LatestIssue { get; set; }
+        public FileRevision LatestDraft { get; set; }
     }
 }

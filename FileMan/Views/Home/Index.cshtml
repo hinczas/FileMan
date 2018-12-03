@@ -37,13 +37,22 @@
 </div>
 
 <div class="col-md-8">
-    <div class="input-group" style="margin-bottom:10px;">
+    <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
         <span class="input-group-addon" id="sizing-addon1">New</span>
         <span class="input-group-btn" style="float:left">
-            <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#filModal">File</button>
-            <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#dirModal">Folder</button>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">File</button>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Folder</button>
         </span>
     </div>
+</div>
+<div class="col-md-4">
+    <div class="input-group input-group-sm">
+        <input type="text" class="form-control" placeholder="Search for..." style="width:100%;">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+        </span>
+    </div><!-- /input-group -->
+
 </div>
 <div class="col-md-12">
     <table class="table table-condensed">
@@ -67,10 +76,10 @@
                     <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = "Directory" }) </td>
                     <td></td>
                     <td></td>
-                    <td style="white-space:nowrap; overflow-y:hidden; text-overflow:ellipsis;">@itm.Description</td>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
                     <td>@itm.Added</td>
                     <td>@itm.Edited</td>
-                    <td align="right">                        
+                    <td align="right">
                         <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
                         <span><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></span>
                         <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this folder and ALL files inside?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
@@ -89,7 +98,7 @@
                             @Html.ActionLink("v" + itm.Revisions.Select(a => a.Revision).Max().ToString(), "GetFile", "MasterFiles", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                         }
                     </td>
-                    <td style="white-space:nowrap; overflow-y:hidden; text-overflow:ellipsis;">@itm.Description</td>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
                     <td>@itm.Added</td>
                     <td>@itm.Edited</td>
                     <td align="right">
@@ -127,8 +136,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-                
-                
+
+
             </div>
         </div>
     </div>
@@ -137,7 +146,7 @@
 
 <!-- Setup Modal -->
 <div id="setModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
             @using (Html.BeginForm("Setup", "Folders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
@@ -168,7 +177,7 @@
 
 <!-- File Modal -->
 <div id="filModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
             @using (Html.BeginForm("Create", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
@@ -208,7 +217,7 @@
 
 <!-- Directory Modal -->
 <div id="dirModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
 
         <!-- Modal content-->
         <div class="modal-content">
@@ -247,7 +256,10 @@
 
 @section scripts
 {
+    <script src="~/Scripts/popper.min.js"></script>
     <script>
-
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 }   

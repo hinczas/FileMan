@@ -47,6 +47,12 @@ namespace FileMan.Classes
             }
             return bc;
         }
+        private TreeNode GetTree()
+        {
+            TreeNode tmp = new TreeNode();
+
+            return tmp;
+        }
 
         public MasterFileViewModel GetMasterFileViewModel(long id)
         {
@@ -57,6 +63,13 @@ namespace FileMan.Classes
             var revNam = revisions.Count == 0 ? "N/A" : revisions.Where(a => a.Id == revId).FirstOrDefault().Name;
             var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
 
+            FileRevision fr = _db.FileRevision.Where(a => a.MasterFileId == id).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+            string issue = item.Issue == null ? "" : item.Issue.ToString();
+            string draft = fr == null ? "" : fr.Draft;
+
+            FileRevision lIssue = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c=>string.IsNullOrEmpty(c.Draft)).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+            FileRevision lDraft = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c => !string.IsNullOrEmpty(c.Draft)).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
@@ -64,7 +77,10 @@ namespace FileMan.Classes
                 LatestRevision = latRev,
                 LatestRevisionId = revId,
                 RevisionName = revNam,
-                RevisionsCount = revCnt
+                RevisionsCount = revCnt,
+                DraftVersion = issue + draft,
+                LatestDraft = lDraft,
+                LatestIssue = lIssue
             };
             return file;
         }
@@ -139,8 +155,10 @@ namespace FileMan.Classes
 
         public void DeleteFile(long id)
         {
-
+            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault().Path;
             var mf = _db.MasterFile.Find(id);
+            var path = Path.Combine(root, mf.Number);
+
             var revisions = mf.Revisions.ToList();
 
             foreach (FileRevision fr in revisions)
@@ -151,10 +169,41 @@ namespace FileMan.Classes
             }
             _db.SaveChanges();
 
-            Directory.Delete(mf.Path);
+            Directory.Delete(path);
 
             _db.MasterFile.Remove(mf);
             _db.SaveChanges();
+
+        }
+
+        public string Increment(string s)
+        {
+
+            // first case - string is empty: return "a"
+
+            if ((s == null) || (s.Length == 0))
+
+                return "A";
+
+            // next case - last char is less than 'z': simply increment last char
+
+            char lastChar = s[s.Length - 1];
+
+            string fragment = s.Substring(0, s.Length - 1);
+
+            if (lastChar < 'Z')
+
+            {
+
+                ++lastChar;
+
+                return fragment + lastChar;
+
+            }
+
+            // next case - last char is 'z': roll over and increment preceding string
+
+            return Increment(fragment) + 'A';
 
         }
     }

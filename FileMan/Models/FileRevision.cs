@@ -21,6 +21,8 @@ namespace FileMan.Models
         public long Revision { get; set; }
         public string Name { get; set; }
         public string FullPath { get; set; }
+        public string Comment { get; set; }
         public DateTime? Added { get; set; }
+        public string Draft { get; set; }
     }
 }
