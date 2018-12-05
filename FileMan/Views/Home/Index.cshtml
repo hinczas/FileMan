@@ -1,5 +1,6 @@
 ﻿@model FileMan.Models.ViewModels.ItemViewModel
 @using FileMan.Models;
+@using FileMan.Models.ViewModels;
 @{
     ViewBag.Title = "Home Page";
 }
@@ -22,95 +23,114 @@
         font-size: small;
     }
 </style>
+<div class="row">
+    <div class="col-md-3">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">Collections</div>
+                <div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
+                    @foreach (TreeNode node in Model.TreeNodes)
+                    {                        
+                    <p style="text-indent:@(node.Indent*20)px; margin-bottom:5px;">@Html.ActionLink(node.Branch.Name, "Index", "Home", new { id = node.Branch.Id }, new { title = "Parent" }) 
+                    @if(@node.Branch.Files.Count > 0)
+                    { 
+                        <span class="badge" style="text-indent:0px;">@node.Branch.Files.Count()</span>}</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-12">
+            <ol class="breadcrumb" style="margin-bottom:10px;">
+                @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
+                {
+                    for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
+                    {
+                        <li>@Html.ActionLink(Model.Breadcrumbs.ElementAt(i).Name, "Index", "Home", new { id = Model.Breadcrumbs.ElementAt(i).Id }, new { title = "Parent" })</li>
+                    }
+                }
+                <li class="active">@Model.Current.Name</li>
+            </ol>
+        </div>
 
-<div class="col-md-12">
-    <ol class="breadcrumb" style="margin-bottom:10px;">
-        @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
-        {
-            for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
-            {
-                <li>@Html.ActionLink(Model.Breadcrumbs.ElementAt(i).Name, "Index", "Home", new { id = Model.Breadcrumbs.ElementAt(i).Id }, new { title = "Parent" })</li>
-            }
-        }
-        <li class="active">@Model.Current.Name</li>
-    </ol>
-</div>
+        <div class="col-md-8">
+            <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
+                <span class="input-group-addon" id="sizing-addon1">New</span>
+                <span class="input-group-btn" style="float:left">
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">File</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Folder</button>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" placeholder="Search for..." style="width:100%;">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div><!-- /input-group -->
 
-<div class="col-md-8">
-    <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
-        <span class="input-group-addon" id="sizing-addon1">New</span>
-        <span class="input-group-btn" style="float:left">
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">File</button>
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Folder</button>
-        </span>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-condensed">
+                <thead class="thead-dark">
+                    <tr>
+                        <th style="width:15px;" scope="col"></th>
+                        <th style="width:100px;" scope="col">Name</th>
+                        <th style="width:70px;" scope="col">Number</th>
+                        <th style="width:25px;" scope="col">Ver</th>
+                        <th style="width:250px; max-width:250px;" scope="col">Description</th>
+                        <th style="width:130px;" scope="col">Added</th>
+                        <th style="width:130px;" scope="col">Edited</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Folder itm in Model.ChildrenDirs)
+                    {
+                        <tr>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" /></td>
+                            <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = "Directory" }) </td>
+                            <td></td>
+                            <td></td>
+                            <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                            <td>@itm.Added</td>
+                            <td>@itm.Edited</td>
+                            <td align="right">
+                                <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
+                                <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this folder and ALL files inside?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (MasterFile itm in Model.ChildrenFiles)
+                    {
+                        <tr>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" /></td>
+                            <td>@itm.Name</td>
+                            <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
+                            <td>
+                                @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                {
+                                    @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                                }
+                            </td>
+                            <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                            <td>@itm.Added</td>
+                            <td>@itm.Edited</td>
+                            <td align="right">
+                                <a href="@Url.Action("Details", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                                <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<div class="col-md-4">
-    <div class="input-group input-group-sm">
-        <input type="text" class="form-control" placeholder="Search for..." style="width:100%;">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Go!</button>
-        </span>
-    </div><!-- /input-group -->
 
-</div>
-<div class="col-md-12">
-    <table class="table table-condensed">
-        <thead class="thead-dark">
-            <tr>
-                <th style="width:15px;" scope="col"></th>
-                <th style="width:100px;" scope="col">Name</th>
-                <th style="width:70px;" scope="col">Number</th>
-                <th style="width:25px;" scope="col">Rev</th>
-                <th style="width:250px; max-width:250px;" scope="col">Description</th>
-                <th style="width:130px;" scope="col">Added</th>
-                <th style="width:130px;" scope="col">Edited</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Folder itm in Model.ChildrenDirs)
-            {
-                <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" /></td>
-                    <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = "Directory" }) </td>
-                    <td></td>
-                    <td></td>
-                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                    <td>@itm.Added</td>
-                    <td>@itm.Edited</td>
-                    <td align="right">
-                        <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
-                        <span><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></span>
-                        <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this folder and ALL files inside?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
-                    </td>
-                </tr>
-            }
-            @foreach (MasterFile itm in Model.ChildrenFiles)
-            {
-                <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" /></td>
-                    <td>@Html.ActionLink(itm.Name, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
-                    <td>@itm.Number</td>
-                    <td>
-                        @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                        {
-                            @Html.ActionLink("v" + itm.Revisions.Select(a => a.Revision).Max().ToString(), "GetFile", "MasterFiles", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
-                        }
-                    </td>
-                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                    <td>@itm.Added</td>
-                    <td>@itm.Edited</td>
-                    <td align="right">
-                        <a href="@Url.Action("Details", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                        <span><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></span>
-                        <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this object?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+
 
 <!-- Dir Info Modal -->
 @foreach (Folder itm in Model.ChildrenDirs)

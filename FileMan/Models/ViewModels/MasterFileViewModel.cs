@@ -21,5 +21,6 @@ namespace FileMan.Models.ViewModels
         public string DraftVersion { get; set; }
         public FileRevision LatestIssue { get; set; }
         public FileRevision LatestDraft { get; set; }
+        public List<TreeNode> TreeNodes { get; set; }
     }
 }

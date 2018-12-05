@@ -8,6 +8,6 @@ namespace FileMan.Models.ViewModels
     public class TreeNode
     {
         public Folder Branch { get; set; }
-        public List<TreeNode> Nodes { get; set; }
+        public int Indent { get; set; }
     }
 }

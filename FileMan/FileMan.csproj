@@ -257,6 +257,10 @@
     <Compile Include="Migrations\201812031140104_issueDraft.Designer.cs">
       <DependentUpon>201812031140104_issueDraft.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812050832596_revisionType.cs" />
+    <Compile Include="Migrations\201812050832596_revisionType.Designer.cs">
+      <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
@@ -408,6 +412,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812031140104_issueDraft.resx">
       <DependentUpon>201812031140104_issueDraft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812050832596_revisionType.resx">
+      <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

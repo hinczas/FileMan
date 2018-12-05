@@ -24,5 +24,6 @@ namespace FileMan.Models
         public string Comment { get; set; }
         public DateTime? Added { get; set; }
         public string Draft { get; set; }
+        public string Type { get; set; }
     }
 }

@@ -140,3 +140,4 @@ C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.dele
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.csprojAssemblyReference.cache
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.revComment.resources
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.issueDraft.resources
+C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.revisionType.resources

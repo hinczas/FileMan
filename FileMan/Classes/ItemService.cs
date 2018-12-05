@@ -47,11 +47,23 @@ namespace FileMan.Classes
             }
             return bc;
         }
-        private TreeNode GetTree()
+
+        private List<TreeNode> GetTree(List<TreeNode> tree, Folder root, int indent)
         {
             TreeNode tmp = new TreeNode();
 
-            return tmp;
+            tmp.Branch = root;
+            tmp.Indent = indent;
+            tree.Add(tmp);
+            var folders = _db.Folder.Where(a => a.Pid == root.Id).OrderBy(a=>a.Name).ToList();
+            if (folders.Count > 0)
+            {
+                foreach(Folder fol in folders)
+                {
+                    tree = GetTree(tree, fol, indent + 1);
+                }
+            }
+            return tree;
         }
 
         public MasterFileViewModel GetMasterFileViewModel(long id)
@@ -63,12 +75,15 @@ namespace FileMan.Classes
             var revNam = revisions.Count == 0 ? "N/A" : revisions.Where(a => a.Id == revId).FirstOrDefault().Name;
             var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
 
+            List<TreeNode> list = new List<TreeNode>();
+            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            list = GetTree(list, root, 0);
+
             FileRevision fr = _db.FileRevision.Where(a => a.MasterFileId == id).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
             string issue = item.Issue == null ? "" : item.Issue.ToString();
             string draft = fr == null ? "" : fr.Draft;
-
-            FileRevision lIssue = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c=>string.IsNullOrEmpty(c.Draft)).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
-            FileRevision lDraft = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c => !string.IsNullOrEmpty(c.Draft)).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+            FileRevision lIssue = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c=> c.Type.Equals("issue")).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+            FileRevision lDraft = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c => c.Type.Equals("draft")).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
 
             MasterFileViewModel file = new MasterFileViewModel()
             {
@@ -78,9 +93,10 @@ namespace FileMan.Classes
                 LatestRevisionId = revId,
                 RevisionName = revNam,
                 RevisionsCount = revCnt,
-                DraftVersion = issue + draft,
+                DraftVersion = draft,
                 LatestDraft = lDraft,
-                LatestIssue = lIssue
+                LatestIssue = lIssue,
+                TreeNodes = list
             };
             return file;
         }
@@ -100,16 +116,20 @@ namespace FileMan.Classes
             {
                 item = _db.Folder.Find(id);
             }
-            var childrenDir = _db.Folder.Where(a => a.Pid == item.Id).ToList();
-            var childrenFil = _db.MasterFile.Where(a => a.FolderId == item.Id).ToList();
+            var childrenDir = _db.Folder.Where(a => a.Pid == item.Id).OrderBy(a=>a.Name).ToList();
+            var childrenFil = _db.MasterFile.Where(a => a.FolderId == item.Id).OrderBy(a => a.Name).ToList();
             var bc = GetBreadcrumbs(item.Id);
+            List<TreeNode> list = new List<TreeNode>();
+            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            list = GetTree(list, root, 0);
 
             ItemViewModel ivm = new ItemViewModel()
             {
                 Current = item,
                 ChildrenDirs = childrenDir,
                 ChildrenFiles = childrenFil,
-                Breadcrumbs = bc
+                Breadcrumbs = bc,
+                TreeNodes = list
             };
             return ivm;
         }
@@ -184,6 +204,11 @@ namespace FileMan.Classes
             if ((s == null) || (s.Length == 0))
 
                 return "A";
+
+            // case if is numeric
+            double tmp;
+            if (Double.TryParse(s, out tmp))
+                return s + "A";
 
             // next case - last char is less than 'z': simply increment last char
 

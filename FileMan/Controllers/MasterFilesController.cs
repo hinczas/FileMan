@@ -26,7 +26,8 @@ namespace FileMan.Controllers
 
         // GET: MasterFiles/Details/5
         public ActionResult Details(int id)
-        {
+        {           
+
             MasterFileViewModel file = _is.GetMasterFileViewModel(id);
 
             return View(file);
@@ -87,6 +88,7 @@ namespace FileMan.Controllers
                         Comment = item.Comment,
                         FullPath = fullpath,
                         Draft = draft,
+                        Type = "draft",
                         Added = added
                     };
 
@@ -150,14 +152,19 @@ namespace FileMan.Controllers
             MasterFile item = _db.MasterFile.Find(id);
             if (item != null)
             {
-                long curIssue = ((long)item.Issue) + 1;
-                long issue = item.Issue==null ? 1 : curIssue;
+                long curIssue = item.Issue == null ? 0 : (long)item.Issue;
+                long nextIssue = curIssue + 1;
+                long issue = nextIssue;
 
                 FileRevision fr = _db.FileRevision.Where(a => a.MasterFileId == id).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
 
                 item.Issue = issue;
                 item.Changelog = item.Changelog + string.Format("{0} - Promoted to Issue : {1} \n", DateTime.Now, issue);
-                fr.Draft = "";
+                if (fr != null)
+                {
+                    fr.Draft = issue.ToString();
+                    fr.Type = "issue";
+                }
 
                 _db.SaveChanges();
             }

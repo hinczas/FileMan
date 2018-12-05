@@ -35,7 +35,8 @@ namespace FileMan.Controllers
         public ActionResult Create([Bind(Include = "MasterFileId,Revision,Name,Comment")] FileRevision item, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
-            {                
+            {
+                double tmp;
                 var prev = _db.FileRevision.Where(a => a.MasterFileId == item.MasterFileId).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
                 string prefDraft = prev == null ? "" : prev.Draft;
                 string draft = _is.Increment(prefDraft);
@@ -61,7 +62,9 @@ namespace FileMan.Controllers
                     item.Name = file.FileName;
                     item.FullPath = fullpath;
                     item.Draft = draft;
+                    item.Type = "draft";
                     file.SaveAs(fullpath);
+
 
 
                     _db.FileRevision.Add(item);
