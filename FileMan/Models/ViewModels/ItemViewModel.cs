@@ -16,7 +16,9 @@ namespace FileMan.Models.ViewModels
         public List<Folder> ChildrenDirs { get; set; }
         public List<MasterFile> ChildrenFiles { get; set; }
         public List<Folder> Breadcrumbs { get; set; }
+        public List<MasterFile> UnassignedFiles { get; set; }
 
         public List<TreeNode> TreeNodes { get; set; }
-    }
+        public List<FolderPartialViewModel> FolderList { get; set; }
+}
 }

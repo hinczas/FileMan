@@ -27,7 +27,7 @@
     <div class="col-md-3">
         <div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading">Collections</div>
+                <div class="panel-heading">Categories</div>
                 <div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
                     @foreach (TreeNode node in Model.TreeNodes)
                     {                        
@@ -127,6 +127,52 @@
                 </tbody>
             </table>
         </div>
+        @if (Model.UnassignedFiles != null)
+        {
+            var counter = 0;
+            <div class="col-md-12">
+                <h4>Uncategorised</h4>
+                <table class="table table-condensed">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th style="width:15px;" scope="col"></th>
+                            <th style="width:100px;" scope="col">Name</th>
+                            <th style="width:70px;" scope="col">Number</th>
+                            <th style="width:25px;" scope="col">Ver</th>
+                            <th style="width:250px; max-width:250px;" scope="col">Description</th>
+                            <th style="width:130px;" scope="col">Added</th>
+                            <th style="width:130px;" scope="col">Edited</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (MasterFile itm in Model.UnassignedFiles)
+                        {
+                            <tr>
+                                <td scope="row"><input type="checkbox" class="form-check-input" name="moveFilesCheck[@counter]" style="margin-top:2px;"></td>
+                                <td>@itm.Name</td>
+                                <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
+                                <td>
+                                    @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                    {
+                                        @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                                    }
+                                </td>
+                                <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                <td>@itm.Added</td>
+                                <td>@itm.Edited</td>
+                                <td align="right">
+                                    <a href="@Url.Action("Details", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                                    <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -162,38 +208,6 @@
         </div>
     </div>
 }
-
-
-<!-- Setup Modal -->
-<div id="setModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <!-- Modal content-->
-        <div class="modal-content">
-            @using (Html.BeginForm("Setup", "Folders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select root directory</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-12" style="float:none">
-                        <h4>Type in your data root directory *</h4>
-                        <small>*For security reasons you cannot manually choose location</small><br />
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="root" placeholder="Data folder...." style="max-width:100%;" />
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <input type="submit" value="Save" class="btn btn-success" />
-                </div>
-            }
-        </div>
-    </div>
-</div>
 
 <!-- File Modal -->
 <div id="filModal" class="modal fade" role="dialog">

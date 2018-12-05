@@ -261,6 +261,10 @@
     <Compile Include="Migrations\201812050832596_revisionType.Designer.cs">
       <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812051323392_fileFolderMultiRel.cs" />
+    <Compile Include="Migrations\201812051323392_fileFolderMultiRel.Designer.cs">
+      <DependentUpon>201812051323392_fileFolderMultiRel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
@@ -268,6 +272,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MasterFile.cs" />
+    <Compile Include="Models\ViewModels\FolderPartialViewModel.cs" />
     <Compile Include="Models\ViewModels\MasterFileViewModel.cs" />
     <Compile Include="Models\ViewModels\ItemViewModel.cs" />
     <Compile Include="Models\ViewModels\TreeNode.cs" />
@@ -415,6 +420,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812050832596_revisionType.resx">
       <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812051323392_fileFolderMultiRel.resx">
+      <DependentUpon>201812051323392_fileFolderMultiRel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

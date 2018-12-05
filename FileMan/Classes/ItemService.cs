@@ -84,11 +84,17 @@ namespace FileMan.Classes
             string draft = fr == null ? "" : fr.Draft;
             FileRevision lIssue = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c=> c.Type.Equals("issue")).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
             FileRevision lDraft = _db.FileRevision.Where(a => a.MasterFileId == id).Where(c => c.Type.Equals("draft")).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
+            var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path
+            }).ToList();
 
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
-                Breadcrumbs = GetFileBreadcrumbs((long)item.FolderId),
+                //Breadcrumbs = GetFileBreadcrumbs((long)item.FolderId),
                 LatestRevision = latRev,
                 LatestRevisionId = revId,
                 RevisionName = revNam,
@@ -96,7 +102,8 @@ namespace FileMan.Classes
                 DraftVersion = draft,
                 LatestDraft = lDraft,
                 LatestIssue = lIssue,
-                TreeNodes = list
+                TreeNodes = list,
+                FolderList = foldersList
             };
             return file;
         }
@@ -117,11 +124,18 @@ namespace FileMan.Classes
                 item = _db.Folder.Find(id);
             }
             var childrenDir = _db.Folder.Where(a => a.Pid == item.Id).OrderBy(a=>a.Name).ToList();
-            var childrenFil = _db.MasterFile.Where(a => a.FolderId == item.Id).OrderBy(a => a.Name).ToList();
+            var childrenFil = item.Files.OrderBy(a => a.Name).ToList();
+            var unassigned = _db.MasterFile.Where(a => a.Folders.Count == 0).ToList();
             var bc = GetBreadcrumbs(item.Id);
             List<TreeNode> list = new List<TreeNode>();
             var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
             list = GetTree(list, root, 0);
+            var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path
+            }).ToList();
 
             ItemViewModel ivm = new ItemViewModel()
             {
@@ -129,7 +143,9 @@ namespace FileMan.Classes
                 ChildrenDirs = childrenDir,
                 ChildrenFiles = childrenFil,
                 Breadcrumbs = bc,
-                TreeNodes = list
+                TreeNodes = list,
+                UnassignedFiles = unassigned,
+                FolderList = foldersList
             };
             return ivm;
         }
@@ -154,20 +170,21 @@ namespace FileMan.Classes
 
         public void DeleteDirectory(long id)
         {
-            List<MasterFile> files = _db.MasterFile.Where(a => a.FolderId == id).ToList();
+            Folder folder = _db.Folder.Find(id);
+            //List<MasterFile> files = folder.Files.ToList();
             List<Folder> dirs = _db.Folder.Where(a=>a.Pid==id).ToList();
 
-            foreach (MasterFile file in files)
-            {
-                DeleteFile(file.Id);
-            }
+            //foreach (MasterFile file in files)
+            //{
+            //    DeleteFile(file.Id);
+            //}
 
             foreach (Folder dir in dirs)
             {
                 DeleteDirectory(dir.Id);
             }
 
-            var folder = _db.Folder.Find(id);
+            //var folder = _db.Folder.Find(id);
 
             _db.Folder.Remove(folder);
             _db.SaveChanges();

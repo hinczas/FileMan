@@ -36,17 +36,17 @@ namespace FileMan.Controllers
         // GET: MasterFiles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "FolderId,Name,Description,Comment,Number")] MasterFile item, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "Name,Description,Comment,Number")] MasterFile item, long FolderId, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
-                Folder parent = _db.Folder.Find(item.FolderId);
+                Folder parent = _db.Folder.Where(a=>a.Id == FolderId).FirstOrDefault();
 
                 var added = DateTime.Now;
                 var changelog = string.Format("{0} - Item created \n", added);
                 var changelogParent = string.Format("{0} - File created : {1} \n", added, item.Name);
                 string path = "";
-                if (parent!=null)
+                if (parent != null)
                 {
                     string oldChng = parent.Changelog;
                     parent.Changelog = oldChng + changelogParent;
@@ -63,12 +63,13 @@ namespace FileMan.Controllers
 
                 Directory.CreateDirectory(Path.Combine(rootPath, number));
 
-                item.Folder = parent;
                 item.Path = path;
                 item.Added = added;
                 item.Changelog = changelog;
                 item.Extension = extension;
-
+                item.Folders = new List<Folder>() {
+                    parent
+                };
                 _db.MasterFile.Add(item);
                 _db.SaveChanges();
 
@@ -169,6 +170,12 @@ namespace FileMan.Controllers
                 _db.SaveChanges();
             }
 
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
+        public ActionResult MoveFiles(long Id, long[] folders)
+        {
+            
             return Redirect(Request.UrlReferrer.ToString());
         }
 

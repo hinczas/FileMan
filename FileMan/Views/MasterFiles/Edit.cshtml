@@ -30,7 +30,7 @@
     <div class="col-md-3">
         <div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading">Collections</div>
+                <div class="panel-heading">Categories</div>
                 <div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
                     @foreach (TreeNode node in Model.TreeNodes)
                     {
@@ -49,14 +49,14 @@
     <div class="col-md-9">
         <div class="col-md-12">
             <ol class="breadcrumb" style="margin-bottom:10px;">
-                @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
+                Exists in: 
+                @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
                 {
-                    for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
+                    foreach (Folder fol in Model.Current.Folders)
                     {
-                        <li>@Html.ActionLink(Model.Breadcrumbs.ElementAt(i).Name, "Index", "Home", new { id = Model.Breadcrumbs.ElementAt(i).Id }, new { title = "Parent" })</li>
+                        <li>@Html.ActionLink(fol.Name, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })</li>
                     }
                 }
-                <li class="active">@Model.Current.Name</li>
             </ol>
         </div>
         <div class="col-md-12">

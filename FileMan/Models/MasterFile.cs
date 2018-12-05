@@ -14,10 +14,6 @@ namespace FileMan.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 Id { get; set; }
 
-        [ForeignKey("Folder")]
-        public Int64? FolderId { get; set; }
-        public virtual Folder Folder { get; set; }
-
         [Required]
         public string Number { get; set; }
         public string Name { get; set; }
@@ -30,6 +26,7 @@ namespace FileMan.Models
         public DateTime? Edited { get; set; }
         public long? Issue { get; set; }
 
+        public virtual List<Folder> Folders { get; set; }
         public virtual List<FileRevision> Revisions { get; set; }
     }
 }
