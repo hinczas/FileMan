@@ -175,7 +175,13 @@ namespace FileMan.Controllers
 
         public ActionResult MoveFiles(long Id, long[] folders)
         {
-            
+            var assigned = _db.MasterFile.SelectMany(a => a.Folders).Select(a => a.Id).ToList();
+            foreach(int i in folders)
+            {
+                if (assigned.Contains(i))
+                {
+                }
+            }
             return Redirect(Request.UrlReferrer.ToString());
         }
 
