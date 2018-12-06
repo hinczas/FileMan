@@ -23,5 +23,6 @@ namespace FileMan.Models.ViewModels
         public FileRevision LatestDraft { get; set; }
         public List<TreeNode> TreeNodes { get; set; }
         public List<FolderPartialViewModel> FolderList { get; set; }
+        public bool Promote { get; set; }
     }
 }

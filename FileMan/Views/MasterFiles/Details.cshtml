@@ -67,7 +67,14 @@
                         <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
                             <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#movModal">Move</button>
                             <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#filModal">Add draft</button>
-                            @Html.ActionLink("Promote", "Promote", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-default", type = "button" })
+                            @if (Model.Promote)
+                            {
+                                @Html.ActionLink("Promote", "Promote", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-default", type = "button" })
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-default" type="button" disabled>Promote</button>
+                            }
                             @Html.ActionLink("Edit", "Edit", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-primary", type = "button" })
                         </div>
                     </div>

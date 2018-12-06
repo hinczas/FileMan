@@ -94,6 +94,7 @@ namespace FileMan.Classes
             .ThenBy(a=>a.Path)
             .ToList();
 
+            bool promote = !issue.Equals(draft) && revisions.Count() != 0;
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
@@ -106,7 +107,8 @@ namespace FileMan.Classes
                 LatestDraft = lDraft,
                 LatestIssue = lIssue,
                 TreeNodes = list,
-                FolderList = foldersList
+                FolderList = foldersList,
+                Promote = promote
             };
             return file;
         }
