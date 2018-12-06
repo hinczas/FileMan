@@ -89,7 +89,10 @@ namespace FileMan.Classes
                 Id = a.Id,
                 Name = a.Name,
                 Path = a.Path
-            }).ToList();
+            })
+            .OrderBy(a=>a.Name)
+            .ThenBy(a=>a.Path)
+            .ToList();
 
             MasterFileViewModel file = new MasterFileViewModel()
             {
@@ -171,20 +174,12 @@ namespace FileMan.Classes
         public void DeleteDirectory(long id)
         {
             Folder folder = _db.Folder.Find(id);
-            //List<MasterFile> files = folder.Files.ToList();
             List<Folder> dirs = _db.Folder.Where(a=>a.Pid==id).ToList();
-
-            //foreach (MasterFile file in files)
-            //{
-            //    DeleteFile(file.Id);
-            //}
 
             foreach (Folder dir in dirs)
             {
                 DeleteDirectory(dir.Id);
             }
-
-            //var folder = _db.Folder.Find(id);
 
             _db.Folder.Remove(folder);
             _db.SaveChanges();

@@ -59,7 +59,7 @@
 
         <div class="col-md-12">
             <div class="panel panel-success">
-                <div class="panel-heading">
+                <div class="panel-heading" style="padding:5px 5px 5px 15px;">
                     <div class="container" style="align-items:center; width:100%; padding:0px;">
                         <h3 style="margin-top:0; margin-bottom:0px;float:left; padding-top:3px;">
                             <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
@@ -192,18 +192,22 @@
 <!-- File Modal -->
 <div id="movModal" class="modal fade" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
 
-            @using (Html.BeginForm("MoveFiles", "MasterFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
+        @using (Html.BeginForm("MoveFile", "MasterFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Assign category</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="container" style="align-items:center; width:100%; padding:0px;">
+                        <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
+                            Assign category
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    @Html.AntiForgeryToken()
                     @{
                         var counter = 0;
                     }
@@ -215,26 +219,34 @@
                         </tr>
                         @foreach (var p in Model.FolderList)
                         {
-                        <tr>
-                            @{
-                                var chckd = Model.Current.Folders.Select(a => a.Id).Contains(p.Id) ? "checked" : "";
-                            }
-                            <td><input type="checkbox" name="folders" value=@p.Id @chckd /> </td>
-                            <td>@p.Name</td>
-                            <td>@p.Path</td>
-                        </tr>
+                            <tr>
+                                @{
+                                    var chckd = Model.Current.Folders.Select(a => a.Id).Contains(p.Id) ? "checked" : "";
+                                }
+                                <td><input type="checkbox" name="folders" value=@p.Id @chckd /> </td>
+                                <td>@p.Name</td>
+                                <td>@p.Path</td>
+                            </tr>
                             counter++;
                         }
                     </table>
-                    
+
                     <input type="hidden" name="Id" value=@Model.Current.Id />
                 </div>
                 <div class="modal-footer">
+                    @if (Model.Current.Folders == null || Model.Current.Folders.Count() == 0)
+                    {
+                    <button type="button" class="btn btn-danger" style ="float:left;"  disabled>Uncategorise</button>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Uncategorise", "MoveFile", "MasterFiles", new { Id = Model.Current.Id }, new { @class = "btn btn-danger", type = "button", style = "float:left;" })
+                    }
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="submit" name="action" value="cp" class="btn btn-primary">Save</button>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </div>
 

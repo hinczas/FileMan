@@ -137,13 +137,12 @@ namespace FileMan.Controllers
         }
 
         // POST: MasterFiles/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, int folderId)
         {
             MasterFile item = _db.MasterFile.Find(id);
-            if (item != null)
-            {
-                _is.DeleteFile(item.Id);
-            }
+            Folder folder = _db.Folder.Find(folderId);
+            item.Folders.Remove(folder);
+            _db.SaveChanges();
 
             return Redirect(Request.UrlReferrer.ToString());
         }
@@ -173,15 +172,36 @@ namespace FileMan.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
-        public ActionResult MoveFiles(long Id, long[] folders)
+        public ActionResult MoveFile(long Id, long[] folders)
         {
-            var assigned = _db.MasterFile.SelectMany(a => a.Folders).Select(a => a.Id).ToList();
-            foreach(int i in folders)
+            MasterFile master = _db.MasterFile.Find(Id);
+            var assigned = master.Folders.Select(a => a.Id).ToArray();
+
+            if (folders==null || folders.Count()==0)
             {
-                if (assigned.Contains(i))
-                {
-                }
+                master.Folders = new List<Folder>();
+                _db.SaveChanges();
+                return Redirect(Request.UrlReferrer.ToString());
             }
+
+            var toAdd = folders.Except(assigned);
+            var toDel = assigned.Except(folders);
+
+
+            foreach (int i in toDel)
+            {
+                Folder folder = _db.Folder.Find(i);
+                master.Folders.Remove(folder);
+            }
+            _db.SaveChanges();
+
+            foreach (int i in toAdd)
+            {
+                Folder folder = _db.Folder.Find(i);
+                master.Folders.Add(folder);
+            }
+            _db.SaveChanges();
+
             return Redirect(Request.UrlReferrer.ToString());
         }
 

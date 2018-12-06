@@ -27,5 +27,27 @@ namespace FileMan.Models
 
         public virtual List<MasterFile> Files { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Folder);
+        }
+
+        public bool Equals(Folder other)
+        {
+            if (other == null)
+                return false;
+
+            return this.Id==other.Id && this.Name.Equals(other.Name) && this.Path.Equals(other.Path);
+        }
+
+        public override int GetHashCode()
+        {
+
+            int name = Name.GetHashCode();
+            int path = Path.GetHashCode();
+            int id = Id.GetHashCode();
+
+            return name ^ path ^ id;
+        }
     }
 }

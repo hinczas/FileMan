@@ -62,10 +62,42 @@ namespace FileMan.Controllers
             Folder item = _db.Folder.Find(id);
             if (item != null)
             {
-                _is.DeleteDirectory(item.Id);
+
+                int files = item.Files.Count();
+                int folders = _db.Folder.Where(a => a.Pid == id).Count();
+
+                if (files != 0 || folders != 0)
+                {
+                    TempData["Error"] = true;
+                    TempData["Message"] = "Cannot delete non-empty directory.";
+
+                } else
+                {
+                    _db.Folder.Remove(item);
+                    _db.SaveChanges();
+                }
+                //_is.DeleteDirectory(item.Id);
             }
 
             return Redirect(Request.UrlReferrer.ToString());
-        }        
+        }
+
+        public ActionResult MoveFiles(int Id, int[] files)
+        {
+            Folder item = _db.Folder.Find(Id);
+            
+            if (files==null)
+                return Redirect(Request.UrlReferrer.ToString());
+
+            foreach(int i in files)
+            {
+                MasterFile file = _db.MasterFile.Find(i);
+                item.Files.Add(file);
+            }
+            _db.SaveChanges();
+
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
     }
 }
