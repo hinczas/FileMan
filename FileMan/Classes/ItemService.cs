@@ -110,6 +110,7 @@ namespace FileMan.Classes
             };
             return file;
         }
+
         /// <summary>
         /// Return Item View Model for index page
         /// </summary>
