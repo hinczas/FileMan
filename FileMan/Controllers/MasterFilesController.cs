@@ -75,9 +75,9 @@ namespace FileMan.Controllers
 
                 if (file != null)
                 {
-                    extension = Path.GetExtension(file.FileName);
+                    extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
                     var revision = 1;
-                    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+extension;
+                    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+"."+extension.ToLower();
                     var fullpath = Path.Combine(rootPath, number, filname);
                     string draft = _is.Increment(string.Empty);
 

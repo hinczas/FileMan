@@ -1,6 +1,7 @@
 ﻿using FileMan.Classes;
 using FileMan.Context;
 using FileMan.Models;
+using MimeTypes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,6 +31,29 @@ namespace FileMan.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        public ActionResult Details (long? id)
+        {
+            FileRevision file = _db.FileRevision.Find(id);
+
+            if (file == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                if (DataFeeder.DocuCompatible(file.Extension))
+                {
+                    return View(file);
+                } else
+                {
+                    string mimeType = MimeTypeMap.GetMimeType(file.Extension);
+                    Response.AddHeader("Content-Disposition", "inline; filename=" + file.Name);
+
+                    return File(file.FullPath, mimeType);
+                }                    
+            }            
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "MasterFileId,Revision,Name,Comment")] FileRevision item, HttpPostedFileBase file)
@@ -47,8 +71,8 @@ namespace FileMan.Controllers
                 {
                     // vars 
                     var actionDate = DateTime.Now;
-                    string extension = Path.GetExtension(file.FileName);
-                    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + "_v" + item.Revision + extension;
+                    string extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
+                    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + "_v" + item.Revision +"."+ extension.ToLower();
 
                     // MasterFile setup
                     MasterFile parent = _db.MasterFile.Find(item.MasterFileId);                    
@@ -63,6 +87,7 @@ namespace FileMan.Controllers
                     item.FullPath = fullpath;
                     item.Draft = draft;
                     item.Type = "draft";
+                    item.Extension = extension;
                     file.SaveAs(fullpath);
 
 

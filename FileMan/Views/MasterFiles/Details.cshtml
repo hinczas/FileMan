@@ -116,26 +116,29 @@
                             <th style="font-weight:900; width:250px;" align="right">Comment</th>
                             <th style="font-weight:900; width:130px;" align="right">Added</th>
                             <th style="font-weight:900; width:25px;" align="right"></th>
+                            <th style="font-weight:900; width:15px;" align="right"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (@Model.LatestIssue != null)
                         {
-                            <tr>
-                                <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
-                                <td>@Model.LatestIssue.Comment</td>
-                                <td>@Model.LatestIssue.Added</td>
-                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                            </tr>
+                        <tr>
+                            <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
+                            <td>@Model.LatestIssue.Comment</td>
+                            <td>@Model.LatestIssue.Added</td>
+                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                        </tr>
                         }
                         @if (@Model.LatestDraft != null)
                         {
-                            <tr>
-                                <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
-                                <td>@Model.LatestDraft.Comment</td>
-                                <td>@Model.LatestDraft.Added</td>
-                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                            </tr>
+                        <tr>
+                            <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
+                            <td>@Model.LatestDraft.Comment</td>
+                            <td>@Model.LatestDraft.Added</td>
+                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                        </tr>
                         }
                     </tbody>
                 </table>
@@ -160,27 +163,29 @@
                                             <th style="font-weight:900; width:250px;" align="right">Comment</th>
                                             <th style="font-weight:900; width:130px;" align="right">Added</th>
                                             <th style="font-weight:900; width:25px;" align="right"></th>
+                                            <th style="font-weight:900; width:15px;" align="right"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @{ int counter = 0;}
                                         @foreach (FileRevision rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
                                         {
-                                            <tr>
-                                                <td>
-                                                    @if (string.IsNullOrEmpty(rev.Draft))
-                                                    {
-                                                        <span class="label label-success">issue</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @rev.Draft
-                                                    }
-                                                </td>
-                                                <td>@rev.Comment</td>
-                                                <td>@rev.Added</td>
-                                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
-                                            </tr>
+                                        <tr>
+                                            <td>
+                                                @if (string.IsNullOrEmpty(rev.Draft))
+                                                {
+                                                    <span class="label label-success">issue</span>
+                                                }
+                                                else
+                                                {
+                                                    @rev.Draft
+                                                }
+                                            </td>
+                                            <td>@rev.Comment</td>
+                                            <td>@rev.Added</td>
+                                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
+                                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
+                                        </tr>
                                             counter++;
                                         }
                                     </tbody>
@@ -278,7 +283,7 @@
                             <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
                         </div>
                         <div class="form-group">
-                            <input style="margin-bottom: 10px;" class="form-control" type="file" name="file">
+                            <input style="margin-bottom: 10px;" class="form-control" type="file" name="file" required>
                         </div>
 
                     </div>

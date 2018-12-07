@@ -1,0 +1,21 @@
+﻿@model FileMan.Models.FileRevision
+@Styles.Render("~/Content/docuvieware")
+@Scripts.Render("~/bundles/docuvieware")
+
+@{
+    ViewBag.Title = "Document Preview";
+}
+
+<div style="height: 1000px; margin-top: 0px;">
+    @{
+        GdPicture14.WEB.DocuVieware docuVieware = new GdPicture14.WEB.DocuVieware
+        {
+            ID = "DocuVieware1",
+            //CacheFolder = HttpRuntime.AppDomainAppPath + "\\Cache",
+            Height = new System.Web.UI.WebControls.Unit("100%"),
+            Width = new System.Web.UI.WebControls.Unit("100%")
+        };
+        docuVieware.LoadFromStream(new FileStream(Model.FullPath, FileMode.Open, FileAccess.Read), true, Model.Name); 
+        docuVieware.RenderControl(Output);
+    }
+</div>
