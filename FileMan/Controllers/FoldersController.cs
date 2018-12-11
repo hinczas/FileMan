@@ -92,6 +92,7 @@ namespace FileMan.Controllers
             foreach(int i in files)
             {
                 MasterFile file = _db.MasterFile.Find(i);
+                file.Changelog = file.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
                 item.Files.Add(file);
             }
             _db.SaveChanges();
