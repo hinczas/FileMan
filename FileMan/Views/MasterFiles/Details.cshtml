@@ -216,22 +216,23 @@
                                         @{ int counter = 0;}
                                         @foreach (FileRevision rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
                                         {
-                                            <tr>
-                                                <td>
-                                                    @if (string.IsNullOrEmpty(rev.Draft))
-                                                    {
-                                                        <span class="label label-success">issue</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @rev.Draft
-                                                    }
-                                                </td>
-                                                <td>@rev.Comment</td>
-                                                <td>@rev.Added</td>
-                                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
-                                                <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
-                                            </tr>
+                                        <tr>
+                                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
+                                            <td>
+                                                @if (string.IsNullOrEmpty(rev.Draft))
+                                                {
+                                                    <span class="label label-success">issue</span>
+                                                }
+                                                else
+                                                {
+                                                    @rev.Draft
+                                                }
+                                            </td>
+                                            <td>@rev.Comment</td>
+                                            <td>@rev.Added</td>
+                                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
+                                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
+                                        </tr>
                                             counter++;
                                         }
                                     </tbody>

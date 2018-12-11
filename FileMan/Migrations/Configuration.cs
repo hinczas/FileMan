@@ -5,14 +5,14 @@ namespace FileMan.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<FileMan.Models.ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<FileMan.Context.DatabaseCtx>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(FileMan.Models.ApplicationDbContext context)
+        protected override void Seed(FileMan.Context.DatabaseCtx context)
         {
             //  This method will be called after migrating to the latest version.
 

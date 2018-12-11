@@ -295,6 +295,10 @@
     <Compile Include="Migrations\201812090848212_fileIcon.Designer.cs">
       <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812110846397_pendingOnes.cs" />
+    <Compile Include="Migrations\201812110846397_pendingOnes.Designer.cs">
+      <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
@@ -617,6 +621,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812090848212_fileIcon.resx">
       <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812110846397_pendingOnes.resx">
+      <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
