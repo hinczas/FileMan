@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 
@@ -46,6 +47,14 @@ namespace FileMan.Controllers
 
                 var added = DateTime.Now;
                 var changelog = string.Format("{0} - Item created \n", added);
+
+
+                item.Added = added;
+                item.Changelog = changelog;
+                _db.MasterFile.Add(item);
+                _db.SaveChanges();
+
+
                 var changelogParent = string.Format("{0} - File created : {1} \n", added, item.Name);
                 string path = "";
                 if (parent != null)
@@ -56,7 +65,8 @@ namespace FileMan.Controllers
                 }
 
 
-                string number = item.GetHashCode().ToString();
+                string number = item.Id.ToString().PadLeft(9, '0');
+
                 item.Number = number;
 
                 var rootPath = _db.Folder.Where(a=> a.Type.Equals("root")).FirstOrDefault().Path;
@@ -72,7 +82,7 @@ namespace FileMan.Controllers
                 item.Folders = new List<Folder>() {
                     parent
                 };
-                _db.MasterFile.Add(item);
+                //_db.MasterFile.Add(item);
                 _db.SaveChanges();
 
                 if (file != null)
@@ -91,13 +101,20 @@ namespace FileMan.Controllers
                         Name = file.FileName,
                         Comment = item.Comment,
                         FullPath = fullpath,
+                        Extension = extension,
                         Draft = draft,
                         Type = "draft",
                         Added = added,
                         Icon = icon
                     };
 
+
                     file.SaveAs(fullpath);
+
+                    //var md5 = MD5.Create();
+                    //byte[] hash = md5.ComputeHash(System.IO.File.ReadAllBytes(fullpath));
+                    //rf.Md5hash = System.Text.Encoding.UTF8.GetString(hash);
+
                     item.Extension = extension;
                     item.Changelog = item.Changelog + string.Format("{0} - Revision added : {1} \n", added, filname);
 

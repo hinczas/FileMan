@@ -67,21 +67,44 @@ namespace FileMan.Classes
             return tree;
         }
 
-        private string GetTree(string tree, Folder root, int indent)
+        public TreeviewNodeEntity[] GetTree(Folder root, long id)
         {
-            if (string.IsNullOrEmpty(tree))
-                tree = "<ul id=\"myUL\">\n";
-            
             var folders = _db.Folder.Where(a => a.Pid == root.Id).OrderBy(a => a.Name).ToList();
             if (folders.Count > 0)
             {
+                int cntr = 0;
+                TreeviewNodeEntity[] tmpList = new TreeviewNodeEntity[folders.Count];
+
                 foreach (Folder fol in folders)
                 {
-                    tree = GetTree(tree, fol, indent + 1);
-                }
-            }
+                    var nods = GetTree(fol, id);
+                    bool exp = nods==null ? false : nods.Select(a => a.state.expandedPath).Max();
 
-            return tree;
+                    var files = fol.Files.Count.ToString();
+                    var nState = new TreeNodeState()
+                    {
+                        disabled = false,
+                        selected = id == fol.Id ? true : false,
+                        expanded = exp,
+                        expandedPath = exp || id == fol.Id
+
+                    };
+                    tmpList[cntr] = new TreeviewNodeEntity()
+                    {
+                        text = fol.Name,
+                        tags = new string[1] { files },
+                        href = "/Home/Index/" + fol.Id,
+                        state = nState,
+                        nodes = nods
+                    };
+                    cntr++;
+                }
+                return tmpList;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public MasterFileViewModel GetMasterFileViewModel(long id, string userId)
@@ -178,6 +201,7 @@ namespace FileMan.Classes
             List<TreeNode> list = new List<TreeNode>();
             var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
             list = GetTree(list, root, 0);
+
             var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
             {
                 Id = a.Id,

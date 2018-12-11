@@ -27,5 +27,6 @@ namespace FileMan.Models
         public string Draft { get; set; }
         public string Type { get; set; }
         public string Icon { get; set; }
+        public string Md5hash { get; set; }
     }
 }

@@ -299,6 +299,10 @@
     <Compile Include="Migrations\201812110846397_pendingOnes.Designer.cs">
       <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812111446592_md5Sum.cs" />
+    <Compile Include="Migrations\201812111446592_md5Sum.Designer.cs">
+      <DependentUpon>201812111446592_md5Sum.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
@@ -311,6 +315,8 @@
     <Compile Include="Models\ViewModels\MasterFileViewModel.cs" />
     <Compile Include="Models\ViewModels\ItemViewModel.cs" />
     <Compile Include="Models\ViewModels\TreeNode.cs" />
+    <Compile Include="Models\ViewModels\TreeNodeState.cs" />
+    <Compile Include="Models\ViewModels\TreeviewNodeEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -318,6 +324,8 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-toggle.min.css" />
+    <Content Include="Content\bootstrap-treeview.css" />
+    <Content Include="Content\bootstrap-treeview.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\docuvieware-min.css" />
@@ -412,6 +420,7 @@
     <Content Include="Content\Images\Icons\32px\java.png" />
     <Content Include="Content\Images\Icons\32px\jpg.png" />
     <Content Include="Content\Images\Icons\32px\js.png" />
+    <Content Include="Content\Images\Icons\32px\json.png" />
     <Content Include="Content\Images\Icons\32px\key.png" />
     <Content Include="Content\Images\Icons\32px\less.png" />
     <Content Include="Content\Images\Icons\32px\mid.png" />
@@ -483,6 +492,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\bootstrap-toggle.min.js" />
+    <Content Include="Scripts\bootstrap-treeview.js" />
+    <Content Include="Scripts\bootstrap-treeview.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docuvieware-min.js" />
@@ -624,6 +635,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812110846397_pendingOnes.resx">
       <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812111446592_md5Sum.resx">
+      <DependentUpon>201812111446592_md5Sum.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

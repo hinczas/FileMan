@@ -30,18 +30,9 @@
     <div class="col-md-3">
         <div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading">Categories</div>
-                <div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
-                    @foreach (TreeNode node in Model.TreeNodes)
-                    {
-                        <p style="text-indent:@(node.Indent*20)px; margin-bottom:5px;">
-                            @Html.ActionLink(node.Branch.Name, "Index", "Home", new { id = node.Branch.Id }, new { title = "Parent" }) 
-                            @if (@node.Branch.Files.Count > 0)
-                            {
-                                <span class="badge" style="text-indent:0px;">@node.Branch.Files.Count()</span>
-                            }
-                        </p>
-                    }
+                <div class="panel-heading">Categories (<a href="javascript:expandAll();">expand all</a> | <a href="javascript:collapseAll();">collapse all</a>)</div>
+                <div style="white-space:nowrap; overflow-x:auto;">
+                    <div id="tree"></div>
                 </div>
             </div>
         </div>

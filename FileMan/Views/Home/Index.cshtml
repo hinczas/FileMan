@@ -22,25 +22,29 @@
     .table {
         font-size: small;
     }
+
 </style>
 <div class="row">
     <div class="col-md-3">
         <div class="col-md-12">
             <div class="panel panel-info">
-                <div class="panel-heading">Categories</div>
-                <div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
+                <div class="panel-heading">Categories (<a href="javascript:expandAll();">expand all</a> | <a href="javascript:collapseAll();">collapse all</a>)</div>
+                <div style="white-space:nowrap; overflow-x:auto;">
+                    <div id="tree"></div>
+                </div>
+                    @*<div class="panel-body" style="white-space:nowrap; overflow-x:auto;">
                     @foreach (TreeNode node in Model.TreeNodes)
+                {
+                    <p style="text-indent:@(node.Indent*20)px; margin-bottom:5px;">
+                        @Html.ActionLink(node.Branch.Name, "Index", "Home", new { id = node.Branch.Id }, new { title = "Parent" })
+                    @if (@node.Branch.Files.Count > 0)
                     {
-                        <p style="text-indent:@(node.Indent*20)px; margin-bottom:5px;">
-                            @Html.ActionLink(node.Branch.Name, "Index", "Home", new { id = node.Branch.Id }, new { title = "Parent" })
-                        @if (@node.Branch.Files.Count > 0)
-                        {
-                            <span class="badge" style="text-indent:0px;">@node.Branch.Files.Count()</span>}
-                    </p>
-                }
+                        <span class="badge" style="text-indent:0px;">@node.Branch.Files.Count()</span>}
+                </p>
+            }
+                </div>*@
                 </div>
             </div>
-        </div>
     </div>
     <div class="col-md-9">
         @if (TempData["Error"] != null)
@@ -72,8 +76,8 @@
             <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
                 <span class="input-group-addon" id="sizing-addon1">New</span>
                 <span class="input-group-btn" style="float:left">
-                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">File</button>
-                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Folder</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">Document</button>
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Category</button>
                 </span>
             </div>
         </div>
@@ -91,12 +95,10 @@
                 <thead class="thead-dark">
                     <tr>
                         <th style="width:15px;" scope="col"></th>
-                        <th style="width:100px;" scope="col">Name</th>
+                        <th style="width:200px;" scope="col">Name</th>
                         <th style="width:70px;" scope="col">Number</th>
                         <th style="width:25px;" scope="col">Ver</th>
-                        <th style="width:250px; max-width:250px;" scope="col">Description</th>
-                        <th style="width:130px;" scope="col">Added</th>
-                        <th style="width:130px;" scope="col">Edited</th>
+                        <th style="width:380px; max-width:250px;" scope="col">Description</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -109,8 +111,6 @@
                             <td></td>
                             <td></td>
                             <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                            <td>@itm.Added</td>
-                            <td>@itm.Edited</td>
                             <td align="right">
                                 <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
                                 <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
@@ -130,8 +130,6 @@
                                 }
                             </td>
                             <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                            <td>@itm.Added</td>
-                            <td>@itm.Edited</td>
                             <td align="right">
 
                                 @if (itm.Folders.Count() > 0)
@@ -336,7 +334,6 @@
 
 @section scripts
 {
-    <script src="~/Scripts/popper.min.js"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -350,5 +347,6 @@
                 });
             });
         });
+        
     </script>
 }   

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 
@@ -48,7 +49,8 @@ namespace FileMan.Controllers
                 else
                 {
                     string mimeType = MimeTypeMap.GetMimeType(file.Extension);
-                    Response.AddHeader("Content-Disposition", "inline; filename=" + file.Name);
+                    string fileName = file.MasterFile.Number + "-" + file.Draft + "-" + file.MasterFile.Name + "-" + file.Name;
+                    Response.AddHeader("Content-Disposition", "inline; filename=" + fileName);
 
                     return File(file.FullPath, mimeType);
                 }                    
@@ -92,7 +94,9 @@ namespace FileMan.Controllers
                     item.Icon = icon;
                     file.SaveAs(fullpath);
 
-
+                    //var md5 = MD5.Create();
+                    //byte[] hash = md5.ComputeHash(System.IO.File.ReadAllBytes(fullpath));
+                    //item.Md5hash = System.Text.Encoding.UTF8.GetString(hash);
 
                     _db.FileRevision.Add(item);
                     _db.SaveChanges();
@@ -111,7 +115,7 @@ namespace FileMan.Controllers
 
             string path = rev.FullPath;
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);
-            string fileName = rev.Name;
+            string fileName = rev.MasterFile.Number + "-" + rev.Draft + "-" + rev.MasterFile.Name + "-" + rev.Name;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
 
         }

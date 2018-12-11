@@ -26,7 +26,7 @@ namespace FileMan.Controllers
 
         public ActionResult Index(long? id)
         {
-
+            TempData["folderId"] = id;
             var items = _db.Folder.Count();
             ItemViewModel ivm;
 
@@ -44,6 +44,39 @@ namespace FileMan.Controllers
             
             
             return View(ivm);
-        }                
+        }
+
+        [HttpGet]
+        public JsonResult GetTree(long id)
+        {
+
+            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+
+            
+            var nods = _is.GetTree(root, id);
+            bool exp = nods == null ? false : nods.Select(a => a.state.expandedPath).Max();
+
+            var nState = new TreeNodeState()
+            {
+                disabled = false,
+                selected = id == root.Id ? true : false,
+                expanded = exp
+
+            };
+
+            var list2 = new TreeviewNodeEntity[1]
+            {
+                new TreeviewNodeEntity()
+                {
+                    text = root.Name,
+                    tags = new string[1] { root.Files.Count.ToString() },
+                    href = "/Home/Index/" + root.Id,
+                    state = nState,
+                    nodes = nods
+                }                
+            };
+
+            return Json(list2, JsonRequestBehavior.AllowGet);
+        }
     }
 }

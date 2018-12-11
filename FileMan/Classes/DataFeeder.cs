@@ -69,6 +69,7 @@ namespace FileMan.Classes
                     {"java","java.png"},
                     {"jpg","jpg.png"},
                     {"js","js.png"},
+                    {"json","json.png"},
                     {"key","key.png"},
                     {"less","less.png"},
                     {"mid","mid.png"},
