@@ -23,6 +23,7 @@
             @Html.AntiForgeryToken()
             <h1>FileMan</h1>
             <p>Log into existing account</p>
+            @Html.ValidationSummary("", new { @class = "text-danger" })
             <br />
             <div>
                 <div class="col-md-12">
