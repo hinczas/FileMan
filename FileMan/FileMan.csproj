@@ -290,6 +290,7 @@
     <Compile Include="Migrations\201812101037052_linkSettings.cs" />
     <Compile Include="Migrations\201812101037052_linkSettings.Designer.cs">
       <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\201812090848212_fileIcon.cs" />
     <Compile Include="Migrations\201812090848212_fileIcon.Designer.cs">
       <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
@@ -613,6 +614,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812101037052_linkSettings.resx">
       <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812090848212_fileIcon.resx">
       <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
     </EmbeddedResource>
