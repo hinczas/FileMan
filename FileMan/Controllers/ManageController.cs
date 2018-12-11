@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FileMan.Models;
+using FileMan.Context;
+using System.Data.Entity;
 
 namespace FileMan.Controllers
 {
@@ -64,13 +66,19 @@ namespace FileMan.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ShowOnRoot = user.UserSetting.ShowUncategorisedRoot,
+                UncatVisible = user.UserSetting.UncategorisedVisible,
+                ShowChangelog = user.UserSetting.ShowChangelog,
+                SettingsId = user.UserSetting.Id
             };
             return View(model);
         }
@@ -104,6 +112,31 @@ namespace FileMan.Controllers
         public ActionResult AddPhoneNumber()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible)
+        {
+            DatabaseCtx _db = new DatabaseCtx();
+            UserSetting settings = _db.UserSetting.Find(Id);
+            if (settings!=null)
+            {
+                settings.ShowChangelog = ShowChangelog==null ? false : true;
+                settings.ShowUncategorisedRoot = ShowUncategorisedRoot == null ? false : true;
+                settings.UncategorisedVisible = UncategorisedVisible == null ? false : true;
+                _db.SaveChanges();
+                return Redirect(Request.UrlReferrer.ToString());
+            } else
+            {
+                var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new { x.Key, x.Value.Errors })
+                .ToArray();
+
+                var som = "asdf";
+            }
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         //

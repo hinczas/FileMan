@@ -5,16 +5,14 @@ namespace FileMan.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<FileMan.Context.DatabaseCtx>
+    internal sealed class Configuration : DbMigrationsConfiguration<FileMan.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            SetSqlGenerator("MySql.Data.MySqlClient", new MySql.Data.Entity.MySqlMigrationSqlGenerator());
-            CodeGenerator = new MySql.Data.Entity.MySqlMigrationCodeGenerator();
         }
 
-        protected override void Seed(FileMan.Context.DatabaseCtx context)
+        protected override void Seed(FileMan.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

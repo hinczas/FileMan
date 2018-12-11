@@ -151,7 +151,13 @@ namespace FileMan.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var settings = new UserSetting()
+                {
+                    ShowChangelog = false,
+                    ShowUncategorisedRoot = true,
+                    UncategorisedVisible = true
+                };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

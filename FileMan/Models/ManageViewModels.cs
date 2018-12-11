@@ -12,6 +12,10 @@ namespace FileMan.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+        public bool ShowOnRoot { get; set; }
+        public bool UncatVisible { get; set; }
+        public bool ShowChangelog { get; set; }
+        public long SettingsId { get; set; }
     }
 
     public class ManageLoginsViewModel

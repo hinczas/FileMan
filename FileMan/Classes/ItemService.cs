@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace FileMan.Classes
 {
@@ -66,7 +67,24 @@ namespace FileMan.Classes
             return tree;
         }
 
-        public MasterFileViewModel GetMasterFileViewModel(long id)
+        private string GetTree(string tree, Folder root, int indent)
+        {
+            if (string.IsNullOrEmpty(tree))
+                tree = "<ul id=\"myUL\">\n";
+            
+            var folders = _db.Folder.Where(a => a.Pid == root.Id).OrderBy(a => a.Name).ToList();
+            if (folders.Count > 0)
+            {
+                foreach (Folder fol in folders)
+                {
+                    tree = GetTree(tree, fol, indent + 1);
+                }
+            }
+
+            return tree;
+        }
+
+        public MasterFileViewModel GetMasterFileViewModel(long id, string userId)
         {
             var item = _db.MasterFile.Find(id);
             var revisions = item.Revisions;
@@ -94,6 +112,10 @@ namespace FileMan.Classes
             .ThenBy(a=>a.Path)
             .ToList();
 
+            ApplicationDbContext adb = new ApplicationDbContext();
+            ApplicationUser user = adb.Users.Find(userId);
+            bool changelog = user.UserSetting.ShowChangelog;
+
             bool promote = !issue.Equals(draft) && revisions.Count() != 0;
             MasterFileViewModel file = new MasterFileViewModel()
             {
@@ -108,7 +130,8 @@ namespace FileMan.Classes
                 LatestIssue = lIssue,
                 TreeNodes = list,
                 FolderList = foldersList,
-                Promote = promote
+                Promote = promote,
+                ShowChangelog = changelog
             };
             return file;
         }
@@ -118,7 +141,7 @@ namespace FileMan.Classes
         /// </summary>
         /// <param name="id">Optional current item ID</param>
         /// <returns>ItemViewModel</returns>
-        public ItemViewModel GetItemViewModel(long? id)
+        public ItemViewModel GetItemViewModel(long? id, string userId)
         {
             Folder item;
             if (id == null)
@@ -129,9 +152,28 @@ namespace FileMan.Classes
             {
                 item = _db.Folder.Find(id);
             }
+
+            ApplicationDbContext adb = new ApplicationDbContext();
+            ApplicationUser user = adb.Users.Find(userId);
+            bool uncatVisible = user.UserSetting.UncategorisedVisible;
+            bool showUncatRoot = user.UserSetting.ShowUncategorisedRoot;
+
             var childrenDir = _db.Folder.Where(a => a.Pid == item.Id).OrderBy(a=>a.Name).ToList();
             var childrenFil = item.Files.OrderBy(a => a.Name).ToList();
             var unassigned = _db.MasterFile.Where(a => a.Folders.Count == 0).ToList();
+
+            if (uncatVisible)
+            {
+                if(showUncatRoot)
+                {
+                    if(item.Type.Equals("root"))
+                    {
+                        childrenFil = childrenFil.Union(unassigned).OrderBy(a => a.Name).ToList();
+                    }
+                }                
+            }
+
+            
             var bc = GetBreadcrumbs(item.Id);
             List<TreeNode> list = new List<TreeNode>();
             var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
@@ -143,6 +185,7 @@ namespace FileMan.Classes
                 Path = a.Path
             }).ToList();
 
+
             ItemViewModel ivm = new ItemViewModel()
             {
                 Current = item,
@@ -150,7 +193,7 @@ namespace FileMan.Classes
                 ChildrenFiles = childrenFil,
                 Breadcrumbs = bc,
                 TreeNodes = list,
-                UnassignedFiles = unassigned,
+                UnassignedFiles = uncatVisible && !showUncatRoot ? unassigned : null,
                 FolderList = foldersList
             };
             return ivm;

@@ -158,3 +158,5 @@ C:\Users\marciner\source\repos\FileMan\FileMan\bin\System.Net.Http.Formatting.xm
 C:\Users\marciner\source\repos\FileMan\FileMan\bin\System.Web.Http.xml
 C:\Users\marciner\source\repos\FileMan\FileMan\bin\System.Web.Http.WebHost.xml
 C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.fileExtension.resources
+C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.settingsForUser.resources
+C:\Users\marciner\source\repos\FileMan\FileMan\obj\Debug\FileMan.Migrations.linkSettings.resources

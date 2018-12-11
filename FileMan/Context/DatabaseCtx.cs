@@ -20,6 +20,7 @@ namespace FileMan.Context
         public virtual DbSet<Folder> Folder { get; set; }
         public virtual DbSet<MasterFile> MasterFile { get; set; }
         public virtual DbSet<FileRevision> FileRevision { get; set; }
+        public virtual DbSet<UserSetting> UserSetting { get; set; }
 
 
         public static DatabaseCtx Create()

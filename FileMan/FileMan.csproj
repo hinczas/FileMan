@@ -283,9 +283,18 @@
     <Compile Include="Migrations\201812070948080_fileExtension.Designer.cs">
       <DependentUpon>201812070948080_fileExtension.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812101014041_settingsForUser.cs" />
+    <Compile Include="Migrations\201812101014041_settingsForUser.Designer.cs">
+      <DependentUpon>201812101014041_settingsForUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812101037052_linkSettings.cs" />
+    <Compile Include="Migrations\201812101037052_linkSettings.Designer.cs">
+      <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
+    <Compile Include="Models\UserSetting.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -304,12 +313,141 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\docuvieware-min.css" />
+    <Content Include="Content\Images\Icons\16px\aac.png" />
+    <Content Include="Content\Images\Icons\16px\ai.png" />
+    <Content Include="Content\Images\Icons\16px\aiff.png" />
+    <Content Include="Content\Images\Icons\16px\avi.png" />
+    <Content Include="Content\Images\Icons\16px\bmp.png" />
+    <Content Include="Content\Images\Icons\16px\c.png" />
+    <Content Include="Content\Images\Icons\16px\cpp.png" />
+    <Content Include="Content\Images\Icons\16px\css.png" />
+    <Content Include="Content\Images\Icons\16px\csv.png" />
+    <Content Include="Content\Images\Icons\16px\dat.png" />
+    <Content Include="Content\Images\Icons\16px\dmg.png" />
+    <Content Include="Content\Images\Icons\16px\doc.png" />
+    <Content Include="Content\Images\Icons\16px\dotx.png" />
+    <Content Include="Content\Images\Icons\16px\dwg.png" />
+    <Content Include="Content\Images\Icons\16px\dxf.png" />
+    <Content Include="Content\Images\Icons\16px\eps.png" />
+    <Content Include="Content\Images\Icons\16px\exe.png" />
+    <Content Include="Content\Images\Icons\16px\flv.png" />
+    <Content Include="Content\Images\Icons\16px\gif.png" />
+    <Content Include="Content\Images\Icons\16px\h.png" />
+    <Content Include="Content\Images\Icons\16px\hpp.png" />
+    <Content Include="Content\Images\Icons\16px\html.png" />
+    <Content Include="Content\Images\Icons\16px\ics.png" />
+    <Content Include="Content\Images\Icons\16px\iso.png" />
+    <Content Include="Content\Images\Icons\16px\java.png" />
+    <Content Include="Content\Images\Icons\16px\jpg.png" />
+    <Content Include="Content\Images\Icons\16px\js.png" />
+    <Content Include="Content\Images\Icons\16px\key.png" />
+    <Content Include="Content\Images\Icons\16px\less.png" />
+    <Content Include="Content\Images\Icons\16px\mid.png" />
+    <Content Include="Content\Images\Icons\16px\mp3.png" />
+    <Content Include="Content\Images\Icons\16px\mp4.png" />
+    <Content Include="Content\Images\Icons\16px\mpg.png" />
+    <Content Include="Content\Images\Icons\16px\odf.png" />
+    <Content Include="Content\Images\Icons\16px\ods.png" />
+    <Content Include="Content\Images\Icons\16px\odt.png" />
+    <Content Include="Content\Images\Icons\16px\otp.png" />
+    <Content Include="Content\Images\Icons\16px\ots.png" />
+    <Content Include="Content\Images\Icons\16px\ott.png" />
+    <Content Include="Content\Images\Icons\16px\pdf.png" />
+    <Content Include="Content\Images\Icons\16px\php.png" />
+    <Content Include="Content\Images\Icons\16px\png.png" />
+    <Content Include="Content\Images\Icons\16px\ppt.png" />
+    <Content Include="Content\Images\Icons\16px\psd.png" />
+    <Content Include="Content\Images\Icons\16px\py.png" />
+    <Content Include="Content\Images\Icons\16px\qt.png" />
+    <Content Include="Content\Images\Icons\16px\rar.png" />
+    <Content Include="Content\Images\Icons\16px\rb.png" />
+    <Content Include="Content\Images\Icons\16px\rtf.png" />
+    <Content Include="Content\Images\Icons\16px\sass.png" />
+    <Content Include="Content\Images\Icons\16px\scss.png" />
+    <Content Include="Content\Images\Icons\16px\sql.png" />
+    <Content Include="Content\Images\Icons\16px\tga.png" />
+    <Content Include="Content\Images\Icons\16px\tgz.png" />
+    <Content Include="Content\Images\Icons\16px\tiff.png" />
+    <Content Include="Content\Images\Icons\16px\txt.png" />
+    <Content Include="Content\Images\Icons\16px\wav.png" />
+    <Content Include="Content\Images\Icons\16px\xls.png" />
+    <Content Include="Content\Images\Icons\16px\xlsx.png" />
+    <Content Include="Content\Images\Icons\16px\xml.png" />
+    <Content Include="Content\Images\Icons\16px\yml.png" />
+    <Content Include="Content\Images\Icons\16px\zip.png" />
+    <Content Include="Content\Images\Icons\16px\_blank.png" />
+    <Content Include="Content\Images\Icons\16px\_page.png" />
+    <Content Include="Content\Images\Icons\32px\aac.png" />
+    <Content Include="Content\Images\Icons\32px\ai.png" />
+    <Content Include="Content\Images\Icons\32px\aiff.png" />
+    <Content Include="Content\Images\Icons\32px\avi.png" />
+    <Content Include="Content\Images\Icons\32px\bmp.png" />
+    <Content Include="Content\Images\Icons\32px\c.png" />
+    <Content Include="Content\Images\Icons\32px\cpp.png" />
+    <Content Include="Content\Images\Icons\32px\css.png" />
+    <Content Include="Content\Images\Icons\32px\csv.png" />
+    <Content Include="Content\Images\Icons\32px\dat.png" />
+    <Content Include="Content\Images\Icons\32px\dmg.png" />
+    <Content Include="Content\Images\Icons\32px\doc.png" />
+    <Content Include="Content\Images\Icons\32px\dotx.png" />
+    <Content Include="Content\Images\Icons\32px\dwg.png" />
+    <Content Include="Content\Images\Icons\32px\dxf.png" />
+    <Content Include="Content\Images\Icons\32px\eps.png" />
+    <Content Include="Content\Images\Icons\32px\exe.png" />
+    <Content Include="Content\Images\Icons\32px\flv.png" />
+    <Content Include="Content\Images\Icons\32px\gif.png" />
+    <Content Include="Content\Images\Icons\32px\h.png" />
+    <Content Include="Content\Images\Icons\32px\hpp.png" />
+    <Content Include="Content\Images\Icons\32px\html.png" />
+    <Content Include="Content\Images\Icons\32px\ics.png" />
+    <Content Include="Content\Images\Icons\32px\iso.png" />
+    <Content Include="Content\Images\Icons\32px\java.png" />
+    <Content Include="Content\Images\Icons\32px\jpg.png" />
+    <Content Include="Content\Images\Icons\32px\js.png" />
+    <Content Include="Content\Images\Icons\32px\key.png" />
+    <Content Include="Content\Images\Icons\32px\less.png" />
+    <Content Include="Content\Images\Icons\32px\mid.png" />
+    <Content Include="Content\Images\Icons\32px\mp3.png" />
+    <Content Include="Content\Images\Icons\32px\mp4.png" />
+    <Content Include="Content\Images\Icons\32px\mpg.png" />
+    <Content Include="Content\Images\Icons\32px\odf.png" />
+    <Content Include="Content\Images\Icons\32px\ods.png" />
+    <Content Include="Content\Images\Icons\32px\odt.png" />
+    <Content Include="Content\Images\Icons\32px\otp.png" />
+    <Content Include="Content\Images\Icons\32px\ots.png" />
+    <Content Include="Content\Images\Icons\32px\ott.png" />
+    <Content Include="Content\Images\Icons\32px\pdf.png" />
+    <Content Include="Content\Images\Icons\32px\php.png" />
+    <Content Include="Content\Images\Icons\32px\png.png" />
+    <Content Include="Content\Images\Icons\32px\ppt.png" />
+    <Content Include="Content\Images\Icons\32px\psd.png" />
+    <Content Include="Content\Images\Icons\32px\py.png" />
+    <Content Include="Content\Images\Icons\32px\qt.png" />
+    <Content Include="Content\Images\Icons\32px\rar.png" />
+    <Content Include="Content\Images\Icons\32px\rb.png" />
+    <Content Include="Content\Images\Icons\32px\rtf.png" />
+    <Content Include="Content\Images\Icons\32px\sass.png" />
+    <Content Include="Content\Images\Icons\32px\scss.png" />
+    <Content Include="Content\Images\Icons\32px\sql.png" />
+    <Content Include="Content\Images\Icons\32px\tga.png" />
+    <Content Include="Content\Images\Icons\32px\tgz.png" />
+    <Content Include="Content\Images\Icons\32px\tiff.png" />
+    <Content Include="Content\Images\Icons\32px\txt.png" />
+    <Content Include="Content\Images\Icons\32px\wav.png" />
+    <Content Include="Content\Images\Icons\32px\xls.png" />
+    <Content Include="Content\Images\Icons\32px\xlsx.png" />
+    <Content Include="Content\Images\Icons\32px\xml.png" />
+    <Content Include="Content\Images\Icons\32px\yml.png" />
+    <Content Include="Content\Images\Icons\32px\zip.png" />
+    <Content Include="Content\Images\Icons\32px\_blank.png" />
+    <Content Include="Content\Images\Icons\32px\_page.png" />
     <Content Include="Content\Images\Icons\cross.png" />
     <Content Include="Content\Images\Icons\edit.png" />
     <Content Include="Content\Images\Icons\file.png" />
     <Content Include="Content\Images\Icons\folder.png" />
     <Content Include="Content\Images\Icons\info.png" />
     <Content Include="Content\Images\Icons\pencil2.png" />
+    <Content Include="Content\Images\no-avatar.png" />
     <Content Include="Content\LoginStyling.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -336,6 +474,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\bootstrap-toggle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docuvieware-min.js" />
@@ -355,6 +494,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Scripts\bootstrap-toggle.min.js.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -464,6 +604,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812070948080_fileExtension.resx">
       <DependentUpon>201812070948080_fileExtension.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812101014041_settingsForUser.resx">
+      <DependentUpon>201812101014041_settingsForUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812101037052_linkSettings.resx">
+      <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

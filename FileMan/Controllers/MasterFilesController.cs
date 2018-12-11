@@ -2,6 +2,7 @@
 using FileMan.Context;
 using FileMan.Models;
 using FileMan.Models.ViewModels;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,9 +27,10 @@ namespace FileMan.Controllers
 
         // GET: MasterFiles/Details/5
         public ActionResult Details(int id)
-        {           
+        {
 
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id);
+            string userId = User.Identity.GetUserId();
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
 
             return View(file);
         }
@@ -111,7 +113,8 @@ namespace FileMan.Controllers
         // GET: MasterFiles/Edit/5
         public ActionResult Edit(int id)
         {
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id);
+            string userId = User.Identity.GetUserId();
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
 
             return View(file);
         }
@@ -147,7 +150,9 @@ namespace FileMan.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
-        public ActionResult Promote(long id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Promote(long id, string Comment)
         {
             MasterFile item = _db.MasterFile.Find(id);
             if (item != null)
@@ -160,6 +165,12 @@ namespace FileMan.Controllers
 
                 item.Issue = issue;
                 item.Changelog = item.Changelog + string.Format("{0} - Promoted to Issue : {1} \n", DateTime.Now, issue);
+                if (!string.IsNullOrEmpty(Comment))
+                {
+                    item.Comment = item.Comment + 
+                                    "\n" + 
+                                    Comment;
+                }
                 if (fr != null)
                 {
                     fr.Draft = issue.ToString();
@@ -177,9 +188,11 @@ namespace FileMan.Controllers
             MasterFile master = _db.MasterFile.Find(Id);
             var assigned = master.Folders.Select(a => a.Id).ToArray();
 
+
             if (folders==null || folders.Count()==0)
             {
                 master.Folders = new List<Folder>();
+                master.Changelog = master.Changelog + string.Format("{0} - Uncategorised \n", DateTime.Now);
                 _db.SaveChanges();
                 return Redirect(Request.UrlReferrer.ToString());
             }
@@ -200,6 +213,8 @@ namespace FileMan.Controllers
                 Folder folder = _db.Folder.Find(i);
                 master.Folders.Add(folder);
             }
+
+            master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
             _db.SaveChanges();
 
             return Redirect(Request.UrlReferrer.ToString());

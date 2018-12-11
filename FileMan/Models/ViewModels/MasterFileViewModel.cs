@@ -24,5 +24,6 @@ namespace FileMan.Models.ViewModels
         public List<TreeNode> TreeNodes { get; set; }
         public List<FolderPartialViewModel> FolderList { get; set; }
         public bool Promote { get; set; }
+        public bool ShowChangelog { get; set; }
     }
 }
