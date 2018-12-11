@@ -26,5 +26,6 @@ namespace FileMan.Models
         public DateTime? Added { get; set; }
         public string Draft { get; set; }
         public string Type { get; set; }
+        public string Icon { get; set; }
     }
 }

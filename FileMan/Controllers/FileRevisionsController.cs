@@ -44,7 +44,8 @@ namespace FileMan.Controllers
                 if (DataFeeder.DocuCompatible(file.Extension))
                 {
                     return View(file);
-                } else
+                }
+                else
                 {
                     string mimeType = MimeTypeMap.GetMimeType(file.Extension);
                     Response.AddHeader("Content-Disposition", "inline; filename=" + file.Name);
@@ -73,7 +74,7 @@ namespace FileMan.Controllers
                     var actionDate = DateTime.Now;
                     string extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
                     var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + "_v" + item.Revision +"."+ extension.ToLower();
-
+                    string icon = DataFeeder.GetIcon(extension);
                     // MasterFile setup
                     MasterFile parent = _db.MasterFile.Find(item.MasterFileId);                    
                     var fullpath = Path.Combine(rootPath, parent.Number, filname);
@@ -88,6 +89,7 @@ namespace FileMan.Controllers
                     item.Draft = draft;
                     item.Type = "draft";
                     item.Extension = extension;
+                    item.Icon = icon;
                     file.SaveAs(fullpath);
 
 

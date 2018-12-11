@@ -78,6 +78,7 @@ namespace FileMan.Controllers
                 if (file != null)
                 {
                     extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
+                    string icon = DataFeeder.GetIcon(extension);
                     var revision = 1;
                     var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+"."+extension.ToLower();
                     var fullpath = Path.Combine(rootPath, number, filname);
@@ -92,7 +93,8 @@ namespace FileMan.Controllers
                         FullPath = fullpath,
                         Draft = draft,
                         Type = "draft",
-                        Added = added
+                        Added = added,
+                        Icon = icon
                     };
 
                     file.SaveAs(fullpath);
