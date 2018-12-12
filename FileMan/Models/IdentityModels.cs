@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Security.Claims;
@@ -15,6 +16,9 @@ namespace FileMan.Models
         [ForeignKey("UserSetting")]
         public long UserSettingId { get; set; }
         public virtual UserSetting UserSetting { get; set; }
+        public DateTime JoinDate { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

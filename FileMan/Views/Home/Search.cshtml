@@ -82,16 +82,12 @@
             </div>
         </div>
         <div class="col-md-4">
-            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="searchBox" placeholder="Search for.." name="search" style="width:100%;" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Go!</button>
-                    </span>
-                </div><!-- /input-group -->
-            }
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="searchBox" placeholder="Search for.." style="width:100%;" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div><!-- /input-group -->
 
         </div>
         <div class="col-md-12">
@@ -110,8 +106,8 @@
                     @foreach (Folder itm in Model.ChildrenDirs)
                     {
                         <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory"/></td>
-                            <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = itm.Path }) </td>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" /></td>
+                            <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = "Directory" }) </td>
                             <td></td>
                             <td></td>
                             <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
@@ -124,9 +120,9 @@
                     @foreach (MasterFile itm in Model.ChildrenFiles)
                     {
                         <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png"  title="Document"/></td>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" /></td>
                             <td>@itm.Name</td>
-                            <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = itm.Number }) </td>
+                            <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
                             <td>
                                 @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                                 {

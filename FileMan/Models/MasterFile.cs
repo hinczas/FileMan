@@ -28,5 +28,29 @@ namespace FileMan.Models
 
         public virtual List<Folder> Folders { get; set; }
         public virtual List<FileRevision> Revisions { get; set; }
+
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as MasterFile);
+        }
+
+        public bool Equals(MasterFile other)
+        {
+            if (other == null)
+                return false;
+
+            return this.Id == other.Id && this.Name.Equals(other.Name) && this.Number.Equals(other.Number);
+        }
+
+        public override int GetHashCode()
+        {
+
+            int name = Name.GetHashCode();
+            int number = Number.GetHashCode();
+            int id = Id.GetHashCode();
+
+            return name ^ number ^ id;
+        }
     }
 }

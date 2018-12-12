@@ -1,6 +1,7 @@
 ﻿using FileMan.Classes;
 using FileMan.Context;
 using FileMan.Models;
+using Microsoft.AspNet.Identity;
 using MimeTypes;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,12 @@ namespace FileMan.Controllers
 
         public ActionResult Details (long? id)
         {
+            ApplicationDbContext adb = new ApplicationDbContext();
             FileRevision file = _db.FileRevision.Find(id);
+            string userId = User.Identity.GetUserId();
+            ApplicationUser user = adb.Users.Find(userId);
+            bool useDocu = user.UserSetting.UseDocuViewer;
+
 
             if (file == null)
             {
@@ -42,7 +48,7 @@ namespace FileMan.Controllers
             }
             else
             {
-                if (DataFeeder.DocuCompatible(file.Extension))
+                if (useDocu && DataFeeder.DocuCompatible(file.Extension))
                 {
                     return View(file);
                 }
@@ -94,9 +100,9 @@ namespace FileMan.Controllers
                     item.Icon = icon;
                     file.SaveAs(fullpath);
 
-                    //var md5 = MD5.Create();
-                    //byte[] hash = md5.ComputeHash(System.IO.File.ReadAllBytes(fullpath));
-                    //item.Md5hash = System.Text.Encoding.UTF8.GetString(hash);
+                    var md5 = MD5.Create();
+                    string hash = _is.GetMd5Hash(md5, fullpath);
+                    item.Md5hash = hash;
 
                     _db.FileRevision.Add(item);
                     _db.SaveChanges();

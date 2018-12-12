@@ -16,6 +16,7 @@ namespace FileMan.Models
         
         public bool ShowChangelog { get; set; }
         public bool ShowUncategorisedRoot { get; set; }
-        public bool UncategorisedVisible { get; set; }        
+        public bool UncategorisedVisible { get; set; }
+        public bool UseDocuViewer { get; set; }
     }
 }

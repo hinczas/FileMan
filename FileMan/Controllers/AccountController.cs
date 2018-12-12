@@ -155,9 +155,11 @@ namespace FileMan.Controllers
                 {
                     ShowChangelog = false,
                     ShowUncategorisedRoot = true,
-                    UncategorisedVisible = true
+                    UncategorisedVisible = true,
+                    UseDocuViewer = true
                 };
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings };
+                var joinDate = DateTime.Now;
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings, JoinDate = joinDate, FirstName = model.FirstName, Surname = model.Surname };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -169,7 +171,7 @@ namespace FileMan.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Manage");
                 }
                 AddErrors(result);
             }

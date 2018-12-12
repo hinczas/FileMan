@@ -78,7 +78,11 @@ namespace FileMan.Controllers
                 ShowOnRoot = user.UserSetting.ShowUncategorisedRoot,
                 UncatVisible = user.UserSetting.UncategorisedVisible,
                 ShowChangelog = user.UserSetting.ShowChangelog,
-                SettingsId = user.UserSetting.Id
+                UseDocuViewer = user.UserSetting.UseDocuViewer,
+                SettingsId = user.UserSetting.Id,
+                JoinDate = user.JoinDate,
+                FirstName = user.FirstName,
+                Surname = user.Surname
             };
             return View(model);
         }
@@ -116,7 +120,7 @@ namespace FileMan.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible)
+        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible, string UseDocuViewer)
         {
             DatabaseCtx _db = new DatabaseCtx();
             UserSetting settings = _db.UserSetting.Find(Id);
@@ -125,16 +129,9 @@ namespace FileMan.Controllers
                 settings.ShowChangelog = ShowChangelog==null ? false : true;
                 settings.ShowUncategorisedRoot = ShowUncategorisedRoot == null ? false : true;
                 settings.UncategorisedVisible = UncategorisedVisible == null ? false : true;
+                settings.UseDocuViewer = UseDocuViewer == null ? false : true;
                 _db.SaveChanges();
                 return Redirect(Request.UrlReferrer.ToString());
-            } else
-            {
-                var errors = ModelState
-                .Where(x => x.Value.Errors.Count > 0)
-                .Select(x => new { x.Key, x.Value.Errors })
-                .ToArray();
-
-                var som = "asdf";
             }
             return Redirect(Request.UrlReferrer.ToString());
         }

@@ -40,8 +40,41 @@
         @using Microsoft.AspNet.Identity
         @if (Request.IsAuthenticated)
         {
-            <b>@User.Identity.GetUserName() </b>
+            <p><a href="mailto:@User.Identity.GetUserName()">@User.Identity.GetUserName() </a><br /></p>
         }
+            <dl class="dl-horizontal">
+                <dt style="width:80px;">
+                    name:
+                </dt>
+                <dd style="margin-left:85px; padding-left:5px; text-align:left;">
+                    @Model.FirstName
+                </dd>
+                <dt style="width:80px;">
+                    surname:
+                </dt>
+                <dd style="margin-left:85px; padding-left:5px; text-align:left;">
+                    @Model.Surname
+                </dd>
+                @*<dt style="width:80px;">
+                    phone:
+                </dt>
+                <dd style="margin-left:5px;">
+                    @if (string.IsNullOrEmpty(@Model.PhoneNumber))
+                    {
+                        @Html.ActionLink("add", "AddPhoneNumber")
+                    }
+                    else
+                    {
+                        @Model.PhoneNumber
+                    }
+                </dd>*@
+                <dt style="width:80px;">
+                    joined:
+                </dt>
+                <dd style="margin-left:85px; padding-left:5px; text-align:left;">
+                    @Model.JoinDate
+                </dd>
+            </dl>
     </div>
 </div>
 <div class="col-md-9">
@@ -77,8 +110,8 @@
 
              Uncomment the following block after you have set up two-factor authentication
                 *@
-                @*
-            <dt>Phone Number:</dt>
+                
+            @*<dt>Phone Number:</dt>
             <dd>
                 @(Model.PhoneNumber ?? "None")
                 @if (Model.PhoneNumber != null)
@@ -93,11 +126,11 @@
                 }
                 else
                 {
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")]</text>
                 }
-            </dd>
-                *@
-                <dt>Two-Factor Authentication:</dt>
+            </dd>*@
+                
+                <dt>Two-Factor Auth:</dt>
                 <dd>
                     <p>
                         There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
@@ -151,6 +184,12 @@
                     </dt>
                     <dd>
                         Show <b>changelog</b> on document details page
+                    </dd>
+                    <dt>
+                        <input type="checkbox" @(Model.UseDocuViewer ? "checked" : "") data-toggle="toggle" name="UseDocuViewer" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Use third party <b>DocuViewer</b> to open even more documents in browser (e.g.: docx)
                     </dd>
                 </dl>
 

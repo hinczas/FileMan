@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -15,7 +16,11 @@ namespace FileMan.Models
         public bool ShowOnRoot { get; set; }
         public bool UncatVisible { get; set; }
         public bool ShowChangelog { get; set; }
+        public bool UseDocuViewer { get; set; }
         public long SettingsId { get; set; }
+        public DateTime JoinDate { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
     }
 
     public class ManageLoginsViewModel

@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity.Owin;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FileMan.Classes
 {
@@ -36,6 +38,7 @@ namespace FileMan.Classes
             }
             return bc;
         }
+
         private List<Folder> GetFileBreadcrumbs(long id)
         {
             var item = _db.Folder.Find(id);
@@ -223,6 +226,52 @@ namespace FileMan.Classes
             return ivm;
         }
 
+        public ItemViewModel GetItemViewModel(string search)
+        {
+            Folder item = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            
+            var childrenDir = _db.Folder.Where(a => a.Name.Contains(search)).OrderBy(a => a.Name).ToList();
+            var filesNumber = _db.MasterFile.Where(a=>a.Number.Contains(search)).OrderBy(a => a.Name).ToList();
+            var filesName = _db.MasterFile.Where(a => a.Name.Contains(search)).OrderBy(a => a.Name).ToList();
+            var filesDesc = _db.MasterFile.Where(a => a.Description.Contains(search)).OrderBy(a => a.Name).ToList();
+            var filesComm = _db.MasterFile.Where(a => a.Comment.Contains(search)).OrderBy(a => a.Name).ToList();
+
+            var childrenFil = filesNumber.Union(filesName);
+            childrenFil = childrenFil.Union(filesDesc);
+            childrenFil = childrenFil.Union(filesComm);
+
+            var revFilesNam = _db.FileRevision.Where(a => a.Name.Contains(search)).Select(b => b.MasterFile).ToList();
+            var revFilesDraft = _db.FileRevision.Where(a => a.Draft.Contains(search)).Select(b => b.MasterFile).ToList();
+            var revFiles = revFilesNam.Union(revFilesDraft);
+            childrenFil = childrenFil.Union(revFiles);
+
+            var fileList = childrenFil.ToList();
+
+            var bc = GetBreadcrumbs(item.Id);
+            List<TreeNode> list = new List<TreeNode>();
+            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            list = GetTree(list, root, 0);
+
+            var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path
+            }).ToList();
+
+
+            ItemViewModel ivm = new ItemViewModel()
+            {
+                Current = item,
+                ChildrenDirs = childrenDir,
+                ChildrenFiles = fileList,
+                Breadcrumbs = bc,
+                TreeNodes = list,
+                FolderList = foldersList
+            };
+            return ivm;
+        }
+
         public long CreateRoot()
         {
             string path = ConfigurationManager.AppSettings["ROOT_DIR"];
@@ -312,6 +361,27 @@ namespace FileMan.Classes
 
             return Increment(fragment) + 'A';
 
+        }
+
+        public string GetMd5Hash(MD5 md5Hash, string input)
+        {
+
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(System.IO.File.ReadAllBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
         }
     }
 }

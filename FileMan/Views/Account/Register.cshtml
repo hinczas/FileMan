@@ -22,6 +22,16 @@
             @Html.ValidationSummary("", new { @class = "text-danger" })
             <br />
             <div>
+                <div class="col-md-6" style="padding-left:25px; padding-right:0px;">
+                    @Html.TextBoxFor(m => m.FirstName, new { @type = "text", placeholder = "Name...", @required = "" })
+                    @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-6" style="padding-right:25px; padding-left:0px;">
+                    @Html.TextBoxFor(m => m.Surname, new { @type = "text", placeholder = "Last name...", @required = "" })
+                    @Html.ValidationMessageFor(m => m.Surname, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div>
                 <div class="col-md-12">
                     @Html.TextBoxFor(m => m.Email, new { @type = "text", placeholder = "Email...", @required = "" })
                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })

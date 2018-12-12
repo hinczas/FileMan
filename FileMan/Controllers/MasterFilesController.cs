@@ -111,9 +111,9 @@ namespace FileMan.Controllers
 
                     file.SaveAs(fullpath);
 
-                    //var md5 = MD5.Create();
-                    //byte[] hash = md5.ComputeHash(System.IO.File.ReadAllBytes(fullpath));
-                    //rf.Md5hash = System.Text.Encoding.UTF8.GetString(hash);
+                    var md5 = MD5.Create();
+                    string hash = _is.GetMd5Hash(md5,fullpath);
+                    rf.Md5hash = hash;
 
                     item.Extension = extension;
                     item.Changelog = item.Changelog + string.Format("{0} - Revision added : {1} \n", added, filname);

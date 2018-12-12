@@ -24,7 +24,7 @@ namespace FileMan.Controllers
             _db = new DatabaseCtx();
         }
 
-        public ActionResult Index(long? id)
+        public ActionResult Index(long? id, string search)
         {
             TempData["folderId"] = id;
             var items = _db.Folder.Count();
@@ -32,19 +32,27 @@ namespace FileMan.Controllers
 
             string userId = User.Identity.GetUserId();
 
-            if (items==0)
+            if(string.IsNullOrEmpty(search))
             {
-                long newId = _is.CreateRoot();
-                ivm = _is.GetItemViewModel(newId, userId);
+                if (items == 0)
+                {
+                    long newId = _is.CreateRoot();
+                    ivm = _is.GetItemViewModel(newId, userId);
 
+                }
+                else
+                {
+                    ivm = _is.GetItemViewModel(id, userId);
+                }
             } else
             {
-                ivm = _is.GetItemViewModel(id, userId);
+                ivm = _is.GetItemViewModel(search);
             }
-            
+                       
             
             return View(ivm);
         }
+
 
         [HttpGet]
         public JsonResult GetTree(long id)
