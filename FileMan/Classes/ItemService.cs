@@ -226,24 +226,31 @@ namespace FileMan.Classes
             return ivm;
         }
 
-        public ItemViewModel GetItemViewModel(string search)
+        public ItemViewModel GetItemViewModel(string search, int scope)
         {
             Folder item = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
             
+            // Search scope 1
             var childrenDir = _db.Folder.Where(a => a.Name.Contains(search)).OrderBy(a => a.Name).ToList();
             var filesNumber = _db.MasterFile.Where(a=>a.Number.Contains(search)).OrderBy(a => a.Name).ToList();
             var filesName = _db.MasterFile.Where(a => a.Name.Contains(search)).OrderBy(a => a.Name).ToList();
-            var filesDesc = _db.MasterFile.Where(a => a.Description.Contains(search)).OrderBy(a => a.Name).ToList();
-            var filesComm = _db.MasterFile.Where(a => a.Comment.Contains(search)).OrderBy(a => a.Name).ToList();
-
             var childrenFil = filesNumber.Union(filesName);
-            childrenFil = childrenFil.Union(filesDesc);
-            childrenFil = childrenFil.Union(filesComm);
 
-            var revFilesNam = _db.FileRevision.Where(a => a.Name.Contains(search)).Select(b => b.MasterFile).ToList();
-            var revFilesDraft = _db.FileRevision.Where(a => a.Draft.Contains(search)).Select(b => b.MasterFile).ToList();
-            var revFiles = revFilesNam.Union(revFilesDraft);
-            childrenFil = childrenFil.Union(revFiles);
+
+            // Search scope 2 (includes comments and description)
+            if (scope==2)
+            {
+                var filesDesc = _db.MasterFile.Where(a => a.Description.Contains(search)).OrderBy(a => a.Name).ToList();
+                var filesComm = _db.MasterFile.Where(a => a.Comment.Contains(search)).OrderBy(a => a.Name).ToList();
+
+                childrenFil = childrenFil.Union(filesDesc);
+                childrenFil = childrenFil.Union(filesComm);
+            }
+
+            //var revFilesNam = _db.FileRevision.Where(a => a.Name.Contains(search)).Select(b => b.MasterFile).ToList();
+            //var revFilesDraft = _db.FileRevision.Where(a => a.Draft.Contains(search)).Select(b => b.MasterFile).ToList();
+            //var revFiles = revFilesNam.Union(revFilesDraft);
+            //childrenFil = childrenFil.Union(revFiles);
 
             var fileList = childrenFil.ToList();
 

@@ -24,7 +24,7 @@ namespace FileMan.Controllers
             _db = new DatabaseCtx();
         }
 
-        public ActionResult Index(long? id, string search)
+        public ActionResult Index(long? id, string search, int? scope)
         {
             TempData["folderId"] = id;
             var items = _db.Folder.Count();
@@ -45,8 +45,8 @@ namespace FileMan.Controllers
                     ivm = _is.GetItemViewModel(id, userId);
                 }
             } else
-            {
-                ivm = _is.GetItemViewModel(search);
+            {                
+                ivm = _is.GetItemViewModel(search, (int)scope);
             }
                        
             

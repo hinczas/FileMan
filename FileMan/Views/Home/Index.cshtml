@@ -22,7 +22,6 @@
     .table {
         font-size: small;
     }
-
 </style>
 <div class="row">
     <div class="col-md-3">
@@ -70,9 +69,8 @@
                 }
                 <li class="active">@Model.Current.Name</li>
             </ol>
-        </div>
-
-        <div class="col-md-8">
+        </div>        
+        <div class="col-md-6">
             <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
                 <span class="input-group-addon" id="sizing-addon1">New</span>
                 <span class="input-group-btn" style="float:left">
@@ -81,18 +79,24 @@
                 </span>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
+
             @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="searchBox" placeholder="Search for.." name="search" style="width:100%;" />
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Go!</button>
-                    </span>
-                </div><!-- /input-group -->
-            }
+                    <div class="input-group input-group-sm" style="display:flex; align-items:flex-end;">
+                        <input type="text" class="form-control" id="searchBox" placeholder="Search for.." name="search" style="width:200px;" />
+                        <select name="scope" class="form-control" style="max-width:150px;">
+                            <option value=1 >Number &amp; Name</option>
+                            <option value=2 >Number, Name, Description &amp; Comment </option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" style="width:60px;">Go!</button>
+                        </span>
 
+                    </div><!-- /input-group -->
+                
+            }
         </div>
         <div class="col-md-12">
             <table class="table table-condensed">
@@ -110,7 +114,7 @@
                     @foreach (Folder itm in Model.ChildrenDirs)
                     {
                         <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory"/></td>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
                             <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = itm.Path }) </td>
                             <td></td>
                             <td></td>
@@ -124,7 +128,7 @@
                     @foreach (MasterFile itm in Model.ChildrenFiles)
                     {
                         <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png"  title="Document"/></td>
+                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" title="Document" /></td>
                             <td>@itm.Name</td>
                             <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = itm.Number }) </td>
                             <td>
