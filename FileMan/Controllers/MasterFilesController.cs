@@ -198,7 +198,6 @@ namespace FileMan.Controllers
 
                 _db.SaveChanges();
             }
-
             return Redirect(Request.UrlReferrer.ToString());
         }
 

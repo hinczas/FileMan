@@ -118,7 +118,8 @@
                                     {
                                         foreach (Folder fol in Model.Current.Folders)
                                         {
-                                            @Html.ActionLink(fol.Path, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })<br />
+                                            string folName = fol.Type.Equals("root") ? "root" : fol.Path;
+                                            @Html.ActionLink(folName, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })<br />
                                         }
                                     }
                                 </div>

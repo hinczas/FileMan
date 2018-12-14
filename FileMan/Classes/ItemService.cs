@@ -116,6 +116,10 @@ namespace FileMan.Classes
         public MasterFileViewModel GetMasterFileViewModel(long id, string userId)
         {
             var item = _db.MasterFile.Find(id);
+            if (item==null)
+            {
+                return new MasterFileViewModel();
+            }
             var revisions = item.Revisions;
             var latRev = revisions.Count == 0 ? 0 : revisions.Select(a => a.Revision).Max();
             var revId = revisions.Count == 0 ? 0 : revisions.OrderByDescending(a => a.Revision).Take(1).Select(b => b.Id).FirstOrDefault();
