@@ -72,9 +72,12 @@ namespace FileMan.Classes
 
         public TreeviewNodeEntity[] GetTree(Folder root, long id)
         {
-            var folders = _db.Folder.Where(a => a.Pid == root.Id).OrderBy(a => a.Name).ToList();
-            if (folders.Count > 0)
+            var fols = _db.Folder.Where(a => a.Pid == root.Id);
+            
+            if (fols.Count() > 0)
             {
+                var folders = fols.OrderBy(a => a.Name).ToList();
+
                 int cntr = 0;
                 TreeviewNodeEntity[] tmpList = new TreeviewNodeEntity[folders.Count];
 
@@ -184,9 +187,14 @@ namespace FileMan.Classes
             bool uncatVisible = user.UserSetting.UncategorisedVisible;
             bool showUncatRoot = user.UserSetting.ShowUncategorisedRoot;
 
-            var childrenDir = _db.Folder.Where(a => a.Pid == item.Id).OrderBy(a=>a.Name).ToList();
-            var childrenFil = item.Files.OrderBy(a => a.Name).ToList();
-            var unassigned = _db.MasterFile.Where(a => a.Folders.Count == 0).ToList();
+            var chilDrs = _db.Folder.Where(a => a.Pid == item.Id);
+            var childrenDir = chilDrs.Count() > 0 ? chilDrs.OrderBy(a=>a.Name).ToList() : new List<Folder>();
+
+            var chilFls = item.Files;
+            var childrenFil = chilFls.Count() > 0 ? chilFls.OrderBy(a => a.Name).ToList() : new List<MasterFile>();
+
+            var uns = _db.MasterFile.Where(a => a.Folders.Count == 0);
+            var unassigned = uns.Count() > 0 ? uns.ToList() : new List<MasterFile>();
 
             if (uncatVisible)
             {
