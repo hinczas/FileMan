@@ -118,7 +118,7 @@
                                     {
                                         foreach (Folder fol in Model.Current.Folders)
                                         {
-                                            string folName = fol.Type.Equals("root") ? "root" : fol.Path;
+                                            string folName = fol.IsRoot ? "root" : fol.Path;
                                             @Html.ActionLink(folName, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })<br />
                                         }
                                     }

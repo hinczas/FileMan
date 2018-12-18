@@ -35,10 +35,9 @@ namespace FileMan.Controllers
 
         public ActionResult Details (long? id)
         {
-            ApplicationDbContext adb = new ApplicationDbContext();
             FileRevision file = _db.FileRevision.Find(id);
             string userId = User.Identity.GetUserId();
-            ApplicationUser user = adb.Users.Find(userId);
+            ApplicationUser user = _is.GetASPUser(userId);
             bool useDocu = user.UserSetting.UseDocuViewer;
 
 
@@ -74,7 +73,7 @@ namespace FileMan.Controllers
                 string prefDraft = prev == null ? "" : prev.Draft;
                 string draft = _is.Increment(prefDraft);
 
-                var rootPath = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault().Path;
+                var rootPath = _is.GetRoot().Path;
 
                 if (file != null)
                 {

@@ -127,7 +127,7 @@ namespace FileMan.Classes
             var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
 
             List<TreeNode> list = new List<TreeNode>();
-            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            var root = GetRoot();
             list = GetTree(list, root, 0);
 
             FileRevision fr = _db.FileRevision.Where(a => a.MasterFileId == id).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
@@ -145,8 +145,7 @@ namespace FileMan.Classes
             .ThenBy(a=>a.Path)
             .ToList();
 
-            ApplicationDbContext adb = new ApplicationDbContext();
-            ApplicationUser user = adb.Users.Find(userId);
+            ApplicationUser user = GetASPUser(userId);
             bool changelog = user.UserSetting.ShowChangelog;
 
             bool promote = !issue.Equals(draft) && revisions.Count() != 0;
@@ -179,15 +178,14 @@ namespace FileMan.Classes
             Folder item;
             if (id == null)
             {
-                item = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+                item = GetRoot();
             }
             else
             {
                 item = _db.Folder.Find(id);
             }
-
-            ApplicationDbContext adb = new ApplicationDbContext();
-            ApplicationUser user = adb.Users.Find(userId);
+            
+            ApplicationUser user = GetASPUser(userId);
             bool uncatVisible = user.UserSetting.UncategorisedVisible;
             bool showUncatRoot = user.UserSetting.ShowUncategorisedRoot;
 
@@ -204,7 +202,7 @@ namespace FileMan.Classes
             {
                 if(showUncatRoot)
                 {
-                    if(item.Type.Equals("root"))
+                    if(item.IsRoot)
                     {
                         childrenFil = childrenFil.Union(unassigned).OrderBy(a => a.Name).ToList();
                     }
@@ -214,7 +212,7 @@ namespace FileMan.Classes
             
             var bc = GetBreadcrumbs(item.Id);
             List<TreeNode> list = new List<TreeNode>();
-            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            var root = GetRoot();
             list = GetTree(list, root, 0);
 
             var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
@@ -240,7 +238,7 @@ namespace FileMan.Classes
 
         public ItemViewModel GetItemViewModel(string search, int scope)
         {
-            Folder item = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            Folder item = GetRoot();
             
             // Search scope 1
             var childrenDir = _db.Folder.Where(a => a.Name.Contains(search)).OrderBy(a => a.Name).ToList();
@@ -268,7 +266,7 @@ namespace FileMan.Classes
 
             var bc = GetBreadcrumbs(item.Id);
             List<TreeNode> list = new List<TreeNode>();
-            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            var root = GetRoot();
             list = GetTree(list, root, 0);
 
             var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
@@ -325,9 +323,9 @@ namespace FileMan.Classes
 
         public void DeleteFile(long id)
         {
-            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault().Path;
+            var rootPath = GetRoot().Path;
             var mf = _db.MasterFile.Find(id);
-            var path = Path.Combine(root, mf.Number);
+            var path = Path.Combine(rootPath, mf.Number);
 
             var revisions = mf.Revisions.ToList();
 
@@ -401,6 +399,17 @@ namespace FileMan.Classes
 
             // Return the hexadecimal string.
             return sBuilder.ToString();
+        }
+
+        public Folder GetRoot()
+        {
+            return _db.Folder.Where(a => a.IsRoot).FirstOrDefault();
+        }
+
+        public ApplicationUser GetASPUser(string userId)
+        {
+            ApplicationDbContext adb = new ApplicationDbContext();
+            return adb.Users.Find(userId);
         }
     }
 }

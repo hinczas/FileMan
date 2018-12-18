@@ -49,5 +49,16 @@ namespace FileMan.Models
 
             return name ^ path ^ id;
         }
+
+        public bool IsRoot
+        {
+            get
+            {
+                if (Type.Equals("root"))
+                    return true;
+
+                return false;
+            }
+        }
     }
 }

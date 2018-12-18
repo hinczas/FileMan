@@ -32,7 +32,7 @@ namespace FileMan.Controllers
                 var added = DateTime.Now;
                 var changelog = string.Format("{0} - Folder created \n", added);
                 var parent = _db.Folder.Find(item.Pid);
-                var parentPath = parent == null || parent.Type.Equals("root") ? "" : parent.Path;
+                var parentPath = parent == null || parent.IsRoot ? "" : parent.Path;
                 var path = Path.Combine(parentPath, item.Name);
 
                 var changelogParent = string.Format("{0} - Subfolder created : {1} \n", added, item.Name);

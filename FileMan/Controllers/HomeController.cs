@@ -58,7 +58,7 @@ namespace FileMan.Controllers
         public JsonResult GetTree(long id)
         {
 
-            var root = _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+            var root = _is.GetRoot();
 
             
             var nods = _is.GetTree(root, id);
@@ -69,7 +69,6 @@ namespace FileMan.Controllers
                 disabled = false,
                 selected = id == root.Id ? true : false,
                 expanded = exp
-
             };
 
             var list2 = new TreeviewNodeEntity[1]

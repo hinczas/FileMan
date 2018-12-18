@@ -61,7 +61,7 @@ namespace FileMan.Controllers
                 {
                     string oldChng = parent.Changelog;
                     parent.Changelog = oldChng + changelogParent;
-                    path = parent.Type.Equals("root") ? "" : parent.Path;
+                    path = parent.IsRoot ? "" : parent.Path;
                 }
 
 
@@ -69,7 +69,7 @@ namespace FileMan.Controllers
 
                 item.Number = number;
 
-                var rootPath = _db.Folder.Where(a=> a.Type.Equals("root")).FirstOrDefault().Path;
+                var rootPath = _is.GetRoot().Path;
                 path = Path.Combine(path, number);
                 string extension = "";
 
