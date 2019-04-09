@@ -1,0 +1,30 @@
+﻿input[hidden] {
+    display: none !important;
+}
+
+.disp-align-ver, .disp-align-ver input, .disp-align-ver button {
+    display: inline-block;
+    vertical-align: middle;
+}
+.row-menu {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-left: 15px;
+    margin-right: 15px;
+    background-color: #f5f5f5;
+}
+.row-menu input {
+    max-width:100px;
+}
+    .row-menu input[disabled] {
+        background-color: white !important;
+        cursor:default;
+    }
+    .row-menu .input-lg {
+        max-width: 250px;
+    }
+    .row-menu .col-sm-1, .row-menu .col-sm-2, .row-menu .col-sm-3, .row-menu .col-sm-4, .row-menu .col-sm-5, .row-menu .col-sm-6 {
+        padding: 0px 5px 0px 5px;
+    }

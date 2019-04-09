@@ -29,8 +29,8 @@ namespace FileMan
 
 
             // Adding the DocuVieware resources we need in a new bundle
-            bundles.Add(new ScriptBundle("~/bundles/docuvieware").Include("~/Scripts/docuvieware-min.js"));
-            bundles.Add(new StyleBundle("~/Content/docuvieware").Include("~/Content/docuvieware-min.css"));
+            //bundles.Add(new ScriptBundle("~/bundles/docuvieware").Include("~/Scripts/docuvieware-min.js"));
+            //bundles.Add(new StyleBundle("~/Content/docuvieware").Include("~/Content/docuvieware-min.css"));
 
 
         }

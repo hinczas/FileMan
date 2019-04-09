@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -100,5 +101,28 @@ namespace FileMan.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ImportFiles(HttpPostedFileBase fileImp, string fileType, long? intoCurrent)
+        {
+            if (string.IsNullOrEmpty(fileType))
+                return Redirect(Request.UrlReferrer.ToString());
+                       
+            if (fileImp!=null)
+            {
+                FileService _fs = new FileService();
+
+                if (fileType.Equals("dir"))
+                {
+                    await _fs.ImportCatsAsync(fileImp, fileType, intoCurrent);
+                }
+
+                if (fileType.Equals("doc"))
+                {
+                    await _fs.ImportDocsAsync(fileImp, fileType, intoCurrent);
+                }
+            }
+            return Redirect(Request.UrlReferrer.ToString());
+        }
     }
 }

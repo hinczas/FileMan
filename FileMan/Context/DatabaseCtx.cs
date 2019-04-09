@@ -8,11 +8,11 @@ using FileMan.Models;
 
 namespace FileMan.Context
 {
-    [DbConfigurationType(typeof(MySqlEFConfiguration))]
+    //[DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class DatabaseCtx : DbContext
     {
         public DatabaseCtx()
-            : base("MySQLConnection")
+            : base("DefaultConnection")
         {
             Database.SetInitializer<DatabaseCtx>(null);
         }

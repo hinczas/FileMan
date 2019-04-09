@@ -10,6 +10,7 @@ using System.Web;
 using Microsoft.AspNet.Identity.Owin;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FileMan.Classes
 {
@@ -307,6 +308,80 @@ namespace FileMan.Classes
             return item.Id;
         }
 
+        public async Task CreateFolderAsync(Folder item)
+        {
+            var added = DateTime.Now;
+            var changelog = string.Format("{0} - Folder imported (csv) \n", added);
+            var parent = _db.Folder.Find(item.Pid);
+            var parentPath = parent == null || parent.IsRoot ? "" : parent.Path;
+            var path = Path.Combine(parentPath, item.Name);
+
+            var changelogParent = string.Format("{0} - Subfolder created (csv) : {1} \n", added, item.Name);
+            if (parent != null)
+            {
+                string oldChng = parent.Changelog;
+                parent.Changelog = oldChng + changelogParent;
+            }
+
+            item.Parent = parent;
+            item.Path = path;
+            item.Added = added;
+            item.Changelog = changelog;
+
+            _db.Folder.Add(item);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task CreateDocumentAsync(MasterFile item, List<Folder> parents)
+        {
+            var added = DateTime.Now;
+            var changelog = string.Format("{0} - Item imported (csv) \n", added);
+
+
+            item.Added = added;
+            item.Changelog = changelog;
+            item.Number = "xxx"; // temp number
+
+            _db.MasterFile.Add(item);
+            try
+            {
+                await _db.SaveChangesAsync();
+            } catch (Exception e)
+            {
+                var smth = e.Message;
+            }
+
+
+            //var changelogParent = string.Format("{0} - File imported (csv): {1} \n", added, item.Name);
+            //string path = "";
+            //if (parent != null)
+            //{
+            //    string oldChng = parent.Changelog;
+            //    parent.Changelog = oldChng + changelogParent;
+            //    path = parent.IsRoot ? "" : parent.Path;
+            //}
+            
+            string number = item.Id.ToString().PadLeft(9, '0');
+
+            item.Number = number;
+
+            var rootPath = GetRoot().Path;
+            //path = Path.Combine(path, number);
+            //string extension = "";
+
+            Directory.CreateDirectory(Path.Combine(rootPath, number));
+
+            //item.Path = path;
+            item.Added = added;
+            item.Changelog = changelog;
+            //item.Extension = extension;
+            item.Folders = parents;
+
+            //_db.MasterFile.Add(item);
+            await _db.SaveChangesAsync();
+
+        }
+
         public void DeleteDirectory(long id)
         {
             Folder folder = _db.Folder.Find(id);
@@ -403,9 +478,32 @@ namespace FileMan.Classes
 
         public Folder GetRoot()
         {
-            return _db.Folder.Where(a => a.IsRoot).FirstOrDefault();
+            return _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
         }
 
+        public Folder GetFolderById(long id)
+        {
+            return _db.Folder.Find(id);
+        }
+
+        public Folder GetFolderByName(string name)
+        {
+            var list = _db.Folder.Where(a => a.Name.ToLower().Equals(name.ToLower())).ToList();
+            if (list==null || list.Count() != 1)
+                return null;
+
+            return list.First();
+        }
+        public Folder GetFolderByPath(string path)
+        {
+            path = path.Replace('/', '\\');
+
+            var list = _db.Folder.Where(a => a.Path.ToLower().Equals(path.ToLower())).ToList();
+            if (list == null || list.Count() != 1)
+                return null;
+
+            return list.First();
+        }
         public ApplicationUser GetASPUser(string userId)
         {
             ApplicationDbContext adb = new ApplicationDbContext();

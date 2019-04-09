@@ -7,8 +7,8 @@ namespace FileMan.Migrations
     {
         public override void Up()
         {
-            DropForeignKey("Item", "Pid", "Item");
-            AddForeignKey("Item", "Pid", "Item", "Id", cascadeDelete: true);
+            //DropForeignKey("Item", "Pid", "Item");
+            //AddForeignKey("Item", "Pid", "Item", "Id", cascadeDelete: true);
         }
         
         public override void Down()
