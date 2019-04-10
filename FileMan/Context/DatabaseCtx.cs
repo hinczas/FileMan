@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-using MySql.Data.Entity;
 using FileMan.Models;
 
 namespace FileMan.Context
 {
-    //[DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class DatabaseCtx : DbContext
     {
         public DatabaseCtx()
@@ -32,7 +30,7 @@ namespace FileMan.Context
         {
             modelBuilder.Entity<Folder>()
                         .HasOptional(c => c.Parent)
-                        .WithMany()
+                        .WithMany(r => r.Children)
                         .HasForeignKey(c => c.Pid);
         }
     }

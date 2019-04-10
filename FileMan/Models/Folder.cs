@@ -26,6 +26,7 @@ namespace FileMan.Models
         public DateTime? Edited { get; set; }
 
         public virtual List<MasterFile> Files { get; set; }
+        public virtual List<Folder> Children { get; set; }
 
         public override bool Equals(object obj)
         {

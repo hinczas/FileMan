@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 
 namespace FileMan.Classes
 {
@@ -494,6 +495,7 @@ namespace FileMan.Classes
 
             return list.First();
         }
+
         public Folder GetFolderByPath(string path)
         {
             path = path.Replace('/', '\\');
@@ -504,10 +506,52 @@ namespace FileMan.Classes
 
             return list.First();
         }
+
         public ApplicationUser GetASPUser(string userId)
         {
             ApplicationDbContext adb = new ApplicationDbContext();
             return adb.Users.Find(userId);
+        }
+
+        public JSTNode JSTree(long id)
+        {
+            var root = GetRoot();
+
+            return JSTree(root.Id, id);
+        }
+        public JSTNode JSTree(long id, long curId)
+        {
+            var fol = _db.Folder.Find(id);
+
+            var tree = new JSTNode()
+            {
+                id = fol.Id.ToString(),
+                text = fol.Name,
+                state = new JSTState()
+                {
+                    opened = id==curId,
+                    disabled = false,
+                    selected = id == curId
+                },
+                a_attr = new JSTAAttr()
+                {
+                    href = "/Home/Index/"+id
+                }
+                
+            };
+
+            if (fol.Children.Count>0)
+            {
+                List<JSTNode> childs = new List<JSTNode>();
+                foreach(var c in fol.Children)
+                {
+                    childs.Add(JSTree(c.Id, curId));
+                }
+
+                tree.children = childs;
+            }
+
+            return tree;
         }
     }
 }

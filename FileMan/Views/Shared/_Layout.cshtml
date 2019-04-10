@@ -10,6 +10,8 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/styling.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+
     <style>
         .treeview .list-group {
             padding-left: 0;
@@ -46,27 +48,39 @@
                 @Html.ActionLink("FileMan", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
+                <ul class="nav navbar-nav"></ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
     <div class="container body-content">
-
-        @RenderBody()    
-
-
+        <div class="row">
+            <div class="col-md-3">
+                <div class="col-md-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">Categories (<a href="javascript:expandAll();">expand all</a> | <a href="javascript:collapseAll();">collapse all</a>)</div>
+                        <div style="white-space:nowrap; overflow-x:auto;">
+                            <div id="tree"></div>
+                            <div id="jstree_demo_div"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 sub-container">
+                @RenderBody()
+            </div>
+        </div>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - FileMan</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/bootstrap-treeview.js"></script>
-    @RenderSection("scripts", required: false)
-    <script>
+        @Scripts.Render("~/bundles/bootstrap")
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+        @RenderSection("scripts", required: false)
+        <script>
         $(document).ready(function () {
             var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
             var folId = "@Url.RequestContext.RouteData.Values["id"]";
@@ -74,18 +88,33 @@
             var url = "/Home/GetTree?id="+id;
             $.get(url,
                 function (data) {
-                    $('#tree').treeview(
-                        {
-                            data: data,
-                            enableLinks: true,
-                            showTags: true,
-                            showBorder: false,
-                            expandIcon: "glyphicon glyphicon-triangle-right",
-                            collapseIcon: "glyphicon glyphicon-triangle-bottom",
+                    $('#jstree_demo_div').jstree({
+                        'core': {
+                            'data': data
                         }
-                    );
+                    });
                     //return data;
                 })
+        });
+
+        $(function () {
+            $('#jstree_demo_div').bind("select_node.jstree", function (e, data) {
+                $('#jstree').jstree('save_state');
+            });
+
+            $('#jstree_demo_div').on("activate_node.jstree", function (e, data) {
+                //window.location.href = data.node.a_attr.href;
+                var link = data.node.a_attr.href;
+
+                $.ajax({
+                    type: "get",
+                    url: link,
+                    success: function (d) {
+                        /* d is the HTML of the returned response */
+                        $('.sub-container').html(d); //replaces previous HTML with action
+                    }
+                });
+            })
         });
 
         function collapseAll() {
@@ -95,6 +124,6 @@
         function expandAll() {
             $('#tree').treeview('expandAll', { silent: true });
         }
-    </script>
+        </script>
 </body>
 </html>

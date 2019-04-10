@@ -32,6 +32,7 @@ namespace FileMan.Controllers
 
             string userId = User.Identity.GetUserId();
 
+
             if(string.IsNullOrEmpty(search))
             {
                 if (items == 0)
@@ -58,31 +59,32 @@ namespace FileMan.Controllers
         public JsonResult GetTree(long id)
         {
 
-            var root = _is.GetRoot();
+            //var root = _is.GetRoot();
 
-            
-            var nods = _is.GetTree(root, id);
-            bool exp = nods == null ? false : nods.Select(a => a.state.expandedPath).Max();
 
-            var nState = new TreeNodeState()
-            {
-                disabled = false,
-                selected = id == root.Id ? true : false,
-                expanded = exp
-            };
+            //var nods = _is.GetTree(root, id);
+            //bool exp = nods == null ? false : nods.Select(a => a.state.expandedPath).Max();
 
-            var list2 = new TreeviewNodeEntity[1]
-            {
-                new TreeviewNodeEntity()
-                {
-                    text = root.Name,
-                    tags = new string[1] { root.Files.Count.ToString() },
-                    href = "/Home/Index/" + root.Id,
-                    state = nState,
-                    nodes = nods
-                }                
-            };
+            //var nState = new TreeNodeState()
+            //{
+            //    disabled = false,
+            //    selected = id == root.Id ? true : false,
+            //    expanded = exp
+            //};
 
+            //var list2 = new TreeviewNodeEntity[1]
+            //{
+            //    new TreeviewNodeEntity()
+            //    {
+            //        text = root.Name,
+            //        tags = new string[1] { root.Files.Count.ToString() },
+            //        href = "/Home/Index/" + root.Id,
+            //        state = nState,
+            //        nodes = nods
+            //    }                
+            //};
+
+            var list2 = _is.JSTree(id);
             return Json(list2, JsonRequestBehavior.AllowGet);
         }
     }
