@@ -165,6 +165,21 @@
                 //});
 
             });
+
+
+            $("#searchItems").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tbl-unassigned tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $('.check-all-items').on("change", function () {
+                var checked = $(this).prop('checked');
+                $('.form-check-input:visible').each(function () {
+                    $(this).prop('checked', checked);
+                })
+            });
         </script>
 
         @RenderSection("scripts", required: false)

@@ -186,16 +186,20 @@
                                     <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
                                         <a data-toggle="collapse" href="#collapse1">Uncategorised</a> <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
                                     </h4>
-                                    <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
-                                        <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
-                                    </div>
+                                    <div class="input-group input-group-sm pull-right" style="max-width:200px;">
+                                        <input type="text" class="form-control form-control-sm" id="searchItems" placeholder="filter..." name="search" style="width:200px;" />
+
+                                        <span class="input-group-btn">
+                                            <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
+                                        </span>
+                                    </div><!-- /input-group -->
                                 </div>
                             </div>
                             <div id="collapse1" class="panel-collapse collapse">
-                                <table class="table table-condensed">
+                                <table class="table table-condensed" id="tbl-unassigned">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th style="width:15px;" scope="col"></th>
+                                            <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" /></th>
                                             <th style="width:100px;" scope="col">Name</th>
                                             <th style="width:70px;" scope="col">Number</th>
                                             <th style="width:25px;" scope="col">Ver</th>
@@ -208,24 +212,24 @@
                                     <tbody>
                                         @foreach (MasterFile itm in Model.UnassignedFiles)
                                         {
-                                            <tr>
-                                                <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                                <td>@itm.Name</td>
-                                                <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
-                                                <td>
-                                                    @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                                                    {
-                                                        @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
-                                                    }
-                                                </td>
-                                                <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                                                <td>@itm.Added</td>
-                                                <td>@itm.Edited</td>
-                                                <td align="right">
-                                                    <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                                                    <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
-                                                </td>
-                                            </tr>
+                                        <tr>
+                                            <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
+                                            <td>@itm.Name</td>
+                                            <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
+                                            <td>
+                                                @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                                {
+                                                    @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                                                }
+                                            </td>
+                                            <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                            <td>@itm.Added</td>
+                                            <td>@itm.Edited</td>
+                                            <td align="right">
+                                                <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                                                <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                            </td>
+                                        </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -372,6 +376,19 @@
             //});
 
         });
-        
+
+        $("#searchItems").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tbl-unassigned tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+        $('.check-all-items').on("change", function () {
+            var checked = $(this).prop('checked');
+            $('.form-check-input:visible').each(function () {
+                $(this).prop('checked', checked);
+            })
+        });
     </script>
 }   

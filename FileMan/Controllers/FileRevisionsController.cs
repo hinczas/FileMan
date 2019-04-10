@@ -68,7 +68,7 @@ namespace FileMan.Controllers
         {
             if (ModelState.IsValid)
             {
-                double tmp;
+                //double tmp;
                 var prev = _db.FileRevision.Where(a => a.MasterFileId == item.MasterFileId).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
                 string prefDraft = prev == null ? "" : prev.Draft;
                 string draft = _is.Increment(prefDraft);
