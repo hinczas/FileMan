@@ -1,0 +1,377 @@
+﻿@model FileMan.Models.ViewModels.ItemViewModel
+@using FileMan.Models;
+@using FileMan.Models.ViewModels;
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (TempData["Error"] != null)
+{
+    if ((bool)TempData["Error"])
+    {
+        <div class="col-sm-12">
+            <div class="alert alert-danger alert-dismissible" role="alert" style="margin:0px 0px 10px 0px; padding:8px 15px 8px 15px;">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin-right:21px;"><span aria-hidden="true">&times;</span></button>
+                <strong>Warning!</strong> @TempData["Message"]
+            </div>
+        </div>
+    }
+}
+<div class="col-md-12">
+    <ol class="breadcrumb" style="margin-bottom:10px;">
+        @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
+        {
+            for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
+            {
+                <li>@Html.ActionLink(Model.Breadcrumbs.ElementAt(i).Name, "Index", "Home", new { id = Model.Breadcrumbs.ElementAt(i).Id }, new { title = "Parent" })</li>
+            }
+        }
+        <li class="active">@Model.Current.Name</li>
+    </ol>
+</div>
+<div class="col-md-3" style="padding-left:15px;">
+    <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
+        <span class="input-group-addon" id="sizing-addon1">New</span>
+        <span class="input-group-btn" style="float:left">
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">Document</button>
+            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Category</button>
+        </span>
+    </div>
+</div>
+<div class="col-md-3">
+    <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse">Import</button>
+</div>
+
+<div class="col-md-6">
+
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="input-group input-group-sm" style="display:flex; align-items:flex-end;">
+            <input type="text" class="form-control" id="searchBox" placeholder="Search for.." name="search" style="width:200px;" />
+            <select name="scope" class="form-control" style="max-width:150px;">
+                <option value=1>Number &amp; Name</option>
+                <option value=2>Number, Name, Description &amp; Comment </option>
+            </select>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" style="width:60px;">Go!</button>
+            </span>
+
+        </div><!-- /input-group -->
+
+    }
+</div>
+
+<!-- File import buttons -->
+<div class="col-sm-12">
+    <div class="row" style="padding-top:0px;">
+        <div class="collapse" id="toolsCollapse">
+            <div class="disp-align-ver row-menu">
+                @using (Html.BeginForm("ImportFiles", "Folders", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-sm-1">
+                        <button class="btn btn-primary btn-sm" type="button" id="fileSelect">open....</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                <input type="radio" name="fileType" value="doc" aria-label="docType">
+                            </span>
+                            <input type="text" class="form-control" aria-label="fileText" value="Documents" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                <input type="radio" name="fileType" value="dir" aria-label="catType" checked>
+                            </span>
+                            <input type="text" class="form-control" aria-label="fileText" value="Directories" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                <input type="checkbox" name="intoCurrent" value="@Model.Current.Id" checked>
+                            </span>
+                            <input type="text" class="form-control input-lg" aria-label="fileText" value="Load into current directory" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="file" name="fileImp" value="Import" id="fileImport" class="disp-none" hidden required />
+
+                        <button class="btn btn-success btn-sm" type="submit" id="fileSelectSave">upload</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <table class="table table-condensed">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width:15px;" scope="col"></th>
+                <th style="width:200px;" scope="col">Name</th>
+                <th style="width:70px;" scope="col">Number</th>
+                <th style="width:25px;" scope="col">Ver</th>
+                <th style="width:380px; max-width:250px;" scope="col">Description</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="mainTable">
+            @foreach (Folder itm in Model.ChildrenDirs)
+            {
+                <tr>
+                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
+                    <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = itm.Path }) </td>
+                    <td></td>
+                    <td></td>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                    <td align="right">
+                        <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
+                        <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                    </td>
+                </tr>
+            }
+            @foreach (MasterFile itm in Model.ChildrenFiles)
+            {
+                <tr>
+                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" title="Document" /></td>
+                    <td>@itm.Name</td>
+                    <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = itm.Number }) </td>
+                    <td>
+                        @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                        {
+                            @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                        }
+                    </td>
+                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                    <td align="right">
+
+                        @if (itm.Folders.Count() > 0)
+                        {
+                            <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                            <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@if (Model.UnassignedFiles != null && @Model.UnassignedFiles.Count() > 0)
+{
+    using (Html.BeginForm("MoveFiles", "Folders", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-12">
+            <p></p><br />
+            <p></p><br />
+            <p></p><br />
+            <input type="hidden" name="Id" value=@Model.Current.Id />
+            <div class="panel-group">
+                <div class="panel panel-warning">
+                    <div class="panel-heading panel-title" style="padding:5px 5px 5px 15px;">
+                        <div class="container" style="align-items:center; width:100%; padding:0px;">
+                            <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
+                                <a data-toggle="collapse" href="#collapse1">Uncategorised</a> <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
+                            </h4>
+                            <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
+                                <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <table class="table table-condensed">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="width:15px;" scope="col"></th>
+                                    <th style="width:100px;" scope="col">Name</th>
+                                    <th style="width:70px;" scope="col">Number</th>
+                                    <th style="width:25px;" scope="col">Ver</th>
+                                    <th style="width:250px; max-width:250px;" scope="col">Description</th>
+                                    <th style="width:130px;" scope="col">Added</th>
+                                    <th style="width:130px;" scope="col">Edited</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (MasterFile itm in Model.UnassignedFiles)
+                                {
+                                    <tr>
+                                        <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
+                                        <td>@itm.Name</td>
+                                        <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
+                                        <td>
+                                            @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                            {
+                                                @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                                            }
+                                        </td>
+                                        <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                        <td>@itm.Added</td>
+                                        <td>@itm.Edited</td>
+                                        <td align="right">
+                                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+
+<!-- Dir Info Modal -->
+@foreach (Folder itm in Model.ChildrenDirs)
+{
+    <div id="@itm.Name" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>@itm.Name</h3>
+                </div>
+                <div class="modal-body">
+                    <h4>Description</h4>
+                    <p>
+                        <span style="white-space: pre-line">@itm.Description</span>
+                    </p><br />
+                    <h4>ChangeLog</h4>
+                    <p>
+
+                        <span style="white-space: pre-line">@itm.Changelog</span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}
+
+<!-- File Modal -->
+<div id="filModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("Create", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New File</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12" style="float:none">
+                        <input type="hidden" class="form-control" name="FolderId" value="@Model.Current.Id" />
+                        <input type="hidden" class="form-control" name="Number" value="0" />
+                        <div class="form-group">
+                            <input type="Text" class="form-control" name="Name" placeholder="Name..." />
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input style="margin-bottom: 10px;" class="form-control" type="file" name="file">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" value="Save" class="btn btn-success" id="submitBtn" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Directory Modal -->
+<div id="dirModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("Create", "Folders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Directory</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12" style="float:none">
+                        <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
+                        <input type="hidden" class="form-control" name="Type" value="dir" />
+                        <div class="form-group">
+                            <input type="Text" class="form-control" name="Name" placeholder="Name..." />
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input type="submit" value="Save" class="btn btn-success" id="submitBtn" />
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+
+        $(document).ready(function () {
+            $("#searchBox").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#mainTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#fileSelect").on("click", function () {
+                $("#fileImport").trigger("click");
+            });
+
+            //$("#fileImport").change(function () {
+            //    $("#fileForm").submit();
+            //});
+
+        });
+
+    </script>
+}

@@ -28,3 +28,54 @@
     .row-menu .col-sm-1, .row-menu .col-sm-2, .row-menu .col-sm-3, .row-menu .col-sm-4, .row-menu .col-sm-5, .row-menu .col-sm-6 {
         padding: 0px 5px 0px 5px;
     }
+
+.in-card-search {
+    width: 100%;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    padding: 5px 10px 5px 10px;
+}
+.panel-tree {
+    max-height:726px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y:auto;
+}
+
+/* JsTree styling */
+.jstree-anchor {
+    position: relative;
+}
+
+    .jstree-anchor::after {
+        content: attr(data_quantity);
+        margin-left:5px;
+        font-weight:700;
+        color: #8e002b
+        /*position: absolute;
+        top: 0px;
+        left: 24px;*/
+    }
+
+/*a[data_quantity] > .jstree-icon {
+    margin-right: 28px;
+}*/
+
+/* Index page */
+.row {
+    padding-top: 15px;
+}
+
+.col-md-3, .col-md-9 {
+    padding: 0px;
+}
+
+.icon {
+    max-width: 16px;
+    max-height: 16px;
+}
+
+.table {
+    font-size: small;
+}

@@ -18,8 +18,6 @@ namespace FileMan.Models.ViewModels
         public List<Folder> Breadcrumbs { get; set; }
         public List<MasterFile> UnassignedFiles { get; set; }
 
-        public List<TreeNode> TreeNodes { get; set; }
-        public TreeviewNodeEntity TreeView { get; set; }
         public List<FolderPartialViewModel> FolderList { get; set; }
         public bool Error { get; set; }
         public string ErrorMessage { get; set; }

@@ -59,9 +59,9 @@
                 <div class="col-md-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">Categories (<a href="javascript:expandAll();">expand all</a> | <a href="javascript:collapseAll();">collapse all</a>)</div>
-                        <div style="white-space:nowrap; overflow-x:auto;">
-                            <div id="tree"></div>
-                            <div id="jstree_demo_div"></div>
+                        <div class="panel-tree">
+                            <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search"/>
+                            <div id="jstree_div"></div>
                         </div>
                     </div>
                 </div>
@@ -78,52 +78,96 @@
 
         @Scripts.Render("~/bundles/bootstrap")
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-
-        @RenderSection("scripts", required: false)
         <script>
-        $(document).ready(function () {
-            var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
-            var folId = "@Url.RequestContext.RouteData.Values["id"]";
-            var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
-            var url = "/Home/GetTree?id="+id;
-            $.get(url,
-                function (data) {
-                    $('#jstree_demo_div').jstree({
-                        'core': {
-                            'data': data
-                        }
-                    });
-                    //return data;
-                })
-        });
-
-        $(function () {
-            $('#jstree_demo_div').bind("select_node.jstree", function (e, data) {
-                $('#jstree').jstree('save_state');
+            $(document).ready(function () {
+                var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
+                var folId = "@Url.RequestContext.RouteData.Values["id"]";
+                var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
+                var url = "/Home/GetTree?id=" + id;
+                $.get(url,
+                    function (data) {
+                        $('#jstree_div').jstree({
+                            "plugins": ["search"],
+                            'core': {
+                                'data': data
+                            }
+                        });
+                        //return data;
+                    })
             });
 
-            $('#jstree_demo_div').on("activate_node.jstree", function (e, data) {
-                //window.location.href = data.node.a_attr.href;
-                var link = data.node.a_attr.href;
-
-                $.ajax({
-                    type: "get",
-                    url: link,
-                    success: function (d) {
-                        /* d is the HTML of the returned response */
-                        $('.sub-container').html(d); //replaces previous HTML with action
-                    }
+            $(function () {
+                $('#jstree_div').bind("select_node.jstree", function (e, data) {
+                    $('#jstree').jstree('save_state');
                 });
+
+                $('#jstree_div').on("activate_node.jstree", function (e, data) {
+                    //window.location.href = data.node.a_attr.href;
+
+                    var link = data.node.a_attr.href;
+                    $.ajax({
+                        type: "get",
+                        url: link,
+                        success: function (d) {
+                            /* d is the HTML of the returned response */
+                            $('.sub-container').html(d); //replaces previous HTML with action
+
+                            ChangeUrl("Index", link);
+                        }
+                    });
+                })
+
+                var to = false;
+                $('#jstree_div_q').keyup(function () {
+                    if (to) { clearTimeout(to); }
+                    to = setTimeout(function () {
+                        var v = $('#jstree_div_q').val();
+                        $('#jstree_div').jstree(true).search(v);
+                    }, 250);
+                });
+            });
+
+            function collapseAll() {
+                $('#tree').treeview('collapseAll', { silent: true });
+            }
+
+            function expandAll() {
+                $('#tree').treeview('expandAll', { silent: true });
+            }
+
+            function ChangeUrl(page, url) {
+                if (typeof (history.pushState) != "undefined") {
+                    var newUrl = url.replace("TreeIndex", "Index");
+                    var obj = { Page: page, Url: newUrl };
+                    history.pushState(obj, obj.Page, obj.Url);
+                }
+            }
+
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
             })
-        });
 
-        function collapseAll() {
-            $('#tree').treeview('collapseAll', { silent: true });
-        }
+            $(document).ready(function () {
+                $("#searchBox").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#mainTable tr").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
 
-        function expandAll() {
-            $('#tree').treeview('expandAll', { silent: true });
-        }
+                $("#fileSelect").on("click", function () {
+                    $("#fileImport").trigger("click");
+                });
+
+                //$("#fileImport").change(function () {
+                //    $("#fileForm").submit();
+                //});
+
+            });
         </script>
+
+        @RenderSection("scripts", required: false)
+
 </body>
 </html>

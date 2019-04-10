@@ -48,7 +48,7 @@
                 {
                     foreach (Folder fol in Model.Current.Folders)
                     {
-                        <li>@Html.ActionLink(fol.Name, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })</li>
+                        <li>@Html.ActionLink(fol.Name, "Index", "Home", new { id = fol.Id }, new { title = fol.Path })</li>
                     }
                 }
             </ol>

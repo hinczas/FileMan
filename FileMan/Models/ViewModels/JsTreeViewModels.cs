@@ -19,6 +19,7 @@ namespace FileMan.Models.ViewModels
     public class JSTAAttr
     {
         public string href { get; set; }
+        public string data_quantity { get; set; }
     }
 
     public class JSTState

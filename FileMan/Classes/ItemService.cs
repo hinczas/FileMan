@@ -54,67 +54,6 @@ namespace FileMan.Classes
             return bc;
         }
 
-        private List<TreeNode> GetTree(List<TreeNode> tree, Folder root, int indent)
-        {
-            TreeNode tmp = new TreeNode();
-
-            tmp.Branch = root;
-            tmp.Indent = indent;
-            tree.Add(tmp);
-            var folders = _db.Folder.Where(a => a.Pid == root.Id).OrderBy(a=>a.Name).ToList();
-            if (folders.Count > 0)
-            {
-                foreach(Folder fol in folders)
-                {
-                    tree = GetTree(tree, fol, indent + 1);
-                }
-            }
-            return tree;
-        }
-
-        public TreeviewNodeEntity[] GetTree(Folder root, long id)
-        {
-            var fols = _db.Folder.Where(a => a.Pid == root.Id);
-            
-            if (fols.Count() > 0)
-            {
-                var folders = fols.OrderBy(a => a.Name).ToList();
-
-                int cntr = 0;
-                TreeviewNodeEntity[] tmpList = new TreeviewNodeEntity[folders.Count];
-
-                foreach (Folder fol in folders)
-                {
-                    var nods = GetTree(fol, id);
-                    bool exp = nods==null ? false : nods.Select(a => a.state.expandedPath).Max();
-
-                    var files = fol.Files.Count.ToString();
-                    var nState = new TreeNodeState()
-                    {
-                        disabled = false,
-                        selected = id == fol.Id ? true : false,
-                        expanded = exp,
-                        expandedPath = exp || id == fol.Id
-
-                    };
-                    tmpList[cntr] = new TreeviewNodeEntity()
-                    {
-                        text = fol.Name,
-                        tags = new string[1] { files },
-                        href = "/Home/Index/" + fol.Id,
-                        state = nState,
-                        nodes = nods
-                    };
-                    cntr++;
-                }
-                return tmpList;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public MasterFileViewModel GetMasterFileViewModel(long id, string userId)
         {
             var item = _db.MasterFile.Find(id);
@@ -127,10 +66,6 @@ namespace FileMan.Classes
             var revId = revisions.Count == 0 ? 0 : revisions.OrderByDescending(a => a.Revision).Take(1).Select(b => b.Id).FirstOrDefault();
             var revNam = revisions.Count == 0 ? "N/A" : revisions.Where(a => a.Id == revId).FirstOrDefault().Name;
             var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
-
-            List<TreeNode> list = new List<TreeNode>();
-            var root = GetRoot();
-            list = GetTree(list, root, 0);
 
             FileRevision fr = _db.FileRevision.Where(a => a.MasterFileId == id).OrderByDescending(b => b.Id).Take(1).FirstOrDefault();
             string issue = item.Issue == null ? "" : item.Issue.ToString();
@@ -162,7 +97,6 @@ namespace FileMan.Classes
                 DraftVersion = draft,
                 LatestDraft = lDraft,
                 LatestIssue = lIssue,
-                TreeNodes = list,
                 FolderList = foldersList,
                 Promote = promote,
                 ShowChangelog = changelog
@@ -213,9 +147,6 @@ namespace FileMan.Classes
 
             
             var bc = GetBreadcrumbs(item.Id);
-            List<TreeNode> list = new List<TreeNode>();
-            var root = GetRoot();
-            list = GetTree(list, root, 0);
 
             var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
             {
@@ -231,7 +162,6 @@ namespace FileMan.Classes
                 ChildrenDirs = childrenDir,
                 ChildrenFiles = childrenFil,
                 Breadcrumbs = bc,
-                TreeNodes = list,
                 UnassignedFiles = uncatVisible && !showUncatRoot ? unassigned : null,
                 FolderList = foldersList
             };
@@ -267,9 +197,6 @@ namespace FileMan.Classes
             var fileList = childrenFil.ToList();
 
             var bc = GetBreadcrumbs(item.Id);
-            List<TreeNode> list = new List<TreeNode>();
-            var root = GetRoot();
-            list = GetTree(list, root, 0);
 
             var foldersList = _db.Folder.Select(a => new FolderPartialViewModel()
             {
@@ -285,7 +212,6 @@ namespace FileMan.Classes
                 ChildrenDirs = childrenDir,
                 ChildrenFiles = fileList,
                 Breadcrumbs = bc,
-                TreeNodes = list,
                 FolderList = foldersList
             };
             return ivm;
@@ -529,13 +455,14 @@ namespace FileMan.Classes
                 text = fol.Name,
                 state = new JSTState()
                 {
-                    opened = id==curId,
+                    opened = false,
                     disabled = false,
                     selected = id == curId
                 },
                 a_attr = new JSTAAttr()
                 {
-                    href = "/Home/Index/"+id
+                    href = "/Home/TreeIndex/"+id,
+                    data_quantity = fol.Files == null || fol.Files.Count < 1 ? "" : string.Format("({0})",fol.Files.Count)
                 }
                 
             };
@@ -543,7 +470,7 @@ namespace FileMan.Classes
             if (fol.Children.Count>0)
             {
                 List<JSTNode> childs = new List<JSTNode>();
-                foreach(var c in fol.Children)
+                foreach(var c in fol.Children.OrderBy(a => a.Name).ToList())
                 {
                     childs.Add(JSTree(c.Id, curId));
                 }
