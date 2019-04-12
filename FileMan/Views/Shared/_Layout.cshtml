@@ -78,6 +78,8 @@
 
         @Scripts.Render("~/bundles/bootstrap")
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+        <script src="~/Scripts/fmFunctions.js"></script>
+
         <script>
             $(document).ready(function () {
                 var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
@@ -89,6 +91,7 @@
                         $('#jstree_div').jstree({
                             "plugins": ["search"],
                             'core': {
+                                'check_callback': true,
                                 'data': data
                             }
                         });
@@ -98,7 +101,7 @@
 
             $(function () {
                 $('#jstree_div').bind("select_node.jstree", function (e, data) {
-                    $('#jstree').jstree('save_state');
+                    $('#jstree_div').jstree('save_state');
                 });
 
                 $('#jstree_div').on("activate_node.jstree", function (e, data) {
@@ -125,60 +128,6 @@
                         $('#jstree_div').jstree(true).search(v);
                     }, 250);
                 });
-            });
-
-            function collapseAll() {
-                $('#tree').treeview('collapseAll', { silent: true });
-            }
-
-            function expandAll() {
-                $('#tree').treeview('expandAll', { silent: true });
-            }
-
-            function ChangeUrl(page, url) {
-                if (typeof (history.pushState) != "undefined") {
-                    var newUrl = url.replace("TreeIndex", "Index");
-                    var obj = { Page: page, Url: newUrl };
-                    history.pushState(obj, obj.Page, obj.Url);
-                }
-            }
-
-
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
-
-            $(document).ready(function () {
-                $("#searchBox").on("keyup", function () {
-                    var value = $(this).val().toLowerCase();
-                    $("#mainTable tr").filter(function () {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    });
-                });
-
-                $("#fileSelect").on("click", function () {
-                    $("#fileImport").trigger("click");
-                });
-
-                //$("#fileImport").change(function () {
-                //    $("#fileForm").submit();
-                //});
-
-            });
-
-
-            $("#searchItems").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#tbl-unassigned tbody tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
-            $('.check-all-items').on("change", function () {
-                var checked = $(this).prop('checked');
-                $('.form-check-input:visible').each(function () {
-                    $(this).prop('checked', checked);
-                })
             });
         </script>
 

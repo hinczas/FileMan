@@ -36,6 +36,15 @@ namespace FileMan.Controllers
             return View(file);
         }
 
+        public PartialViewResult PartialDetails(int id)
+        {
+
+            string userId = User.Identity.GetUserId();
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
+
+            return PartialView(file);
+        }
+
         // GET: MasterFiles/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

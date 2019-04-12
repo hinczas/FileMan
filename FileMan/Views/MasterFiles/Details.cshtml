@@ -1,8 +1,5 @@
 ﻿@model FileMan.Models.ViewModels.MasterFileViewModel
-@using FileMan.Models.ViewModels;
-@using FileMan.Models;
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/jqueryval")
+
 @{
     ViewBag.Title = "File";
 }
@@ -20,207 +17,210 @@
         max-width: 16px;
         max-height: 16px;
     }
+
     #moveTable {
         display: block;
         min-height: 300px;
         max-height: 300px;
         overflow-y: scroll;
     }
-    #headTable, #moveTable tr {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-    }
+
+        #headTable, #moveTable tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
     #cats {
         white-space: nowrap;
         overflow: hidden;
         /* "overflow" value must be different from "visible" */
         text-overflow: ellipsis;
-        width:100%;
+        width: 100%;
         direction: rtl;
         text-align: left;
     }
 </style>
-        <div class="col-md-12">
-            <ol class="breadcrumb" style="margin-bottom:10px;">
-                Exists in:
-                @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
-                {
-                    foreach (Folder fol in Model.Current.Folders)
+<div class="col-md-12">
+    <ol class="breadcrumb" style="margin-bottom:10px;">
+        Exists in:
+        @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
+        {
+            foreach (var fol in Model.Current.Folders)
+            {
+                <li class="js-link" onclick="goToFolder(@fol.Id)">@fol.Name</li>
+            }
+        }
+    </ol>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading" style="padding:5px 5px 5px 15px;">
+            <div class="container" style="align-items:center; width:100%; padding:0px;">
+                <h3 style="margin-top:0; margin-bottom:0px;float:left; padding-top:3px;">
+                    <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
+                </h3>
+                <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
+                    <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#movModal">Move</button>
+                    <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#filModal">Add draft</button>
+                    @if (Model.Promote)
                     {
-                        <li>@Html.ActionLink(fol.Name, "Index", "Home", new { id = fol.Id }, new { title = fol.Path })</li>
+
+                        <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#promModal">Promote</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-default" type="button" disabled>Promote</button>
+                    }
+                    @Html.ActionLink("Edit", "Edit", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-primary", type = "button" })
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight:700; width:100px;" align="right">Description</td>
+                    <td><span style="white-space: pre-line">@Model.Current.Description</span> </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:700; width:100px;" align="right">Comment</td>
+                    <td><span style="white-space: pre-line">@Model.Current.Comment</span> </td>
+                </tr>
+                @if (Model.ShowChangelog)
+                {
+                    <tr>
+                        <td style="font-weight:700; width:100px;" align="right">Changelog</td>
+                        <td><span style="white-space: pre-line">@Model.Current.Changelog</span> </td>
+                    </tr>
+                }
+                <tr>
+                    <td style="font-weight:700; width:100px;" align="right">Categories</td>
+                    <td style="max-width:745px;">
+                        <div id="cats" style="max-height:150px; white-space:nowrap; overflow-y:auto;">
+                            @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
+                            {
+                                foreach (var fol in Model.Current.Folders)
+                                {
+                                    string folName = fol.IsRoot ? "root" : fol.Path;
+                                    <span class="js-link" onclick="goToFolder(@fol.Id)">@folName</span><br />
+                                }
+                            }
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight:700; width:100px;" align="right">Added</td>
+                    <td> @Html.DisplayFor(model => model.Current.Added)</td>
+                </tr>
+                <tr>
+                    <td style="font-weight:700; width:100px;" align="right">Edited</td>
+                    <td>@Html.DisplayFor(model => model.Current.Edited)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                Latest revisions
+            </h4>
+        </div>
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th style="font-weight:900; width:15px;" align="right"></th>
+                    <th style="font-weight:900; width:60px;" align="right">Type</th>
+                    <th style="font-weight:900; width:250px;" align="right">Comment</th>
+                    <th style="font-weight:900; width:130px;" align="right">Added</th>
+                    <th style="font-weight:900; width:25px;" align="right"></th>
+                    <th style="font-weight:900; width:15px;" align="right"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.LatestIssue != null)
+                {
+                    <tr>
+                        <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestIssue.Icon" /></td>
+                        <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
+                        <td>@Model.LatestIssue.Comment</td>
+                        <td>@Model.LatestIssue.Added</td>
+                        <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                        <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                    </tr>
+                }
+                @if (@Model.LatestDraft != null)
+                {
+                    <tr>
+                        <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestDraft.Icon" /></td>
+                        <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
+                        <td>@Model.LatestDraft.Comment</td>
+                        <td>@Model.LatestDraft.Added</td>
+                        <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                        <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="panel-group">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#collapse1">All revisions</a> <span class="badge badge-light">@Model.RevisionsCount</span>
+                </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                @if (Model.RevisionsCount > 0)
+                {
+                    using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
+                    {
+                        <table class="table table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="font-weight:900; width:15px;" align="right"></th>
+                                    <th style="font-weight:900; width:35px;" align="right">Rev</th>
+                                    <th style="font-weight:900; width:250px;" align="right">Comment</th>
+                                    <th style="font-weight:900; width:130px;" align="right">Added</th>
+                                    <th style="font-weight:900; width:25px;" align="right"></th>
+                                    <th style="font-weight:900; width:15px;" align="right"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int counter = 0;}
+                                @foreach (var rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
+                                {
+                                    <tr>
+                                        <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
+                                        <td>
+                                            @if (string.IsNullOrEmpty(rev.Draft))
+                                            {
+                                                <span class="label label-success">issue</span>
+                                            }
+                                            else
+                                            {
+                                                @rev.Draft
+                                            }
+                                        </td>
+                                        <td>@rev.Comment</td>
+                                        <td>@rev.Added</td>
+                                        <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
+                                        <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
+                                    </tr>
+                                    counter++;
+                                }
+                            </tbody>
+                        </table>
                     }
                 }
-            </ol>
-        </div>
-
-        <div class="col-md-12">
-            <div class="panel panel-success">
-                <div class="panel-heading" style="padding:5px 5px 5px 15px;">
-                    <div class="container" style="align-items:center; width:100%; padding:0px;">
-                        <h3 style="margin-top:0; margin-bottom:0px;float:left; padding-top:3px;">
-                            <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
-                        </h3>
-                        <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
-                            <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#movModal">Move</button>
-                            <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#filModal">Add draft</button>
-                            @if (Model.Promote)
-                            {
-
-                            <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#promModal">Promote</button>
-                            }
-                            else
-                            {
-                                <button class="btn btn-sm btn-default" type="button" disabled>Promote</button>
-                            }
-                            @Html.ActionLink("Edit", "Edit", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-primary", type = "button" })
-                        </div>
-                    </div>
-                </div>
-                <table class="table table-striped table-hover table-condensed">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight:700; width:100px;" align="right">Description</td>
-                            <td><span style="white-space: pre-line">@Model.Current.Description</span> </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:700; width:100px;" align="right">Comment</td>
-                            <td><span style="white-space: pre-line">@Model.Current.Comment</span> </td>
-                        </tr>
-                        @if (Model.ShowChangelog)
-                        {
-                            <tr>
-                                <td style="font-weight:700; width:100px;" align="right">Changelog</td>
-                                <td><span style="white-space: pre-line">@Model.Current.Changelog</span> </td>
-                            </tr>
-                        }
-                        <tr>
-                            <td style="font-weight:700; width:100px;" align="right">Categories</td>
-                            <td style="max-width:745px;">
-                                <div id="cats" style="max-height:150px; white-space:nowrap; overflow-y:auto;">
-                                    @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
-                                    {
-                                        foreach (Folder fol in Model.Current.Folders)
-                                        {
-                                            string folName = fol.IsRoot ? "root" : fol.Path;
-                                            @Html.ActionLink(folName, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })<br />
-                                        }
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:700; width:100px;" align="right">Added</td>
-                            <td> @Html.DisplayFor(model => model.Current.Added)</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight:700; width:100px;" align="right">Edited</td>
-                            <td>@Html.DisplayFor(model => model.Current.Edited)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        Latest revisions
-                    </h4>
-                </div>
-                <table class="table table-striped table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <th style="font-weight:900; width:15px;" align="right"></th>
-                            <th style="font-weight:900; width:60px;" align="right">Type</th>
-                            <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                            <th style="font-weight:900; width:130px;" align="right">Added</th>
-                            <th style="font-weight:900; width:25px;" align="right"></th>
-                            <th style="font-weight:900; width:15px;" align="right"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (@Model.LatestIssue != null)
-                        {
-                        <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestIssue.Icon" /></td>
-                            <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
-                            <td>@Model.LatestIssue.Comment</td>
-                            <td>@Model.LatestIssue.Added</td>
-                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                        </tr>
-                        }
-                        @if (@Model.LatestDraft != null)
-                        {
-                        <tr>
-                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestDraft.Icon" /></td>
-                            <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
-                            <td>@Model.LatestDraft.Comment</td>
-                            <td>@Model.LatestDraft.Added</td>
-                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="panel-group">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#collapse1">All revisions</a> <span class="badge badge-light">@Model.RevisionsCount</span>
-                        </h4>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse">
-                        @if (Model.RevisionsCount > 0)
-                        {
-                            using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
-                            {
-                                <table class="table table-striped table-hover table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th style="font-weight:900; width:15px;" align="right"></th>
-                                            <th style="font-weight:900; width:35px;" align="right">Rev</th>
-                                            <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                                            <th style="font-weight:900; width:130px;" align="right">Added</th>
-                                            <th style="font-weight:900; width:25px;" align="right"></th>
-                                            <th style="font-weight:900; width:15px;" align="right"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @{ int counter = 0;}
-                                        @foreach (FileRevision rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
-                                        {
-                                        <tr>
-                                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
-                                            <td>
-                                                @if (string.IsNullOrEmpty(rev.Draft))
-                                                {
-                                                    <span class="label label-success">issue</span>
-                                                }
-                                                else
-                                                {
-                                                    @rev.Draft
-                                                }
-                                            </td>
-                                            <td>@rev.Comment</td>
-                                            <td>@rev.Added</td>
-                                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
-                                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
-                                        </tr>
-                                            counter++;
-                                        }
-                                    </tbody>
-                                </table>
-                            }
-                        }
-                    </div>
-                </div>
             </div>
         </div>
+    </div>
+</div>
 
 
 <!-- File Modal -->
@@ -245,7 +245,7 @@
                     @{
                         var counter = 0;
                     }
-                    <input class="form-control" id="searchBox" type="text" placeholder="Search directories.." style="width:100%;" /> <br />
+                    <input class="form-control" id="searchBox" onkeyup="searchMove(this)" type="text" placeholder="Search directories.." style="width:100%;" /> <br />
                     <table style="width:100%">
                         <thead id="headTable">
                             <tr>
@@ -353,18 +353,4 @@
         </div>
     </div>
 </div>
-
-@section scripts
-{
-<script>
-    $(document).ready(function () {
-        $("#searchBox").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#moveTable tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
-</script>
-}
 

@@ -455,6 +455,7 @@
     <Content Include="Content\Images\Icons\32px\zip.png" />
     <Content Include="Content\Images\Icons\32px\_blank.png" />
     <Content Include="Content\Images\Icons\32px\_page.png" />
+    <Content Include="Content\Images\Icons\back.png" />
     <Content Include="Content\Images\Icons\cross.png" />
     <Content Include="Content\Images\Icons\edit.png" />
     <Content Include="Content\Images\Icons\file.png" />
@@ -511,6 +512,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Scripts\bootstrap-toggle.min.js.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\fmFunctions.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -577,6 +579,7 @@
     <Content Include="Views\FileRevisions\Details.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\TreeIndex.cshtml" />
+    <Content Include="Views\MasterFiles\PartialDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

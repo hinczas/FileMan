@@ -23,7 +23,7 @@
         {
             for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
             {
-                <li>@Html.ActionLink(Model.Breadcrumbs.ElementAt(i).Name, "Index", "Home", new { id = Model.Breadcrumbs.ElementAt(i).Id }, new { title = "Parent" })</li>
+                <li style="cursor:pointer; color:royalblue;" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</li>
             }
         }
         <li class="active">@Model.Current.Name</li>
@@ -34,7 +34,7 @@
         <span class="input-group-addon" id="sizing-addon1">New</span>
         <span class="input-group-btn" style="float:left">
             <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">Document</button>
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#dirModal">Category</button>
+            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse">Category</button>
         </span>
     </div>
 </div>
@@ -48,7 +48,7 @@
     {
         @Html.AntiForgeryToken()
         <div class="input-group input-group-sm" style="display:flex; align-items:flex-end;">
-            <input type="text" class="form-control" id="searchBox" placeholder="Search for.." name="search" style="width:200px;" />
+            <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" placeholder="Search for.." name="search" style="width:200px;" />
             <select name="scope" class="form-control" style="max-width:150px;">
                 <option value=1>Number &amp; Name</option>
                 <option value=2>Number, Name, Description &amp; Comment </option>
@@ -62,16 +62,44 @@
     }
 </div>
 
+<!-- New Category -->
+<div class="col-sm-12">
+    <div class="row" style="padding-top:0px;">
+        <div class="collapse" id="catCollapse">
+            <div class="disp-align-ver row-menu row-menu-sm">
+                @using (Html.BeginForm("Create", "Folders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "catForm", role = "form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
+                    <input type="hidden" class="form-control" name="Type" value="dir" />
+                    <div class="col-sm-3">
+                        <input type="text" autocomplete="off" class="form-control form-control-sm" name="Name" placeholder="Name..." autofocus />
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" autocomplete="off" class="form-control" name="Description" placeholder="Description..." />
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="text" autocomplete="off" class="form-control" name="Comment" placeholder="Comment..." />
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="button" value="add" class="btn btn-success btn-sm" id="submitBtn" onclick="submitForm('#catForm', '/Folders/Create/', '@Model.Current.Id')" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- File import buttons -->
 <div class="col-sm-12">
     <div class="row" style="padding-top:0px;">
         <div class="collapse" id="toolsCollapse">
-            <div class="disp-align-ver row-menu">
+            <div class="disp-align-ver row-menu row-menu-nr">
                 @using (Html.BeginForm("ImportFiles", "Folders", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     <div class="col-sm-1">
-                        <button class="btn btn-primary btn-sm" type="button" id="fileSelect">open....</button>
+                        <button class="btn btn-primary btn-sm" type="button" id="fileSelect" onclick="fileSelector(this)">open</button>
                     </div>
                     <div class="col-sm-2">
                         <div class="input-group input-group-sm">
@@ -97,10 +125,10 @@
                             <input type="text" class="form-control input-lg" aria-label="fileText" value="Load into current directory" disabled>
                         </div>
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-sm-3">
                         <input type="file" name="fileImp" value="Import" id="fileImport" class="disp-none" hidden required />
 
-                        <button class="btn btn-success btn-sm" type="submit" id="fileSelectSave">upload</button>
+                        <button class="btn btn-success btn-sm" type="submit" id="fileSelectSave" style="float:right;">upload</button>
                     </div>
                 }
             </div>
@@ -109,7 +137,7 @@
 </div>
 
 <div class="col-md-12">
-    <table class="table table-condensed">
+    <table class="table table-condensed table-hover">
         <thead class="thead-dark">
             <tr>
                 <th style="width:15px;" scope="col"></th>
@@ -121,14 +149,28 @@
             </tr>
         </thead>
         <tbody id="mainTable">
+            @if (Model.Current.IsRoot)
+            {
+                <tr>
+                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
+                    <td colspan="5">. . .</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
+                    <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">. . .</td>
+                </tr>
+            }
             @foreach (Folder itm in Model.ChildrenDirs)
             {
                 <tr>
                     <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
-                    <td>@Html.ActionLink(itm.Name, "Index", "Home", new { id = itm.Id }, new { title = itm.Path }) </td>
-                    <td></td>
-                    <td></td>
-                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
+                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)"></td>
+                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)"></td>
+                    <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
                     <td align="right">
                         <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
                         <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
@@ -139,15 +181,15 @@
             {
                 <tr>
                     <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" title="Document" /></td>
-                    <td>@itm.Name</td>
-                    <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = itm.Number }) </td>
-                    <td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                         @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                         {
                             @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                         }
                     </td>
-                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                    <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;"  onclick="goToFile(@itm.Id)" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
                     <td align="right">
 
                         @if (itm.Folders.Count() > 0)
@@ -186,16 +228,20 @@
                             <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
                                 <a data-toggle="collapse" href="#collapse1">Uncategorised</a> <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
                             </h4>
-                            <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
-                                <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
-                            </div>
+                            <div class="input-group input-group-sm pull-right" style="max-width:200px;">
+                                <input type="text" class="form-control form-control-sm" id="searchItems" onkeyup="searchUnassigned(this)" placeholder="filter..." name="search" style="width:200px;" />
+
+                                <span class="input-group-btn">
+                                    <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
+                                </span>
+                            </div><!-- /input-group -->
                         </div>
                     </div>
                     <div id="collapse1" class="panel-collapse collapse">
                         <table class="table table-condensed" id="tbl-unassigned">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" /></th>
+                                    <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" onchange="checkAllItems(this)" /></th>
                                     <th style="width:100px;" scope="col">Name</th>
                                     <th style="width:70px;" scope="col">Number</th>
                                     <th style="width:25px;" scope="col">Ver</th>
@@ -208,24 +254,24 @@
                             <tbody>
                                 @foreach (MasterFile itm in Model.UnassignedFiles)
                                 {
-                                <tr>
-                                    <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                    <td>@itm.Name</td>
-                                    <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
-                                    <td>
-                                        @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                                        {
-                                            @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
-                                        }
-                                    </td>
-                                    <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                                    <td>@itm.Added</td>
-                                    <td>@itm.Edited</td>
-                                    <td align="right">
-                                        <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                                        <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
+                                        <td>@itm.Name</td>
+                                        <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
+                                        <td>
+                                            @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                            {
+                                                @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                                            }
+                                        </td>
+                                        <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                        <td>@itm.Added</td>
+                                        <td>@itm.Edited</td>
+                                        <td align="right">
+                                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
+                                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -286,13 +332,13 @@
                         <input type="hidden" class="form-control" name="FolderId" value="@Model.Current.Id" />
                         <input type="hidden" class="form-control" name="Number" value="0" />
                         <div class="form-group">
-                            <input type="Text" class="form-control" name="Name" placeholder="Name..." />
+                            <input type="Text" autocomplete="off" class="form-control" name="Name" placeholder="Name..." autofocus />
                         </div>
                         <div class="form-group">
-                            <textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
+                            <textarea rows="5" autocomplete="off" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
                         </div>
                         <div class="form-group">
-                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                            <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
                         </div>
                         <div class="form-group">
                             <input style="margin-bottom: 10px;" class="form-control" type="file" name="file">
@@ -327,13 +373,13 @@
                         <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
                         <input type="hidden" class="form-control" name="Type" value="dir" />
                         <div class="form-group">
-                            <input type="Text" class="form-control" name="Name" placeholder="Name..." />
+                            <input type="Text" autocomplete="off" class="form-control" name="Name" placeholder="Name..." autofocus />
                         </div>
                         <div class="form-group">
-                            <textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
+                            <textarea rows="5" autocomplete="off" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
                         </div>
                         <div class="form-group">
-                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                            <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -347,45 +393,3 @@
     </div>
 </div>
 
-
-@section scripts
-{
-    <script>
-        $(function () {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-
-        $(document).ready(function () {
-            $("#searchBox").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#mainTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
-            $("#fileSelect").on("click", function () {
-                $("#fileImport").trigger("click");
-            });
-
-            //$("#fileImport").change(function () {
-            //    $("#fileForm").submit();
-            //});
-
-        });
-
-        $("#searchItems").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("#tbl-unassigned tbody tr").filter(function () {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-
-        $('.check-all-items').on("change", function () {
-            var checked = $(this).prop('checked');
-            $('.form-check-input:visible').each(function () {
-                $(this).prop('checked', checked);
-            })
-        });
-
-    </script>
-}
