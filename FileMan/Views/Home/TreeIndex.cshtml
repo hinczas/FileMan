@@ -256,10 +256,9 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" onchange="checkAllItems(this)" /></th>
-                                    <th style="width:100px;" scope="col">Name</th>
                                     <th style="width:70px;" scope="col">Number</th>
                                     <th style="width:25px;" scope="col">Ver</th>
-                                    <th style="width:250px; max-width:250px;" scope="col">Description</th>
+                                    <th style="width:350px;" scope="col">Name</th>
                                     <th style="width:130px;" scope="col">Added</th>
                                     <th style="width:130px;" scope="col">Edited</th>
                                     <th scope="col"></th>
@@ -270,7 +269,6 @@
                                 {
                                     <tr>
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                                             @if (itm.Revisions != null && itm.Revisions.Count() > 0)
@@ -278,7 +276,7 @@
                                                 @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                                             }
                                         </td>
-                                        <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;cursor:pointer;" onclick="goToFile(@itm.Id)" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
                                         <td align="right">
