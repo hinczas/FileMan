@@ -39,6 +39,10 @@ function activateNode(id) {
     $('#jstree_div').jstree(true).get_node(id, true).children('.jstree-anchor').focus();
 }
 
+function selectNode(id) {
+    $('#jstree_div').jstree('select_node', id);
+}
+
 function ChangeUrl(page, url) {
     if (typeof (history.pushState) != "undefined") {
         var newUrl = url.replace("TreeIndex", "Index");
@@ -109,3 +113,33 @@ function addNode() {
     $('#jstree_div').jstree('create_node', parent, newNode, 'last', false, false);
     $('#jstree_div').jstree('open_node', parent);
 }
+
+
+$('#jstree_div').on("move_node.jstree", function (e, data) {
+
+    //var moveitemID = $('#' + data.node.id).find('a')[0].id;
+    //item being moved                      
+    var moveitemID = data.node.id;
+
+    //new parent
+    var newParentID = data.parent;
+
+    //old parent
+    var oldParentID = data.old_parent;
+
+    var link = "/Folders/Move/";
+    //$.post(link, { Id: moveitemID, OldParId: oldParentID, NewParId: newParentID },
+    //    function (returnedData) {
+    //        console.log(returnedData);
+    //    });
+    $('#loadingDiv').show();
+    $.ajax({
+        url: link,
+        type: 'post',
+        data: { Id: moveitemID, OldParId: oldParentID, NewParId: newParentID },
+        success: function () {
+            //alert("done");
+            $('#loadingDiv').hide();
+        }
+    });
+});

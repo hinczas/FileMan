@@ -1,6 +1,7 @@
 ﻿using FileMan.Classes;
 using FileMan.Context;
 using FileMan.Models;
+using FileMan.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,6 +57,44 @@ namespace FileMan.Controllers
 
             return Redirect(Request.UrlReferrer.ToString());
         }
+
+        [HttpPost]
+        public async Task<bool> Move([Bind(Include ="Id,OldParId,NewParId")] FolderMovelViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return false;
+
+            //long c, o, n;
+
+            //if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(oldP) || string.IsNullOrEmpty(newP))
+            //    return false;
+
+            //bool cb = long.TryParse(currN, out c);
+            //bool ob = long.TryParse(oldP, out o);
+            //bool nb = long.TryParse(newP, out n);
+
+            //if (!cb || !ob || !nb)
+            //    return false;
+            
+            var oldParent = _db.Folder.Find(model.OldParId);
+            var current = _db.Folder.Find(model.Id);
+            var newParent = _db.Folder.Find(model.NewParId);
+
+            if (oldParent == null || current == null || newParent == null)
+                return false;
+
+            string oldParentPath = oldParent.Path;
+            string newParentPath = newParent.IsRoot ? "" : newParent.Path;
+
+            current.Parent = newParent;
+            current.Pid = newParent.Id;
+            await _db.SaveChangesAsync();
+
+            await UpdatePathAsync(model.Id, newParentPath);
+
+            return true;
+        }
+
 
         // GET: Folders/Delete/5
         public ActionResult Delete(int id)
@@ -123,6 +162,18 @@ namespace FileMan.Controllers
                 }
             }
             return Redirect(Request.UrlReferrer.ToString());
+        }
+
+        private async Task UpdatePathAsync(long id, string newPath)
+        {
+            var folder = _db.Folder.Find(id);
+            string path = Path.Combine(newPath, folder.Name);
+
+            folder.Path = path;
+            await _db.SaveChangesAsync();
+
+            foreach (var ch in folder.Children)
+                await UpdatePathAsync(ch.Id, path);
         }
     }
 }

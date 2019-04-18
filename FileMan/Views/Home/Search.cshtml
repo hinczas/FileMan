@@ -90,8 +90,8 @@
                             <td></td>
                             <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
                             <td align="right">
-                                <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
-                                <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                                <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
+                                <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><i class="fas fa-times-circle"></i></a>
                             </td>
                         </tr>
                     }
@@ -112,13 +112,13 @@
 
                                 @if (itm.Folders.Count() > 0)
                                 {
-                                    <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
-                                    <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                                    <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><i class="fas fa-pen-square"></i></a>
+                                    <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><i class="fas fa-times-circle"></i></a>
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                                    <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                    <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
+                                    <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                                 }
 
                             </td>
@@ -181,8 +181,8 @@
                                                 <td>@itm.Added</td>
                                                 <td>@itm.Edited</td>
                                                 <td align="right">
-                                                    <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                                                    <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                                    <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
+                                                    <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                                                 </td>
                                             </tr>
                                         }

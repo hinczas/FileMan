@@ -29,17 +29,12 @@
         <li class="active">@Model.Current.Name</li>
     </ol>
 </div>
-<div class="col-md-3" style="padding-left:15px;">
-    <div class="input-group input-group-sm" style="margin-bottom:10px; float:left;">
-        <span class="input-group-addon" id="sizing-addon1">New</span>
-        <span class="input-group-btn" style="float:left">
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal">Document</button>
-            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse">Category</button>
-        </span>
+<div class="col-md-6" style="padding-left:15px;">
+    <div class="btn-group btn-group-sm" role="group" style="margin-bottom:10px; float:left;">
+        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal"><i class="fas fa-folder-plus"></i></button>
+        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse"><i class="fas fa-file-medical"></i></button>
+        <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse"><i class="fas fa-upload"></i></button>
     </div>
-</div>
-<div class="col-md-3">
-    <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse">Import</button>
 </div>
 
 <div class="col-md-6">
@@ -47,15 +42,13 @@
     @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
-        <div class="input-group input-group-sm" style="display:flex; align-items:flex-end;">
+        <div class="input-group input-group-sm" style="float:right;">
             <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" placeholder="Search for.." name="search" style="width:200px;" />
             <select name="scope" class="form-control" style="max-width:150px;">
                 <option value=1>Number &amp; Name</option>
                 <option value=2>Number, Name, Description &amp; Comment </option>
             </select>
-            <span class="input-group-btn">
-                <button class="btn btn-default" type="submit" style="width:60px;">Go!</button>
-            </span>
+            <button class="btn btn-default form-control" type="submit" style="width:38px;"><i class="fas fa-search"></i></button>
 
         </div><!-- /input-group -->
 
@@ -72,15 +65,15 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
                     <input type="hidden" class="form-control" name="Type" value="dir" />
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <input type="text" autocomplete="off" class="form-control form-control-sm" name="Name" placeholder="Name..." autofocus />
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-7">
                         <input type="text" autocomplete="off" class="form-control" name="Description" placeholder="Description..." />
                     </div>
-                    <div class="col-sm-4">
+                    @*<div class="col-sm-4">
                         <input type="text" autocomplete="off" class="form-control" name="Comment" placeholder="Comment..." />
-                    </div>
+                    </div>*@
                     <div class="col-sm-1">
                         <input type="button" value="add" class="btn btn-success btn-sm" id="submitBtn" onclick="submitForm('#catForm', '/Folders/Create/', '@Model.Current.Id')" />
                     </div>
@@ -136,71 +129,92 @@
     </div>
 </div>
 
+<!-- Tables -->
 <div class="col-md-12">
-    <table class="table table-condensed table-hover">
+    <!-- Folders -->
+    <table class="table table-condensed table-hover table-folders">
         <thead class="thead-dark">
             <tr>
                 <th style="width:15px;" scope="col"></th>
-                <th style="width:200px;" scope="col">Name</th>
-                <th style="width:70px;" scope="col">Number</th>
-                <th style="width:25px;" scope="col">Ver</th>
-                <th style="width:380px; max-width:250px;" scope="col">Description</th>
-                <th scope="col"></th>
+                <th style="width:200px;" scope="col"></th>
+                <th style="width:380px; max-width:250px;" scope="col"></th>
+                <th style="width:30px;" scope="col"></th>
             </tr>
         </thead>
         <tbody id="mainTable">
             @if (Model.Current.IsRoot)
             {
                 <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
-                    <td colspan="5">. . .</td>
+                    <td scope="row">
+                            <i class="fas fa-folder"></i>
+                    </td>
+                    <td colspan="5">...</td>
                 </tr>
             }
             else
             {
                 <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
-                    <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">. . .</td>
+                    <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
+                            <i class="fas fa-folder"></i>
+                    </td>
+                    <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
                 </tr>
             }
             @foreach (Folder itm in Model.ChildrenDirs)
             {
                 <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/folder.png" title="Directory" /></td>
+                    <td scope="row" style="cursor:pointer;" onclick="goToFolder(@itm.Id)">
+                            <i class="fas fa-folder"></i>
+                    </td>
                     <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
-                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)"></td>
-                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)"></td>
                     <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
                     <td align="right">
-                        <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><img class="icon" src="~/Content/Images/Icons/info.png" /></span></span>
-                        <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                        <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
+                        <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><i class="fas fa-times-circle"></i></a>
                     </td>
                 </tr>
             }
+        </tbody>
+    </table>
+    <!-- Documents -->
+    <table class="table table-condensed table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width:15px;" scope="col"></th>
+                <th style="width:70px;" scope="col">Number</th>
+                <th style="width:25px;" scope="col">Ver</th>
+                <th style="width:455px;" scope="col">Name</th>
+                <th style="width:30px;" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
-                <tr>
-                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/file.png" title="Document" /></td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
+                <tr title="@itm.Description">
+                    <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                        <i class="fas fa-file"></i>
+                    </td>
                     <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
                     <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                         @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                         {
-                            @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                            <span>@itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft</span>
+                            //@Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                         }
                     </td>
-                    <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;"  onclick="goToFile(@itm.Id)" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                     <td align="right">
 
                         @if (itm.Folders.Count() > 0)
                         {
-                            <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
-                            <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><img class="icon" src="~/Content/Images/Icons/cross.png" /></a>
+                            <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><i class="fas fa-pen-square"></i></a>
+                            <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><i class="fas fa-times-circle"></i></a>
                         }
                         else
                         {
-                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                            // data-toggle="tooltip" data-placement="top" title="@itm.Description"
+                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
+                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                         }
 
                     </td>
@@ -256,20 +270,20 @@
                                 {
                                     <tr>
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                        <td>@itm.Name</td>
-                                        <td>@Html.ActionLink(itm.Number, "Details", "MasterFiles", new { id = itm.Id }, new { title = "Directory" }) </td>
-                                        <td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                                             @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                                             {
                                                 @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                                             }
                                         </td>
-                                        <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
-                                        <td>@itm.Added</td>
-                                        <td>@itm.Edited</td>
+                                        <td style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;cursor:pointer;" onclick="goToFile(@itm.Id)" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description">@itm.Description</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
                                         <td align="right">
-                                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/info.png" /></a>
-                                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><img class="icon" src="~/Content/Images/Icons/pencil2.png" /></a>
+                                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
+                                            <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -338,7 +352,12 @@
                             <textarea rows="5" autocomplete="off" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
                         </div>
                         <div class="form-group">
-                            <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                            <span class="cur-point" data-toggle="collapse" data-target="#commMod">Add comment (optional)</span>
+
+                            <div id="commMod" class="collapse">
+                                <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <input style="margin-bottom: 10px;" class="form-control" type="file" name="file">

@@ -10,6 +10,7 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/styling.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 
     <style>
@@ -54,13 +55,20 @@
         </div>
     </div>
     <div class="container body-content">
+        <div id="loadingDiv">
+            <img src="~/Content/Images/spinner.gif" />
+        </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="col-md-12">
                     <div class="panel panel-info">
-                        <div class="panel-heading">Categories (<a href="javascript:expandAll();">expand all</a> | <a href="javascript:collapseAll();">collapse all</a>)</div>
+                        <div class="panel-heading">
+                            Categories
+                            <span class="float-r pl"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
+                            <span class="float-r pl"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
+                        </div>
                         <div class="panel-tree">
-                            <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search"/>
+                            <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />
                             <div id="jstree_div"></div>
                         </div>
                     </div>
@@ -81,23 +89,34 @@
         <script src="~/Scripts/fmFunctions.js"></script>
 
         <script>
-            $(document).ready(function () {
-                var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
-                var folId = "@Url.RequestContext.RouteData.Values["id"]";
-                var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
-                var url = "/Home/GetTree?id=" + id;
-                $.get(url,
-                    function (data) {
-                        $('#jstree_div').jstree({
-                            "plugins": ["search"],
-                            'core': {
-                                'check_callback': true,
-                                'data': data
-                            }
-                        });
-                        //return data;
-                    })
-            });
+            $(document)
+                .ready(function () {
+
+                    var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
+                    var folId = "@Url.RequestContext.RouteData.Values["id"]";
+                    var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
+                    var url = "/Home/GetTree?id=" + id;
+                    $.get(url,
+                        function (data) {
+                            $('#jstree_div').jstree({
+                                "plugins": ["search" , "dnd"],
+                                'core': {
+                                    'check_callback': true,
+                                    'data': data
+                                }
+                            });
+                            //return data;
+                            $('#loadingDiv').hide();
+                        }
+                    )
+
+                //})
+                //.ajaxStart(function () {
+                //    $('#loadingDiv').show();
+                //})
+                //.ajaxStop(function () {
+                //    $('#loadingDiv').hide();
+                });
 
             $(function () {
                 $('#jstree_div').bind("select_node.jstree", function (e, data) {
@@ -129,6 +148,8 @@
                     }, 250);
                 });
             });
+
+                
         </script>
 
         @RenderSection("scripts", required: false)

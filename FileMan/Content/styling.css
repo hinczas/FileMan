@@ -79,19 +79,93 @@
 }
 
 .icon {
-    max-width: 16px;
-    max-height: 16px;
+    max-width: 16px !important;
+    max-height: 16px !important;
 }
 
 .table {
     font-size: small;
 }
-
+.table-condensed td {
+    padding: 2px !important;
+}
+.table > tbody > tr > td, .table > tfoot > tr > td {
+    vertical-align: middle !important;
+}
 .js-link {
     cursor: pointer;
-    color:royalblue;
+    color: royalblue;
 }
 .js-link:hover {
     color: navy;
     text-decoration:underline;
 }
+
+#loadingDiv {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background-color: rgba(255,255,255,0.8);
+}
+#loadingDiv img{
+    position: relative;
+    top: 45%;
+    left: 45%;
+}
+
+.cur-point {
+    cursor: pointer;
+}
+
+.table-folders > thead > tr > th {
+    border-bottom: none;
+}
+
+.float-r {
+    float:right;
+}
+.float-l {
+    float: left;
+}
+
+.pl {
+    padding-left: 0.5em;
+}
+.pl-1 {
+    padding-left: 1em;
+}
+.pl-2 {
+    padding-left: 2em;
+}
+
+/* ICONS */
+.fa, .far, .fas {
+    font-size:16px;
+}
+
+.fa-folder {
+    color: #fdd835;
+}
+.fa-folder-plus {
+    color: #c8b900;
+}
+.fa-file {
+    color: #607d8b;
+}
+.fa-file-medical {
+    color: #34515e;
+}
+.fa-info-circle {
+    color: #1e88e5;
+}
+.fa-times-circle {
+    color: #e53935;
+}
+.fa-pen-square {
+    color: #8bc34a;
+}
+
+

@@ -453,6 +453,7 @@ namespace FileMan.Classes
             {
                 id = fol.Id.ToString(),
                 text = fol.Name,
+                icon = "fas fa-folder",
                 state = new JSTState()
                 {
                     opened = false,
