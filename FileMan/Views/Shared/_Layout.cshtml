@@ -13,29 +13,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 
-    <style>
-        .treeview .list-group {
-            padding-left: 0;
-            margin-bottom: 0px;
-        }
-
-        .treeview .list-group-item {
-            padding-top: 5px;
-            padding-bottom: 5px;
-            border-radius: 0px;
-        }
-
-            .treeview .list-group-item:first-child {
-                border-top-left-radius: 0px;
-                border-top-right-radius: 0px;
-            }
-
-            .treeview .list-group-item:last-child {
-                margin-bottom: 0;
-                border-bottom-right-radius: 0px;
-                border-bottom-left-radius: 0px;
-            }
-    </style>
+    <script type="text/javascript">
+        function preventBack() { window.history.forward(); }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">

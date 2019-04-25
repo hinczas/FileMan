@@ -46,9 +46,10 @@ namespace FileMan.Controllers
         }
 
         // GET: MasterFiles/Create
+        //, HttpPostedFileBase file
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,Description,Comment,Number")] MasterFile item, long FolderId, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "Name,Description,Comment,Number")] MasterFile item, long FolderId)
         {
             if (ModelState.IsValid)
             {
@@ -94,48 +95,47 @@ namespace FileMan.Controllers
                 //_db.MasterFile.Add(item);
                 _db.SaveChanges();
 
-                if (file != null)
-                {
-                    extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
-                    string icon = DataFeeder.GetIcon(extension);
-                    var revision = 1;
-                    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+"."+extension.ToLower();
-                    var fullpath = Path.Combine(rootPath, number, filname);
-                    string draft = _is.Increment(string.Empty);
+                //if (file != null)
+                //{
+                //    extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
+                //    string icon = DataFeeder.GetIcon(extension);
+                //    var revision = 1;
+                //    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+"."+extension.ToLower();
+                //    var fullpath = Path.Combine(rootPath, number, filname);
+                //    string draft = _is.Increment(string.Empty);
 
-                    FileRevision rf = new FileRevision()
-                    {
-                        MasterFileId = item.Id,
-                        Revision = revision,
-                        Name = file.FileName,
-                        Comment = item.Comment,
-                        FullPath = fullpath,
-                        Extension = extension,
-                        Draft = draft,
-                        Type = "draft",
-                        Added = added,
-                        Icon = icon
-                    };
+                //    FileRevision rf = new FileRevision()
+                //    {
+                //        MasterFileId = item.Id,
+                //        Revision = revision,
+                //        Name = file.FileName,
+                //        Comment = item.Comment,
+                //        FullPath = fullpath,
+                //        Extension = extension,
+                //        Draft = draft,
+                //        Type = "draft",
+                //        Added = added,
+                //        Icon = icon
+                //    };
 
 
-                    file.SaveAs(fullpath);
+                //    file.SaveAs(fullpath);
 
-                    var md5 = MD5.Create();
-                    string hash = _is.GetMd5Hash(md5,fullpath);
-                    rf.Md5hash = hash;
+                //    var md5 = MD5.Create();
+                //    string hash = _is.GetMd5Hash(md5,fullpath);
+                //    rf.Md5hash = hash;
 
-                    item.Extension = extension;
-                    item.Changelog = item.Changelog + string.Format("{0} - Revision added : {1} \n", added, filname);
+                //    item.Extension = extension;
+                //    item.Changelog = item.Changelog + string.Format("{0} - Revision added : {1} \n", added, filname);
 
-                    _db.FileRevision.Add(rf);
-                    _db.SaveChanges();
+                //    _db.FileRevision.Add(rf);
+                //    _db.SaveChanges();
+                //}
 
-                }
-
-                return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = true, responseText = "Document created", parentId = FolderId }, JsonRequestBehavior.AllowGet);
             }
 
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = false, responseText = "Invalid model state", parentId = FolderId }, JsonRequestBehavior.AllowGet);
         }
 
         // GET: MasterFiles/Edit/5
@@ -168,14 +168,23 @@ namespace FileMan.Controllers
         }
 
         // POST: MasterFiles/Delete/5
+        [HttpPost]
         public ActionResult Delete(int id, int folderId)
         {
-            MasterFile item = _db.MasterFile.Find(id);
-            Folder folder = _db.Folder.Find(folderId);
-            item.Folders.Remove(folder);
-            _db.SaveChanges();
+            try
+            {
+                MasterFile item = _db.MasterFile.Find(id);
+                Folder folder = _db.Folder.Find(folderId);
+                item.Folders.Remove(folder);
+                _db.SaveChanges();
 
-            return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = true, responseText = "Document removed", parentId = folderId }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, responseText = e.Message, parentId = folderId }, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
         [HttpPost]

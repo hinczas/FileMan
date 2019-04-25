@@ -168,4 +168,9 @@
     color: #8bc34a;
 }
 
+.modal-body {
+    max-height:500px;
+    overflow-y:auto;
+}
+
 

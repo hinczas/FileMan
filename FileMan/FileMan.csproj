@@ -55,9 +55,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="GdPicture.NET.14.WEB.DocuVieware">
-      <HintPath>D:\GdPicture.NET 14\Redist\DocuVieware (.NET 4.5)\GdPicture.NET.14.WEB.DocuVieware.dll</HintPath>
-    </Reference>
     <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
@@ -321,11 +318,8 @@
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-toggle.min.css" />
-    <Content Include="Content\bootstrap-treeview.css" />
-    <Content Include="Content\bootstrap-treeview.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\docuvieware-min.css" />
     <Content Include="Content\Images\Icons\16px\aac.png" />
     <Content Include="Content\Images\Icons\16px\ai.png" />
     <Content Include="Content\Images\Icons\16px\aiff.png" />

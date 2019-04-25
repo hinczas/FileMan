@@ -100,6 +100,7 @@ namespace FileMan.Controllers
         public ActionResult Delete(int id)
         {
             Folder item = _db.Folder.Find(id);
+            long? pid = item.Pid;
             if (item != null)
             {
 
@@ -110,16 +111,17 @@ namespace FileMan.Controllers
                 {
                     TempData["Error"] = true;
                     TempData["Message"] = "Cannot delete non-empty directory.";
+                    return Json(new { success = false, responseText = "Cannot delete non-empty directory." }, JsonRequestBehavior.AllowGet);
 
                 } else
                 {
                     _db.Folder.Remove(item);
                     _db.SaveChanges();
                 }
-                //_is.DeleteDirectory(item.Id);
+                return Json(new { success = true, responseText = "Category deleted.", parentId = pid }, JsonRequestBehavior.AllowGet);
             }
 
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = false, responseText = "Error occured" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MoveFiles(int Id, int[] files)
@@ -174,6 +176,18 @@ namespace FileMan.Controllers
 
             foreach (var ch in folder.Children)
                 await UpdatePathAsync(ch.Id, path);
+        }
+
+        [HttpGet]
+        public string GetChildCount(long id)
+        {
+            var fol = _db.Folder.Find(id);
+            if (fol == null)
+                return "";
+
+            string ret = fol.Files == null || fol.Files.Count < 1 ? "" : string.Format("({0})", fol.Files.Count);
+
+            return ret;
         }
     }
 }

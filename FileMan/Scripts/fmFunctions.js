@@ -1,4 +1,4 @@
-﻿function goToFolder(id) {
+﻿function goToFolder(id, redirect = true) {
     var link = "/Home/TreeIndex/"+id;
     $.ajax({
         type: "get",
@@ -6,8 +6,10 @@
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
-            activateNode(id);
-            ChangeUrl("Index", link);
+            if (redirect) {
+                activateNode(id);
+                ChangeUrl("Index", link);
+            }
         }
     });
 }
@@ -87,6 +89,62 @@ function checkAllItems(e) {
     })
 }
 
+function deleteCategory(id) {
+    var confirmed = confirm('Are you sure you wish to delete this Category?');
+
+    if (confirmed) {
+        $.ajax({
+            url: '/Folders/Delete/'+id,
+            type: 'post',
+            success: function (response) {
+                if (response.success) {
+                    addTableRow(response.parentId);
+                    removeNode(id);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function deleteDocument(did, pid) {
+    $.ajax({
+        url: '/MasterFiles/Delete',
+        type: 'post',
+        data: JSON.stringify({ id: did, folderId: pid }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        //data: {'id': did, 'parentId': pid},
+        success: function (response) {
+            if (response.success) {
+                goToFolder(pid, false);
+                _updateNodeQte(pid);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function createDocument(_form, _pid) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Create/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#filModal');
+                goToFolder(_pid, false);
+                _updateNodeQte(_pid);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
 function submitForm(_form, _url, _pn) {
     var dt = $(_form).serialize();
     $.ajax({
@@ -97,7 +155,9 @@ function submitForm(_form, _url, _pn) {
             if (response.success) {
                 addNode(response.parentId, response.id, response.name);
                 addTableRow(response.parentId);
-            } 
+            } else {
+                alert(response.responseText);
+            }
         }
     });
 }
@@ -113,6 +173,11 @@ function addTableRow(id) {
         }
     });
 }
+
+function removeNode(id) {
+    $("#jstree_div").jstree('delete_node', id);
+}
+
 function addNode(pid, id, name) {
     var position = 'inside';
     //var parent = $('#jstree_div').jstree('get_selected');
@@ -163,3 +228,25 @@ $('#jstree_div').on("move_node.jstree", function (e, data) {
         }
     });
 });
+
+function _hideModal(name) {
+    $(name).modal('hide');
+    //$('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+}
+
+function _updateNodeQte(id) {
+    $.ajax({
+        url: '/Folders/GetChildCount/'+id,
+        type: 'get',
+        success: function (ret) {
+            //var node = $('#jstree_div').jstree(true).get_node(id)
+            //var parent = node.parent;
+            //node.a_attr.data_quantity = ret;
+            //$("#jstree_div").jstree(true).refresh_node(node);
+            var nid = "#"+id+"_anchor";
+            $(nid).attr("data_quantity", ret);
+        }
+    });
+
+}

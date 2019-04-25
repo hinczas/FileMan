@@ -171,7 +171,7 @@
                         <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
                         <td align="right">
                             <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
-                            <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><i class="fas fa-times-circle"></i></a>
+                            <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="fas fa-times-circle"></i></span>
                         </td>
                     </tr>
                 }
@@ -210,7 +210,7 @@
                         @if (itm.Folders.Count() > 0)
                         {
                             <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><i class="fas fa-pen-square"></i></a>
-                            <a href="@Url.Action("Delete", "MasterFiles", new { id=itm.Id, folderId = Model.Current.Id })"><i class="fas fa-times-circle"></i></a>
+                            <span onclick="deleteDocument(@itm.Id, @Model.Current.Id)" class="cur-point"><i class="fas fa-times-circle"></i></span>
                         }
                         else
                         {
@@ -334,7 +334,7 @@
     <div class="modal-dialog modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
-            @using (Html.BeginForm("Create", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Create", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id="newDocForm", @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
@@ -359,15 +359,15 @@
                             </div>
 
                         </div>
-                        <div class="form-group">
+                        @*<div class="form-group">
                             <input style="margin-bottom: 10px;" class="form-control" type="file" name="file">
-                        </div>
+                        </div>*@
 
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <input type="submit" value="Save" class="btn btn-success" id="submitBtn" />
+                    <button type="button" class="btn btn-success" onclick="createDocument('#newDocForm', '@Model.Current.Id')">Save</button>
                 </div>
             }
         </div>
