@@ -55,6 +55,20 @@ namespace FileMan.Controllers
             return View(ivm);
         }
 
+        [HttpGet]
+        public ActionResult GetDocTable(long? id)
+        {
+            TempData["folderId"] = id;
+            ItemViewModel ivm;
+
+            string userId = User.Identity.GetUserId();
+            
+            ivm = _is.GetPartialItemViewModel(id);
+
+
+            return PartialView("_DocTable", ivm);
+        }
+
         public PartialViewResult TreeIndex(long? id, string search, int? scope)
         {
             TempData["folderId"] = id;

@@ -52,10 +52,10 @@ namespace FileMan.Controllers
                 _db.Folder.Add(item);
                 _db.SaveChanges();
 
-                return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = true, responseText = "Node successfully added", name = item.Name, id = item.Id, parentId = item.Pid }, JsonRequestBehavior.AllowGet);
             }
 
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = false, responseText = "Invalid data passed", reload = false }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

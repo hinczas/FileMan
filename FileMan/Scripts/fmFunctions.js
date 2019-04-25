@@ -88,25 +88,45 @@ function checkAllItems(e) {
 }
 
 function submitForm(_form, _url, _pn) {
+    var dt = $(_form).serialize();
     $.ajax({
         url: _url,
         type: 'post',
-        data: $(_form).serialize(),
-        success: function () {
-            addNode();
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                addNode(response.parentId, response.id, response.name);
+                addTableRow(response.parentId);
+            } 
         }
     });
 }
 
-function addNode() {
+function addTableRow(id) {
+    var link = "/Home/GetDocTable/" + id;
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('#replaceDocTable').html(d); //replaces previous HTML with action
+        }
+    });
+}
+function addNode(pid, id, name) {
     var position = 'inside';
-    var parent = $('#jstree_div').jstree('get_selected');
+    //var parent = $('#jstree_div').jstree('get_selected');
+    var parent = $('#jstree_div').jstree(true).get_node(pid)
     var newNode = {
-        'id': 'testrrr',
-        'text': 'testrrr',
+        'id': id,
+        'text': name,
         'type': 'valid_child',
+        'icon': 'fas fa-folder',
         'state': {
             'opened': true
+        },
+        'a_attr': {
+            'href': '/Home/TreeIndex/' + id
         }
     };
 

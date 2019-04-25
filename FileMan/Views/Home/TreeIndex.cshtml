@@ -31,8 +31,8 @@
 </div>
 <div class="col-md-6" style="padding-left:15px;">
     <div class="btn-group btn-group-sm" role="group" style="margin-bottom:10px; float:left;">
-        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal"><i class="fas fa-folder-plus"></i></button>
-        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse"><i class="fas fa-file-medical"></i></button>
+        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal"><i class="fas fa-file-medical"></i></button>
+        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse"><i class="fas fa-folder-plus"></i></button>
         <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse"><i class="fas fa-upload"></i></button>
     </div>
 </div>
@@ -132,50 +132,52 @@
 <!-- Tables -->
 <div class="col-md-12">
     <!-- Folders -->
-    <table class="table table-condensed table-hover table-folders">
-        <thead class="thead-dark">
-            <tr>
-                <th style="width:15px;" scope="col"></th>
-                <th style="width:200px;" scope="col"></th>
-                <th style="width:380px; max-width:250px;" scope="col"></th>
-                <th style="width:30px;" scope="col"></th>
-            </tr>
-        </thead>
-        <tbody id="mainTable">
-            @if (Model.Current.IsRoot)
-            {
+    <div id="replaceDocTable">
+        <table class="table table-condensed table-hover table-folders">
+            <thead class="thead-dark">
                 <tr>
-                    <td scope="row">
-                            <i class="fas fa-folder"></i>
-                    </td>
-                    <td colspan="5">...</td>
+                    <th style="width:15px;" scope="col"></th>
+                    <th style="width:200px;" scope="col"></th>
+                    <th style="width:380px; max-width:250px;" scope="col"></th>
+                    <th style="width:30px;" scope="col"></th>
                 </tr>
-            }
-            else
-            {
-                <tr>
-                    <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
+            </thead>
+            <tbody id="mainTable">
+                @if (Model.Current.IsRoot)
+                {
+                    <tr>
+                        <td scope="row">
                             <i class="fas fa-folder"></i>
-                    </td>
-                    <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
-                </tr>
-            }
-            @foreach (Folder itm in Model.ChildrenDirs)
-            {
-                <tr>
-                    <td scope="row" style="cursor:pointer;" onclick="goToFolder(@itm.Id)">
+                        </td>
+                        <td colspan="5">...</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-folder"></i>
-                    </td>
-                    <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
-                    <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
-                    <td align="right">
-                        <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
-                        <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><i class="fas fa-times-circle"></i></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                        </td>
+                        <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
+                    </tr>
+                }
+                @foreach (Folder itm in Model.ChildrenDirs)
+                {
+                    <tr>
+                        <td scope="row" style="cursor:pointer;" onclick="goToFolder(@itm.Id)">
+                            <i class="fas fa-folder"></i>
+                        </td>
+                        <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
+                        <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
+                        <td align="right">
+                            <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
+                            <a href="@Url.Action("Delete", "Folders", new { id=itm.Id })" onclick="return confirm('Are you sure you wish to delete this Category?');"><i class="fas fa-times-circle"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
     <!-- Documents -->
     <table class="table table-condensed table-hover">
         <thead class="thead-dark">

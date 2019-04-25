@@ -168,6 +168,29 @@ namespace FileMan.Classes
             return ivm;
         }
 
+        public ItemViewModel GetPartialItemViewModel(long? id)
+        {
+            Folder item;
+            if (id == null)
+            {
+                item = GetRoot();
+            }
+            else
+            {
+                item = _db.Folder.Find(id);
+            }
+            
+            var chilDrs = _db.Folder.Where(a => a.Pid == item.Id);
+            var childrenDir = chilDrs.Count() > 0 ? chilDrs.OrderBy(a => a.Name).ToList() : new List<Folder>();
+                          
+            ItemViewModel ivm = new ItemViewModel()
+            {
+                Current = item,
+                ChildrenDirs = childrenDir
+            };
+            return ivm;
+        }
+
         public ItemViewModel GetItemViewModel(string search, int scope)
         {
             Folder item = GetRoot();
