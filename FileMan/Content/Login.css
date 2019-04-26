@@ -1,0 +1,232 @@
+﻿body {
+    margin: 0 !important;
+}
+
+.container {
+    font-family: Nunito;
+}
+
+.main-body {
+    position: relative;
+    background-image: url('../../Content/Images/login_img.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container, .main-body {
+    height: 100% !important;
+    width: 100% !important;
+    overflow-y: hidden;
+}
+
+.login-panel {
+    display: block;
+    position: absolute;
+    width: 400px;
+    height: 110% !important;
+    overflow-y: hidden;
+    right: 0;
+    background-color: #fdfdfd;
+    box-shadow: black 5px 0 10px;
+}
+
+.app-name {
+    text-align: center;
+    font-weight: 700;
+    font-size: 42px;
+    margin-top: 40px;
+}
+
+/* Icons */
+.app-icons {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+    .icons:before,
+    .icons:after {
+        content: "";
+        height: 1px;
+        position: absolute;
+        top: 10px;
+        width: 20%;
+    }
+
+    .icons:after {
+        background: rgb(126,126,126);
+        background: -moz-linear-gradient(left, rgba(126,126,126,1) 0%, rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(left, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -o-linear-gradient(left, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -ms-linear-gradient(left, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: linear-gradient(left, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        right: 0;
+    }
+
+    .icons:before {
+        background: rgb(126,126,126);
+        background: -moz-linear-gradient(right, rgba(126,126,126,1) 0%, rgba(255,255,255,1) 100%);
+        background: -webkit-linear-gradient(right, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -o-linear-gradient(right, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: -ms-linear-gradient(right, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        background: linear-gradient(right, rgba(126,126,126,1) 0%,rgba(255,255,255,1) 100%);
+        left: 0;
+    }
+
+.fas {
+    font-size: 16px;
+    margin: 2px;
+}
+.fa-folder {
+    color: #fdd835;
+}
+
+.fa-copy {
+    color: #6b00ac;
+}
+
+.fa-file {
+    color: #607d8b;
+}
+
+.fa-cogs {
+    color: #009700;
+}
+
+.fa-tasks {
+    color: #0075d8;
+}
+
+.fa-archive {
+    color: #c40400;
+}
+
+.fa-pen-square {
+    color: #8bc34a;
+}
+/* Icons end */
+
+.sub-text {
+    text-align: left !important;
+}
+
+.login-box {
+    height: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 20px 75px;
+}
+
+    .login-box .text-input {
+        font-family: Nunito;
+        font-size: 14px;
+        width: 100%;
+        padding: 2px 0px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: none;
+        border-bottom: 1px solid #42a5f5;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        margin: 10px 0px;
+    }
+
+        .login-box .text-input:focus {
+            outline: none;
+        }
+
+        .login-box .text-input::placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .login-box .text-input::-webkit-input-placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .login-box .text-input::-moz-placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .login-box .text-input:-ms-input-placeholder {
+            color: #aaa;
+            font-size: 14px;
+        }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    color: #495057 !important;
+}
+
+.checkbox {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.checkbox {
+    font-size: 14px;
+    color: #0077c2;
+    margin: 5px 0px;
+}
+
+    .checkbox input, .checkbox label {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0px;
+    }
+
+.text-danger ul {
+    list-style-type: none;
+    margin: 5px 0px;
+    padding-inline-start: 0px;
+}
+
+    .text-danger ul li {
+        color: red;
+        list-style: none;
+    }
+
+.buttons-bottom {
+    margin: 40px 0px;
+}
+
+.btn {
+    float: right;
+    font-family: Nunito;
+    font-size: 14px;
+    height: 30px;
+    width: 70px;
+    background-color: #42a5f5;
+    color: white;
+    border-radius: 0px;
+    outline: none;
+    border: none;
+}
+
+    .btn:hover {
+        background-color: #0077c2;
+        color: white;
+        cursor: pointer;
+        outline: none;
+        border: none;
+    }
+
+a {
+    font-family: Nunito;
+    font-size: 16px;
+    padding: 4px 0px;
+    height: 30px !important;
+    text-decoration: none !important;
+}
+
+.login-footer {
+    text-align: center;
+    font-size: 12px;
+    color: darkslategray;
+    margin-top: 40px;
+}

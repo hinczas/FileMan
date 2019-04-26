@@ -1,65 +1,56 @@
-﻿@using FileMan.Models
-@model LoginViewModel
+﻿@model FileMan.Models.LoginViewModel
 @{
     ViewBag.Title = "Log in";
     Layout = null;
 }
-@Styles.Render("~/Content/css")
-<style>
-    input {
-        max-width:100%;
-    }
-</style>
-<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
-<link href="~/Content/LoginStyling.css" rel="stylesheet" />
-
-<a class="btn btn-sm btn-outline-secondary btn-email" href="mailto:hinczas@gmail.com?Subject=FileMan%20-%20admin%20access%20request" target="_top">Request admin access</a>
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link href="~/Content/Login.css" rel="stylesheet" />
 
 <div class="container">
-    <section id="content">
-        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-        {
-            @Html.AntiForgeryToken()
-            <h1>FileMan</h1>
-            <p>Log into existing account</p>
-            @Html.ValidationSummary("", new { @class = "text-danger" })
-            <br />
-            <div>
-                <div class="col-md-12">
-                    @Html.TextBoxFor(m => m.Email, new { @type = "text", placeholder = "Email...", @required = "" })
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div>
-                <div class="col-md-12">
-                    @Html.PasswordFor(m => m.Password, new { @type = "password", placeholder = "Password...", @required = "" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div>
-                <div class="col-md-12">
-                    <div class="checkbox" style="margin-bottom:10px;">
-                        @Html.CheckBoxFor(m => m.RememberMe)
-                        @Html.LabelFor(m => m.RememberMe)
+    <div class="main-body">
+        <div class="login-panel">
+            <div class="login-box">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="app-name">FileMan</div>
+                    <div class="app-icons">
+                        <div class="icons">
+                            <i class="fas fa-folder"></i>
+                            <i class="fas fa-copy"></i>
+                            <i class="fas fa-cogs"></i>
+                            <i class="fas fa-archive"></i>
+                            <i class="fas fa-tasks"></i>
+                            <i class="fas fa-file"></i>
+                        </div>
                     </div>
-                </div>
+                    <div class="sub-text">Log into existing account</div>
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div>
+                        @Html.TextBoxFor(m => m.Email, new { @type = "text", placeholder = "Email...", @required = "", @class = "text-input" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                    <div>
+                        @Html.PasswordFor(m => m.Password, new { @type = "password", placeholder = "Password...", @required = "", @class = "text-input" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                    <div>
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                    <div class="buttons-bottom">
+                        @Html.ActionLink("Register", "Register", null, new { @type = "button" })
+                        <input type="submit" class="btn btn-login" value="Log in" />
+                    </div>
+                }
             </div>
-            <div class="form-group">
-                <input type="submit" value="Log in" class="btn btn-primary" />
-            </div>
-            <p>
-                @Html.ActionLink("Register as a new user", "Register")
-            </p>
-            <br />
-            @* Enable this once you have account confirmation enabled for password reset functionality
-            <p>
-                @Html.ActionLink("Forgot your password?", "ForgotPassword")
-            </p>*@
-        }
-    </section><!-- content -->
-</div><!-- container -->
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+            <div class="login-footer">
+                &copy; @DateTime.Now.Year - Rafal Maricnek
+            </div>
+        </div>
+    </div>
+</div>

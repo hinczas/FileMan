@@ -12,12 +12,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <script type="text/javascript">
-        function preventBack() { window.history.forward(); }
-        setTimeout("preventBack()", 0);
-        window.onunload = function () { null };
-    </script>
+    @*<script type="text/javascript">
+            function preventBack() { window.history.forward(); }
+            setTimeout("preventBack()", 0);
+            window.onunload = function () { null };
+        </script>*@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -45,9 +46,11 @@
                 <div class="col-md-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            Categories
-                            <span class="float-r pl"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
-                            <span class="float-r pl"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
+                            <h4 class="cus-h4">
+                                Categories
+                            </h4>
+                            <span class="float-r mr"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
+                            <span class="float-r mr"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
                         </div>
                         <div class="panel-tree">
                             <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />

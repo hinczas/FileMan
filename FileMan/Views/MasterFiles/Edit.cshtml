@@ -43,14 +43,14 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="panel panel-success">
-                    <div class="panel-heading">
+                    <div class="panel-heading panel-title">
                         <div class="container" style="align-items:center; width:100%; padding:0px;">
-                            <h3 style="margin-top:0; margin-bottom:0px;float:left; padding-top:3px;">
+                            <h4 class="cus-h4">
                                 <b>@Model.Current.Number</b> - @Model.DraftVersion - @Model.Current.Name
-                            </h3>
+                            </h4>
                             <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
                                 @Html.ActionLink("Cancel", "Details", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-default", type = "button" })
-                                <input type="submit" value="Save" class="btn btn-sm btn-success" />
+                                <input type="submit" value="Save" class="btn btn-sm btn-primary" />
                             </div>
                         </div>
                         <span style="float:right;">
@@ -80,95 +80,112 @@
                 </div>
             }
 
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        Latest revisions
-                    </h4>
-                </div>
-                <table class="table table-striped table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <th style="font-weight:900; width:15px;" align="right"></th>
-                            <th style="font-weight:900; width:60px;" align="right">Type</th>
-                            <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                            <th style="font-weight:900; width:130px;" align="right">Added</th>
-                            <th style="font-weight:900; width:25px;" align="right"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (@Model.LatestIssue != null)
-                        {
-                            <tr>
-                                <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestIssue.Icon" /></td>
-                                <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
-                                <td>@Model.LatestIssue.Comment</td>
-                                <td>@Model.LatestIssue.Added</td>
-                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                            </tr>
-                        }
-                        @if (@Model.LatestDraft != null)
-                        {
-                            <tr>
-                                <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestDraft.Icon" /></td>
-                                <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
-                                <td>@Model.LatestDraft.Comment</td>
-                                <td>@Model.LatestDraft.Added</td>
-                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="panel-group">
-                <div class="panel panel-warning">
+            <br />
+            @if (Model.RevisionsCount > 0)
+            {
+                <div class="panel panel-info">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" href="#collapse1">All revisions</a> <span class="badge badge-light">@Model.RevisionsCount</span>
+                        <h4 class="cus-h4">
+                            Latest revisions
                         </h4>
                     </div>
-                    <div id="collapse1" class="panel-collapse collapse">
-                        @if (Model.RevisionsCount > 0)
-                        {
-                            <table class="table table-striped table-hover table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th style="font-weight:900; width:15px;" align="right"></th>
-                                        <th style="font-weight:900; width:35px;" align="right">Rev</th>
-                                        <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                                        <th style="font-weight:900; width:130px;" align="right">Added</th>
-                                        <th style="font-weight:900; width:25px;" align="right"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @{ int counter = 0;}
-                                    @foreach (FileRevision rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
-                                    {
-                                        <tr>
-                                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
-                                            <td>
-                                                @if (string.IsNullOrEmpty(rev.Draft))
-                                                {
-                                                    <span class="label label-success">issue</span>
-                                                }
-                                                else
-                                                {
-                                                    @rev.Draft
-                                                }
-                                            </td>
-                                            <td>@rev.Comment</td>
-                                            <td>@rev.Added</td>
-                                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
-                                        </tr>
-                                        counter++;
-                                    }
-                                </tbody>
-                            </table>
-                        }
+                    <table class="table table-striped table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="font-weight:900; width:15px;" align="right"></th>
+                                <th style="font-weight:900; width:60px;" align="right">Type</th>
+                                <th style="font-weight:900; width:250px;" align="right">Comment</th>
+                                <th style="font-weight:900; width:130px;" align="right">Added</th>
+                                <th style="font-weight:900; width:25px;" align="right"></th>
+                                <th style="font-weight:900; width:15px;" align="right"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (@Model.LatestIssue != null)
+                            {
+                                <tr>
+                                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestIssue.Icon" /></td>
+                                    <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
+                                    <td>@Model.LatestIssue.Comment</td>
+                                    <td>@Model.LatestIssue.Added</td>
+                                    <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                                    <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
+                                </tr>
+                            }
+                            @if (@Model.LatestDraft != null)
+                            {
+                                <tr>
+                                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestDraft.Icon" /></td>
+                                    <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
+                                    <td>@Model.LatestDraft.Comment</td>
+                                    <td>@Model.LatestDraft.Added</td>
+                                    <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                                    <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="panel-group">
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h4 class="cus-h4">
+                                <a data-toggle="collapse" href="#collapse1">All revisions</a>
+                            </h4>
+                            <span class="badge badge-light">@Model.RevisionsCount</span>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            @if (Model.RevisionsCount > 0)
+                            {
+                                using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
+                                {
+                                    <table class="table table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight:900; width:15px;" align="right"></th>
+                                                <th style="font-weight:900; width:35px;" align="right">Rev</th>
+                                                <th style="font-weight:900; width:250px;" align="right">Comment</th>
+                                                <th style="font-weight:900; width:130px;" align="right">Added</th>
+                                                <th style="font-weight:900; width:25px;" align="right"></th>
+                                                <th style="font-weight:900; width:15px;" align="right"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{ int counter = 0;}
+                                            @foreach (var rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
+                                            {
+                                                <tr>
+                                                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
+                                                    <td>
+                                                        @if (string.IsNullOrEmpty(rev.Draft))
+                                                        {
+                                                            <span class="label label-success">issue</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            @rev.Draft
+                                                        }
+                                                    </td>
+                                                    <td>@rev.Comment</td>
+                                                    <td>@rev.Added</td>
+                                                    <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
+                                                    <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
+                                                </tr>
+                                                counter++;
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <p><i class="fas fa-exclamation-triangle"></i>There are no revisions for this document yet.</p>
+            }
         </div>
 
     @section scripts

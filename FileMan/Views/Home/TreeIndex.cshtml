@@ -239,11 +239,12 @@
             <input type="hidden" name="Id" value=@Model.Current.Id />
             <div class="panel-group">
                 <div class="panel panel-warning">
-                    <div class="panel-heading panel-title" style="padding:5px 5px 5px 15px;">
+                    <div class="panel-heading panel-title">
                         <div class="container" style="align-items:center; width:100%; padding:0px;">
-                            <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
-                                <a data-toggle="collapse" href="#collapse1">Uncategorised</a> <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
+                            <h4 class="cus-h4">
+                                <a data-toggle="collapse" href="#collapse1">Uncategorised</a>
                             </h4>
+                            <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
                             <div class="input-group input-group-sm pull-right" style="max-width:200px;">
                                 <input type="text" class="form-control form-control-sm" id="searchItems" onkeyup="searchUnassigned(this)" placeholder="filter..." name="search" style="width:200px;" />
 
@@ -282,7 +283,6 @@
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
                                         <td align="right">
-                                            <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
                                             <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                                         </td>
                                     </tr>
