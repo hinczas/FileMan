@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -27,20 +28,20 @@ namespace FileMan.Controllers
         }
 
         // GET: MasterFiles/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, long? pid)
         {
 
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
 
             return View(file);
         }
 
-        public PartialViewResult PartialDetails(int id)
+        public PartialViewResult PartialDetails(int id, long? pid)
         {
 
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
 
             return PartialView(file);
         }
@@ -139,18 +140,26 @@ namespace FileMan.Controllers
         }
 
         // GET: MasterFiles/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, long? pid)
         {
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
 
             return View(file);
+        }
+
+        public ActionResult PartialEdit(int id, long? pid)
+        {
+            string userId = User.Identity.GetUserId();
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+
+            return PartialView(file);
         }
 
         // POST: MasterFiles/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Comment,Number")] MasterFile item)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Comment,Number")] MasterFile item, long pid)
         {
             if (ModelState.IsValid)
             {
@@ -163,20 +172,34 @@ namespace FileMan.Controllers
                 mf.Changelog = mf.Changelog + string.Format("{0} - Document edited \n", date);
 
                 _db.SaveChanges();
+
+                return Json(new { success = true, responseText = "Document updated", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-            return RedirectToAction("Details", new { id = item.Id });
+            return Json(new { success = false, responseText = "Cannot update Document. Data issue.", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
         // POST: MasterFiles/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, int folderId)
+        public async Task<ActionResult> DeleteAsync(int id, int folderId)
         {
             try
             {
-                MasterFile item = _db.MasterFile.Find(id);
-                Folder folder = _db.Folder.Find(folderId);
-                item.Folders.Remove(folder);
-                _db.SaveChanges();
+                MasterFile item =await _db.MasterFile.FindAsync(id);
+                if (folderId < 0)
+                {
+                    var fols = item.Folders.Select(s => s.Id).ToArray();
+                    foreach(int fol in fols)
+                    {
+                        Folder folder = _db.Folder.Find(fol);
+                        item.Folders.Remove(folder);
+                        await _db.SaveChangesAsync();
+                    }
+                } else
+                {
+                    Folder folder = _db.Folder.Find(folderId);
+                    item.Folders.Remove(folder);
+                    await _db.SaveChangesAsync();
+                }
 
                 return Json(new { success = true, responseText = "Document removed", parentId = folderId }, JsonRequestBehavior.AllowGet);
             }
@@ -189,7 +212,7 @@ namespace FileMan.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Promote(long id, string Comment)
+        public ActionResult Promote(long id, string Comment, long pid)
         {
             MasterFile item = _db.MasterFile.Find(id);
             if (item != null)
@@ -215,45 +238,55 @@ namespace FileMan.Controllers
                 }
 
                 _db.SaveChanges();
+            } else
+            {
+                return Json(new { success = false, responseText = "Could not fid document", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true, responseText = "Document promoted", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult MoveFile(long Id, long[] folders)
+        public ActionResult MoveFile(long Id, long[] folders, long pid)
         {
-            MasterFile master = _db.MasterFile.Find(Id);
-            var assigned = master.Folders.Select(a => a.Id).ToArray();
+            try {
+                MasterFile master = _db.MasterFile.Find(Id);
+                var assigned = master.Folders.Select(a => a.Id).ToArray();
 
 
-            if (folders==null || folders.Count()==0)
-            {
-                master.Folders = new List<Folder>();
-                master.Changelog = master.Changelog + string.Format("{0} - Uncategorised \n", DateTime.Now);
+                if (folders == null || folders.Count() == 0)
+                {
+                    master.Folders = new List<Folder>();
+                    master.Changelog = master.Changelog + string.Format("{0} - Uncategorised \n", DateTime.Now);
+                    _db.SaveChanges();
+                    return Json(new { success = true, responseText = "Document uncategorised", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                }
+
+                var toAdd = folders.Except(assigned);
+                var toDel = assigned.Except(folders);
+
+
+                foreach (int i in toDel)
+                {
+                    Folder folder = _db.Folder.Find(i);
+                    master.Folders.Remove(folder);
+                }
                 _db.SaveChanges();
-                return Redirect(Request.UrlReferrer.ToString());
+
+                foreach (int i in toAdd)
+                {
+                    Folder folder = _db.Folder.Find(i);
+                    master.Folders.Add(folder);
+                }
+
+                master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
+                _db.SaveChanges();
+
+                return Json(new { success = true, responseText = "Document updated", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-
-            var toAdd = folders.Except(assigned);
-            var toDel = assigned.Except(folders);
-
-
-            foreach (int i in toDel)
+            catch (Exception e)
             {
-                Folder folder = _db.Folder.Find(i);
-                master.Folders.Remove(folder);
+                return Json(new { success = false, responseText = e.Message, id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-            _db.SaveChanges();
-
-            foreach (int i in toAdd)
-            {
-                Folder folder = _db.Folder.Find(i);
-                master.Folders.Add(folder);
-            }
-
-            master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
-            _db.SaveChanges();
-
-            return Redirect(Request.UrlReferrer.ToString());
+            
         }
 
     }

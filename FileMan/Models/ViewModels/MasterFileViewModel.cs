@@ -24,5 +24,7 @@ namespace FileMan.Models.ViewModels
         public List<FolderPartialViewModel> FolderList { get; set; }
         public bool Promote { get; set; }
         public bool ShowChangelog { get; set; }
+        public long RedirectId { get; set; }
+        public string RedirectLabel { get; set; }
     }
 }

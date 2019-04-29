@@ -1,11 +1,6 @@
 ﻿@model FileMan.Models.ViewModels.MasterFileViewModel
 @using FileMan.Models;
 @using FileMan.Models.ViewModels;
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/jqueryval")
-@{
-    ViewBag.Title = "File";
-}
 
 <style>
     .row {
@@ -26,58 +21,52 @@
     }
 </style>
 
-        <div class="col-md-12">
-            <ol class="breadcrumb" style="margin-bottom:10px;">
-                Exists in: 
-                @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
-                {
-                    foreach (Folder fol in Model.Current.Folders)
-                    {
-                        <li>@Html.ActionLink(fol.Name, "Index", "Home", new { id = fol.Id }, new { title = "Parent" })</li>
-                    }
-                }
-            </ol>
-        </div>
+<div class="col-md-12">
+    <ol class="breadcrumb">
+        <li class="js-link disp-align-ver" onclick="goToFolder(@Model.RedirectId)"><i class="fas fa-angle-left"></i>&emsp13;<span> back to <b>@Model.RedirectLabel</b></span></li>
+    </ol>
+</div>
         <div class="col-md-12">
             @using (Html.BeginForm("Edit", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="panel panel-success">
-                    <div class="panel-heading panel-title">
-                        <div class="container" style="align-items:center; width:100%; padding:0px;">
-                            <h4 class="cus-h4">
-                                <b>@Model.Current.Number</b> - @Model.DraftVersion - @Model.Current.Name
-                            </h4>
-                            <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
-                                @Html.ActionLink("Cancel", "Details", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-default", type = "button" })
-                                <input type="submit" value="Save" class="btn btn-sm btn-primary" />
-                            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading panel-title">
+                    <div class="container" style="align-items:center; width:100%; padding:0px;">
+                        <h4 class="cus-h4">
+                            <b>@Model.Current.Number</b> - @Model.DraftVersion - @Model.Current.Name
+                        </h4>
+                        <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
+                            <button class="btn btn-sm btn-default" type="button" onclick="goToFile(@Model.Current.Id, @Model.RedirectId)">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="editDocument('#docEditForm', @Model.RedirectId)">Save</button>
                         </div>
-                        <span style="float:right;">
-
-                        </span>
                     </div>
-                    <table class="table table-striped table-hover table-condensed">
-                        <thead>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="font-weight:700; width:100px;" align="right">Name</td>
-                                <td> <input type="text" class="form-control" name="Name" value="@Model.Current.Name" id="nameInput" /></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:700; width:100px;" align="right">Description</td>
-                                <td><span style="white-space: pre-line"><textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description...">@Model.Current.Description</textarea></span> </td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:700; width:100px;" align="right">Comment</td>
-                                <td><span style="white-space: pre-line"><textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment...">@Model.Current.Comment</textarea></span> </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <input type="hidden" name="Id" value="@Model.Current.Id" />
-                    <input type="hidden" name="Number" value="@Model.Current.Number" />
+                    <span style="float:right;">
+
+                    </span>
                 </div>
+                <table class="table table-striped table-hover table-condensed">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight:700; width:100px;" align="right">Name</td>
+                            <td> <input type="text" class="form-control" name="Name" value="@Model.Current.Name" id="nameInput" /></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700; width:100px;" align="right">Description</td>
+                            <td><span style="white-space: pre-line"><textarea rows="5" cols="10" class="form-control" name="Description" placeholder="Description...">@Model.Current.Description</textarea></span> </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700; width:100px;" align="right">Additional information</td>
+                            <td><span style="white-space: pre-line"><textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Extra info...">@Model.Current.Comment</textarea></span> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="Id" value="@Model.Current.Id" />
+                <input type="hidden" name="Number" value="@Model.Current.Number" />
+                <input type="hidden" name="pid" value="@Model.RedirectId" />
+            </div>
             }
 
             <br />

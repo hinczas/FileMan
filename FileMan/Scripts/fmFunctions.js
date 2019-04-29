@@ -14,16 +14,32 @@
     });
 }
 
-function goToFile(id) {
-    var link = "/MasterFiles/PartialDetails/" + id;
+function goToFile(id, pid=null) {
+    var link = "/MasterFiles/PartialDetails/";
     $.ajax({
         type: "get",
         url: link,
+        data: {id: id, pid: pid},
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
             link = link.replace("PartialDetails","Details")
             ChangeUrl("Details", link);
+        }
+    });
+}
+
+function goToEditFile(id, pid = null) {
+    var link = "/MasterFiles/PartialEdit/";
+    $.ajax({
+        type: "get",
+        url: link,
+        data: { id: id, pid: pid },
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+            link = link.replace("PartialEdit", "Edit")
+            ChangeUrl("Edit", link);
         }
     });
 }
@@ -49,7 +65,7 @@ function ChangeUrl(page, url) {
     if (typeof (history.pushState) != "undefined") {
         var newUrl = url.replace("TreeIndex", "Index");
         var obj = { Page: page, Url: newUrl };
-        history.pushState(obj, obj.Page, obj.Url);
+        //history.pushState(obj, obj.Page, obj.Url);
     }
 }
 
@@ -108,23 +124,30 @@ function deleteCategory(id) {
     }
 }
 
-function deleteDocument(did, pid) {
-    $.ajax({
-        url: '/MasterFiles/Delete',
-        type: 'post',
-        data: JSON.stringify({ id: did, folderId: pid }),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        //data: {'id': did, 'parentId': pid},
-        success: function (response) {
-            if (response.success) {
-                goToFolder(pid, false);
-                _updateNodeQte(pid);
-            } else {
-                alert(response.responseText);
+async function deleteDocument(did, pid) {
+    var confirmed = confirm('Are you sure you wish to delete this Document?');
+
+    if (confirmed) {
+        await $.ajax({
+            url: '/MasterFiles/DeleteAsync',
+            type: 'post',
+            data: { id: did, folderId: pid },
+            contentType: "application/json; charset=utf-8",
+            //data: {'id': did, 'parentId': pid},
+            success: function (response) {
+                if (response.success) {
+                    if (pid > -1) {
+                        goToFolder(pid, false);
+                    } else {
+                        goToFile(did);
+                    }
+                    //_updateNodeQte(pid);
+                } else {
+                    alert(response.responseText);
+                }
             }
-        }
-    });
+        });
+    }    
 }
 
 function createDocument(_form, _pid) {
@@ -145,7 +168,75 @@ function createDocument(_form, _pid) {
     });
 }
 
-function submitForm(_form, _url, _pn) {
+function editDocument(_form, _pid) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Edit/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function moveDocument(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/MoveFile/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#movModal');
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function uncategorise(_id, _pid) {
+    var confirmed = confirm('Are you sure you wish to uncategorise this Document?');
+    if (confirmed) {
+        $.ajax({
+            url: '/MasterFiles/MoveFile/',
+            type: 'post',
+            data: { Id: _id, folders: [], pid: _pid },
+            success: function (response) {
+                if (response.success) {
+                    _hideModal('#movModal');
+                    goToFile(response.id, response.parentId);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function promote(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Promote/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#promModal');
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+function createCategory(_form, _url, _pn) {
     var dt = $(_form).serialize();
     $.ajax({
         url: _url,
@@ -231,7 +322,7 @@ $('#jstree_div').on("move_node.jstree", function (e, data) {
 
 function _hideModal(name) {
     $(name).modal('hide');
-    //$('body').removeClass('modal-open');
+    $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
 }
 

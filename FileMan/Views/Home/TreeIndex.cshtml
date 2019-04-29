@@ -23,7 +23,7 @@
         {
             for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
             {
-                <li style="cursor:pointer; color:royalblue;" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</li>
+                <li style="cursor:pointer; color:royalblue;" title="@Model.Breadcrumbs.ElementAt(i).Name" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</li>
             }
         }
         <li class="active">@Model.Current.Name</li>
@@ -31,9 +31,9 @@
 </div>
 <div class="col-md-6" style="padding-left:15px;">
     <div class="btn-group btn-group-sm" role="group" style="margin-bottom:10px; float:left;">
-        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal"><i class="fas fa-file-medical"></i></button>
-        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse"><i class="fas fa-folder-plus"></i></button>
-        <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse"><i class="fas fa-upload"></i></button>
+        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
+        <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
+        <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
     </div>
 </div>
 
@@ -75,7 +75,7 @@
                         <input type="text" autocomplete="off" class="form-control" name="Comment" placeholder="Comment..." />
                     </div>*@
                     <div class="col-sm-1">
-                        <input type="button" value="add" class="btn btn-success btn-sm" id="submitBtn" onclick="submitForm('#catForm', '/Folders/Create/', '@Model.Current.Id')" />
+                        <input type="button" value="add" class="btn btn-success btn-sm" id="submitBtn" onclick="createCategory('#catForm', '/Folders/Create/', '@Model.Current.Id')" />
                     </div>
                 }
             </div>
@@ -168,7 +168,7 @@
                             <i class="fas fa-folder"></i>
                         </td>
                         <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
-                        <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
+                        <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
                         <td align="right">
                             <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
                             <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="fas fa-times-circle"></i></span>
@@ -186,26 +186,26 @@
                 <th style="width:70px;" scope="col">Number</th>
                 <th style="width:25px;" scope="col">Ver</th>
                 <th style="width:455px;" scope="col">Name</th>
-                <th style="width:30px;" scope="col"></th>
+                @*<th style="width:30px;" scope="col"></th>*@
             </tr>
         </thead>
         <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
                 <tr title="@itm.Description">
-                    <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                    <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
                         <i class="fas fa-file"></i>
                     </td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
                         @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                         {
                             <span>@itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft</span>
                             //@Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
                         }
                     </td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
-                    <td align="right">
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
+                    @*<td align="right">
 
                         @if (itm.Folders.Count() > 0)
                         {
@@ -219,7 +219,7 @@
                             <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
                         }
 
-                    </td>
+                    </td>*@
                 </tr>
             }
         </tbody>
@@ -264,7 +264,7 @@
                                     <th style="width:350px;" scope="col">Name</th>
                                     <th style="width:130px;" scope="col">Added</th>
                                     <th style="width:130px;" scope="col">Edited</th>
-                                    <th scope="col"></th>
+                                    @*<th scope="col"></th>*@
                                 </tr>
                             </thead>
                             <tbody>
@@ -282,9 +282,9 @@
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
-                                        <td align="right">
+                                        @*<td align="right">
                                             <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
-                                        </td>
+                                        </td>*@
                                     </tr>
                                 }
                             </tbody>
@@ -339,7 +339,7 @@
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">New File</h4>
+                    <h4 class="modal-title">New Document</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12" style="float:none">
@@ -352,10 +352,10 @@
                             <textarea rows="5" autocomplete="off" cols="10" class="form-control" name="Description" placeholder="Description..."></textarea>
                         </div>
                         <div class="form-group">
-                            <span class="cur-point" data-toggle="collapse" data-target="#commMod">Add comment (optional)</span>
+                            <span class="cur-point" data-toggle="collapse" data-target="#commMod">Additional information (optional)</span>
 
                             <div id="commMod" class="collapse">
-                                <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                                <textarea rows="3" autocomplete="off" cols="10" class="form-control" name="Comment" placeholder="Extra info..."></textarea>
                             </div>
 
                         </div>

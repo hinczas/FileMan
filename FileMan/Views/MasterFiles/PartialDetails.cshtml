@@ -38,15 +38,8 @@
     }
 </style>
 <div class="col-md-12">
-    <ol class="breadcrumb" style="margin-bottom:10px;">
-        Exists in:
-        @if (@Model.Current.Folders != null || @Model.Current.Folders.Count() > 0)
-        {
-            foreach (var fol in Model.Current.Folders)
-            {
-                <li class="js-link" onclick="goToFolder(@fol.Id)">@fol.Name</li>
-            }
-        }
+    <ol class="breadcrumb">
+        <li class="js-link disp-align-ver" onclick="goToFolder(@Model.RedirectId)"><i class="fas fa-angle-left"></i>&emsp13;<span> back to <b>@Model.RedirectLabel</b></span></li>
     </ol>
 </div>
 
@@ -57,19 +50,33 @@
                 <h4 class="cus-h4">
                     <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
                 </h4>
-                <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
-                    <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#movModal">Move</button>
-                    <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#filModal">Add draft</button>
-                    @if (Model.Promote)
-                    {
-
-                        <button class="btn btn-sm btn-default" type="button" data-toggle="modal" data-target="#promModal">Promote</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-sm btn-default" type="button" disabled>Promote</button>
-                    }
-                    @Html.ActionLink("Edit", "Edit", "MasterFiles", new { id = Model.Current.Id }, new { @class = "btn btn-sm btn-primary", type = "button" })
+                <div class="dropdown pull-right">
+                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" alt="Tools">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><span data-toggle="modal" data-target="#movModal" class="nor">Move</span></li>
+                        <li><span data-toggle="modal" data-target="#revModal" class="nor">Add draft</span></li>
+                        @if (Model.Promote)
+                        {
+                            <li><span data-toggle="modal" data-target="#promModal" class="nor">Promote</span></li>
+                        }
+                        else
+                        {
+                            <li><span class="dis">Promote</span></li>
+                        }
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <span onclick="goToEditFile(@Model.Current.Id, @Model.RedirectId)" class="nor">Edit</span>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        @if (Model.Current.Folders != null && Model.Current.Folders.Count() != 0)
+                        {
+                            <li>
+                                <span onclick="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del">Uncategorise</span>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
@@ -82,7 +89,7 @@
                     <td><span style="white-space: pre-line">@Model.Current.Description</span> </td>
                 </tr>
                 <tr>
-                    <td style="font-weight:700; width:100px;" align="right">Comment</td>
+                    <td style="font-weight:700; width:100px;" align="right">Extra info</td>
                     <td><span style="white-space: pre-line">@Model.Current.Comment</span> </td>
                 </tr>
                 @if (Model.ShowChangelog)
@@ -101,7 +108,7 @@
                                 foreach (var fol in Model.Current.Folders)
                                 {
                                     string folName = fol.IsRoot ? "root" : fol.Path;
-                                    <span class="js-link" onclick="goToFolder(@fol.Id)">@folName</span><br />
+                                    <span class="js-link" onclick="goToFolder(@fol.Id)">@folName.Replace("\\", " > ")</span><br />
                                 }
                             }
                         </div>
@@ -231,7 +238,7 @@
 <div id="movModal" class="modal fade" role="dialog">
     <div class="modal-dialog" role="document">
 
-        @using (Html.BeginForm("MoveFile", "MasterFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        @using (Html.BeginForm("MoveFile", "MasterFiles", FormMethod.Post, new { enctype = "multipart/form-data", id="moveFileForm" }))
         {
             @Html.AntiForgeryToken()
             <div class="modal-content">
@@ -275,6 +282,7 @@
                     </table>
 
                     <input type="hidden" name="Id" value=@Model.Current.Id />
+                    <input type="hidden" name="pid" value=@Model.RedirectId />
                 </div>
                 <div class="modal-footer">
                     @if (Model.Current.Folders == null || Model.Current.Folders.Count() == 0)
@@ -283,10 +291,10 @@
                     }
                     else
                     {
-                        @Html.ActionLink("Uncategorise", "MoveFile", "MasterFiles", new { Id = Model.Current.Id }, new { @class = "btn btn-danger", type = "button", style = "float:left;" })
+                        <button type="button" style="float:left;" name="action" value="cp" class="btn btn-danger" onclick="uncategorise(@Model.Current.Id, @Model.RedirectId)">Uncategorise</button>
                     }
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" name="action" value="cp" class="btn btn-primary">Save</button>
+                    <button type="button" name="action" value="cp" class="btn btn-primary" onclick="moveDocument('#moveFileForm')">Save</button>
                 </div>
             </div>
         }
@@ -294,7 +302,7 @@
 </div>
 
 <!-- File Modal -->
-<div id="filModal" class="modal fade" role="dialog">
+<div id="revModal" class="modal fade" role="dialog">
     <div class="modal-dialog  modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
@@ -333,7 +341,7 @@
     <div class="modal-dialog  modal-sm">
         <!-- Modal content-->
         <div class="modal-content">
-            @using (Html.BeginForm("Promote", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Promote", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id="promFileForm" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
@@ -343,18 +351,18 @@
                 <div class="modal-body">
                     <div class="col-md-12" style="float:none">
                         <input type="hidden" class="form-control" name="id" value="@Model.Current.Id" />
+                        <input type="hidden" class="form-control" name="pid" value="@Model.RedirectId" />
                         <div class="form-group">
-                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Comment..."></textarea>
+                            <textarea rows="3" cols="10" class="form-control" name="Comment" placeholder="Extra info..."></textarea>
                         </div>
 
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <input type="submit" value="Save" class="btn btn-success" id="submitBtn" />
+                    <button type="button" name="action" value="cp" class="btn btn-primary" onclick="promote('#promFileForm')">Save</button>
                 </div>
             }
         </div>
     </div>
 </div>
-

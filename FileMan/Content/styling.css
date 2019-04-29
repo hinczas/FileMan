@@ -2,7 +2,7 @@
     display: none !important;
 }
 
-.disp-align-ver, .disp-align-ver input, .disp-align-ver button {
+.disp-align-ver, .disp-align-ver input, .disp-align-ver button, .disp-align-ver > i, .disp-align-ver > span {
     display: inline-block;
     vertical-align: middle;
 }
@@ -102,7 +102,7 @@
 }
 .js-link:hover {
     color: navy;
-    text-decoration:underline;
+    text-decoration:none;
 }
 
 #loadingDiv {
@@ -275,11 +275,37 @@ a[type="button"] {
 }
 .breadcrumb {
     background-color: #efefef;
+    margin-bottom: 10px;
+    padding: 5px 15px !important;
+    margin-bottom: 10px !important;
+    width: 100%;
 }
 
 legend {
     margin-bottom: 10px;
 }
+
+.dropdown-menu > li > span {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333333;
+    white-space: nowrap;
+    font-size: 16px;
+    margin: 0px;
+}
+.dropdown-menu {
+    padding: 0px;
+    border-radius:0px !important;
+}
+.dropdown-menu .divider {
+    margin: 0px;
+}
+    .dropdown-menu > li:hover {
+        background-color: #e0e0e0;
+    }
 /* Bootstrap override END */
 
 /* scroll bar */
@@ -305,3 +331,20 @@ legend {
     }
 
 /* Scroll bar end */
+
+.dis {
+    color: gray !important;
+    cursor: not-allowed;
+}
+.del {
+    font-weight: 500;
+    cursor: pointer;
+}
+.del:hover {
+    color:white;
+    background-color:darkred;
+}
+.nor:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}

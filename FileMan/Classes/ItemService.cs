@@ -54,7 +54,7 @@ namespace FileMan.Classes
             return bc;
         }
 
-        public MasterFileViewModel GetMasterFileViewModel(long id, string userId)
+        public MasterFileViewModel GetMasterFileViewModel(long id, string userId, long? pid)
         {
             var item = _db.MasterFile.Find(id);
             if (item==null)
@@ -86,6 +86,8 @@ namespace FileMan.Classes
             bool changelog = user.UserSetting.ShowChangelog;
 
             bool promote = !issue.Equals(draft) && revisions.Count() != 0;
+
+
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
@@ -101,6 +103,18 @@ namespace FileMan.Classes
                 Promote = promote,
                 ShowChangelog = changelog
             };
+            Folder par;
+            if (pid!=null)
+            {
+                par = _db.Folder.Find(pid);
+            } else
+            {
+                par = GetRoot();
+            }
+
+            file.RedirectId = par.Id;
+            file.RedirectLabel = par.Name;
+
             return file;
         }
 
