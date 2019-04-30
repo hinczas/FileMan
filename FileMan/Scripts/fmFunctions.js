@@ -1,4 +1,31 @@
-﻿function goToFolder(id, redirect = true) {
+﻿//// 
+//// Listeners
+////
+$('#catForm').find('input').keypress(function (e) {
+    // Enter pressed?
+    if (e.which == 10 || e.which == 13) {
+        $('#submitBtn').trigger("click");
+        //this.form.submit();
+    }
+});
+////
+//// AJAX calls
+////
+function mainSearch(_form) {
+    var link = "/Home/TreeIndex/";
+    var dt = $(_form).serialize();
+    $.ajax({
+        type: "get",
+        url: link,
+        data: dt,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+        }
+    });
+}
+
+function goToFolder(id, redirect = true) {
     var link = "/Home/TreeIndex/"+id;
     $.ajax({
         type: "get",
@@ -40,6 +67,225 @@ function goToEditFile(id, pid = null) {
             $('.sub-container').html(d); //replaces previous HTML with action
             link = link.replace("PartialEdit", "Edit")
             ChangeUrl("Edit", link);
+        }
+    });
+}
+
+function deleteCategory(id) {
+    var confirmed = confirm('Are you sure you wish to delete this Category?');
+
+    if (confirmed) {
+        $.ajax({
+            url: '/Folders/Delete/' + id,
+            type: 'post',
+            success: function (response) {
+                if (response.success) {
+                    addTableRow(response.parentId);
+                    removeNode(id);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function createCategory(_form, _url, _pn) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: _url,
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                addNode(response.parentId, response.id, response.name);
+                addTableRow(response.parentId);
+                $(_form).trigger("reset");
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+async function deleteDocument(did, pid) {
+    var confirmed = confirm('Are you sure you wish to delete this Document?');
+
+    if (confirmed) {
+        await $.ajax({
+            url: '/MasterFiles/DeleteAsync',
+            type: 'post',
+            data: { id: did, folderId: pid },
+            contentType: "application/json; charset=utf-8",
+            //data: {'id': did, 'parentId': pid},
+            success: function (response) {
+                if (response.success) {
+                    if (pid > -1) {
+                        goToFolder(pid, false);
+                    } else {
+                        goToFile(did);
+                    }
+                    //_updateNodeQte(pid);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function createDocument(_form, _pid) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Create/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#filModal');
+                goToFolder(_pid, false);
+                _updateNodeQte(_pid);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function editDocument(_form, _pid) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Edit/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function moveDocument(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/MoveFile/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#movModal');
+                goToFile(response.id, response.parentId);
+                _updateNodes(response.affFolIds);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function moveDocuments(_form) {
+    var form = $(_form)[0];
+    var dt = $(form).serialize();
+
+    var inps = $("input[name='files']:checked");
+
+    if (inps.length > 0) {
+        $.ajax({
+            url: '/Folders/MoveFiles/',
+            type: 'post',
+            data: dt,
+            success: function (response) {
+                if (response.success) {
+                    goToFolder(response.parentId, false);
+                    _updateNodeQte(response.parentId);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function addDraft(_form) {
+    var form = $(_form)[0];
+    var selectedFile = ($("#revFileUpl"))[0].files[0];
+
+    var dt = $(_form).serialize();
+    var dataString = new FormData(form);
+    dataString.append("file", selectedFile);
+
+    $.ajax({
+        url: '/FileRevisions/Create/',
+        type: 'post',
+        contentType: false,
+        processData: false,
+        data: dataString,
+        xhr: function () {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if (myXhr.upload) { // Check if upload property exists
+                // Progress code if you want
+            }
+            return myXhr;
+        },
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#revModal');
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function uncategorise(_id, _pid) {
+    var confirmed = confirm('Are you sure you wish to uncategorise this Document?');
+    if (confirmed) {
+        $.ajax({
+            url: '/MasterFiles/MoveFile/',
+            type: 'post',
+            data: { Id: _id, folders: [], pid: _pid },
+            success: function (response) {
+                if (response.success) {
+                    _hideModal('#movModal');
+                    goToFile(response.id, response.parentId);
+                    _updateNodes(response.affFolIds);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
+}
+
+function promote(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/MasterFiles/Promote/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#promModal');
+                goToFile(response.id, response.parentId);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
+
+function addTableRow(id) {
+    var link = "/Home/GetDocTable/" + id;
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('#replaceDocTable').html(d); //replaces previous HTML with action
         }
     });
 }
@@ -105,165 +351,7 @@ function checkAllItems(e) {
     })
 }
 
-function deleteCategory(id) {
-    var confirmed = confirm('Are you sure you wish to delete this Category?');
 
-    if (confirmed) {
-        $.ajax({
-            url: '/Folders/Delete/'+id,
-            type: 'post',
-            success: function (response) {
-                if (response.success) {
-                    addTableRow(response.parentId);
-                    removeNode(id);
-                } else {
-                    alert(response.responseText);
-                }
-            }
-        });
-    }
-}
-
-async function deleteDocument(did, pid) {
-    var confirmed = confirm('Are you sure you wish to delete this Document?');
-
-    if (confirmed) {
-        await $.ajax({
-            url: '/MasterFiles/DeleteAsync',
-            type: 'post',
-            data: { id: did, folderId: pid },
-            contentType: "application/json; charset=utf-8",
-            //data: {'id': did, 'parentId': pid},
-            success: function (response) {
-                if (response.success) {
-                    if (pid > -1) {
-                        goToFolder(pid, false);
-                    } else {
-                        goToFile(did);
-                    }
-                    //_updateNodeQte(pid);
-                } else {
-                    alert(response.responseText);
-                }
-            }
-        });
-    }    
-}
-
-function createDocument(_form, _pid) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: '/MasterFiles/Create/',
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                _hideModal('#filModal');
-                goToFolder(_pid, false);
-                _updateNodeQte(_pid);
-            } else {
-                alert(response.responseText);
-            }
-        }
-    });
-}
-
-function editDocument(_form, _pid) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: '/MasterFiles/Edit/',
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                goToFile(response.id, response.parentId);
-            } else {
-                alert(response.responseText);
-            }
-        }
-    });
-}
-
-function moveDocument(_form) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: '/MasterFiles/MoveFile/',
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                _hideModal('#movModal');
-                goToFile(response.id, response.parentId);
-            } else {
-                alert(response.responseText);
-            }
-        }
-    });
-}
-
-function uncategorise(_id, _pid) {
-    var confirmed = confirm('Are you sure you wish to uncategorise this Document?');
-    if (confirmed) {
-        $.ajax({
-            url: '/MasterFiles/MoveFile/',
-            type: 'post',
-            data: { Id: _id, folders: [], pid: _pid },
-            success: function (response) {
-                if (response.success) {
-                    _hideModal('#movModal');
-                    goToFile(response.id, response.parentId);
-                } else {
-                    alert(response.responseText);
-                }
-            }
-        });
-    }
-}
-
-function promote(_form) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: '/MasterFiles/Promote/',
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                _hideModal('#promModal');
-                goToFile(response.id, response.parentId);
-            } else {
-                alert(response.responseText);
-            }
-        }
-    });
-}
-function createCategory(_form, _url, _pn) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: _url,
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                addNode(response.parentId, response.id, response.name);
-                addTableRow(response.parentId);
-            } else {
-                alert(response.responseText);
-            }
-        }
-    });
-}
-
-function addTableRow(id) {
-    var link = "/Home/GetDocTable/" + id;
-    $.ajax({
-        type: "get",
-        url: link,
-        success: function (d) {
-            /* d is the HTML of the returned response */
-            $('#replaceDocTable').html(d); //replaces previous HTML with action
-        }
-    });
-}
 
 function removeNode(id) {
     $("#jstree_div").jstree('delete_node', id);
@@ -326,6 +414,14 @@ function _hideModal(name) {
     $('.modal-backdrop').remove();
 }
 
+function _updateNodes(nodes) {
+    if (nodes.length > 0) {
+        $.each(nodes, function(i, v) {
+                _updateNodeQte(v);
+            }
+        );
+    }
+}
 function _updateNodeQte(id) {
     $.ajax({
         url: '/Folders/GetChildCount/'+id,
@@ -339,5 +435,4 @@ function _updateNodeQte(id) {
             $(nid).attr("data_quantity", ret);
         }
     });
-
 }

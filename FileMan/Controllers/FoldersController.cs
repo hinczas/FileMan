@@ -129,9 +129,9 @@ namespace FileMan.Controllers
             Folder item = _db.Folder.Find(Id);
             
             if (files==null)
-                return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = false, responseText = "Empty list of document", id = Id, parentId = Id }, JsonRequestBehavior.AllowGet);
 
-            foreach(int i in files)
+            foreach (int i in files)
             {
                 MasterFile file = _db.MasterFile.Find(i);
                 file.Changelog = file.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
@@ -139,7 +139,7 @@ namespace FileMan.Controllers
             }
             _db.SaveChanges();
 
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = true, responseText = "Documents moved", id = Id, parentId = Id }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

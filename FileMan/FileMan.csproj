@@ -320,6 +320,7 @@
     <Content Include="Content\bootstrap-toggle.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\745.gif" />
     <Content Include="Content\Images\Icons\16px\aac.png" />
     <Content Include="Content\Images\Icons\16px\ai.png" />
     <Content Include="Content\Images\Icons\16px\aiff.png" />
@@ -459,6 +460,7 @@
     <Content Include="Content\Images\login_img.jpg" />
     <Content Include="Content\Images\no-avatar.png" />
     <Content Include="Content\Images\spinner.gif" />
+    <Content Include="Content\loaders.css" />
     <Content Include="Content\Login.css" />
     <Content Include="Content\LoginStyling.css" />
     <Content Include="Content\styling.css" />

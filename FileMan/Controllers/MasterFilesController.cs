@@ -251,13 +251,14 @@ namespace FileMan.Controllers
                 MasterFile master = _db.MasterFile.Find(Id);
                 var assigned = master.Folders.Select(a => a.Id).ToArray();
 
+                var affected = folders==null ? assigned : assigned.Union(folders).ToArray();
 
                 if (folders == null || folders.Count() == 0)
                 {
                     master.Folders = new List<Folder>();
                     master.Changelog = master.Changelog + string.Format("{0} - Uncategorised \n", DateTime.Now);
                     _db.SaveChanges();
-                    return Json(new { success = true, responseText = "Document uncategorised", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, responseText = "Document uncategorised", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
                 }
 
                 var toAdd = folders.Except(assigned);
@@ -280,7 +281,7 @@ namespace FileMan.Controllers
                 master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
                 _db.SaveChanges();
 
-                return Json(new { success = true, responseText = "Document updated", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = "Document updated", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {

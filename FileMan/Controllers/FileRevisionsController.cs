@@ -64,7 +64,7 @@ namespace FileMan.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "MasterFileId,Revision,Name,Comment")] FileRevision item, HttpPostedFileBase file)
+        public ActionResult Create([Bind(Include = "MasterFileId,Revision,Name,Comment")] FileRevision item, HttpPostedFileBase file, long pid)
         {
             if (ModelState.IsValid)
             {
@@ -106,12 +106,14 @@ namespace FileMan.Controllers
                     _db.FileRevision.Add(item);
                     _db.SaveChanges();
 
+                    return Json(new { success = true, responseText = "Draft added", id = item.MasterFileId, parentId = pid }, JsonRequestBehavior.AllowGet);
+
+                } else
+                {
+                    return Json(new { success = false, responseText = "File could not be loaded", id = item.MasterFileId, parentId = pid }, JsonRequestBehavior.AllowGet);
                 }
-
-                return Redirect(Request.UrlReferrer.ToString());
             }
-
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = false, responseText = "Invalid model", id = item.MasterFileId, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetFile(long id)

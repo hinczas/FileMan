@@ -39,18 +39,19 @@
 
 <div class="col-md-6">
 
-    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm" }))
     {
         @Html.AntiForgeryToken()
-        <div class="input-group input-group-sm" style="float:right;">
-            <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" placeholder="Search for.." name="search" style="width:200px;" />
-            <select name="scope" class="form-control" style="max-width:150px;">
-                <option value=1>Number &amp; Name</option>
-                <option value=2>Number, Name, Description &amp; Comment </option>
-            </select>
-                <button class="btn btn-default form-control" type="submit" style="width:38px;"><i class="fas fa-search"></i></button>
+    <div class="input-group input-group-sm" style="float:right;">
+        <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" placeholder="Search for.." name="search" style="width:200px;" />
+        <select name="scope" class="form-control" style="max-width:150px;">
+            <option value=1>Number &amp; Name</option>
+            <option value=2>Number, Name, Description &amp; Comment </option>
+        </select>
+        <!--button class="btn btn-default form-control" type="submit" style="width:38px;"><i class="fas fa-search"></i></button -->
+        <button class="btn btn-default form-control" type="button" style="width:38px;" onclick="mainSearch(mainSearchForm)"><i class="fas fa-search"></i></button>
 
-        </div><!-- /input-group -->
+    </div><!-- /input-group -->
 
     }
 </div>
@@ -229,70 +230,70 @@
     <!-- Unassigned -->
     @if (Model.UnassignedFiles != null && @Model.UnassignedFiles.Count() > 0)
     {
-        using (Html.BeginForm("MoveFiles", "Folders", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        using (Html.BeginForm("MoveFiles", "Folders", FormMethod.Post, new { enctype = "multipart/form-data", id="moveFilesForm" }))
         {
             @Html.AntiForgeryToken()
-            <div class="col-md-12">
-                <p></p><br />
-                <p></p><br />
-                <p></p><br />
-                <input type="hidden" name="Id" value=@Model.Current.Id />
-                <div class="panel-group">
-                    <div class="panel panel-warning">
-                        <div class="panel-heading panel-title">
-                            <div class="container" style="align-items:center; width:100%; padding:0px;">
-                                <h4 class="cus-h4">
-                                    <a data-toggle="collapse" href="#collapse1">Uncategorised</a>
-                                </h4>
-                                <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
-                                <div class="input-group input-group-sm pull-right" style="max-width:200px;">
-                                    <input type="text" class="form-control form-control-sm" id="searchItems" onkeyup="searchUnassigned(this)" placeholder="filter..." name="search" style="width:200px;" />
+<div class="col-md-12">
+    <p></p><br />
+    <p></p><br />
+    <p></p><br />
+    <input type="hidden" name="Id" value=@Model.Current.Id />
+    <div class="panel-group">
+        <div class="panel panel-warning">
+            <div class="panel-heading panel-title">
+                <div class="container" style="align-items:center; width:100%; padding:0px;">
+                    <h4 class="cus-h4">
+                        <a data-toggle="collapse" href="#collapse1">Uncategorised</a>
+                    </h4>
+                    <span class="badge badge-light">@Model.UnassignedFiles.Count()</span>
+                    <div class="input-group input-group-sm pull-right" style="max-width:200px;">
+                        <input type="text" class="form-control form-control-sm" id="searchItems" onkeyup="searchUnassigned(this)" placeholder="filter..." name="search" style="width:200px;" />
 
-                                    <span class="input-group-btn">
-                                        <button type="submit" name="action" class="btn btn-sm btn-primary">Move</button>
-                                    </span>
-                                </div><!-- /input-group -->
-                            </div>
-                        </div>
-                        <div id="collapse1" class="panel-collapse collapse">
-                            <table class="table table-condensed" id="tbl-unassigned">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" onchange="checkAllItems(this)" /></th>
-                                        <th style="width:70px;" scope="col">Number</th>
-                                        <th style="width:25px;" scope="col">Ver</th>
-                                        <th style="width:350px;" scope="col">Name</th>
-                                        <th style="width:130px;" scope="col">Added</th>
-                                        <th style="width:130px;" scope="col">Edited</th>
-                                        @*<th scope="col"></th>*@
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (MasterFile itm in Model.UnassignedFiles)
-                                    {
-                                        <tr>
-                                            <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                            <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
-                                            <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
-                                                @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                                                {
-                                                    @Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
-                                                }
-                                            </td>
-                                            <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
-                                            <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
-                                            <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
-                                            @*<td align="right">
-                                                <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
-                                            </td>*@
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        <span class="input-group-btn">
+                            <button type="button" name="action" class="btn btn-sm btn-primary" onclick="moveDocuments('#moveFilesForm')">Move</button>
+                        </span>
+                    </div><!-- /input-group -->
                 </div>
             </div>
+            <div id="collapse1" class="panel-collapse collapse">
+                <table class="table table-condensed" id="tbl-unassigned">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th width="1%"><input class="check-all-items" name="toggle" type="checkbox" value="0" onchange="checkAllItems(this)" /></th>
+                            <th style="width:70px;" scope="col">Number</th>
+                            <th style="width:25px;" scope="col">Ver</th>
+                            <th style="width:350px;" scope="col">Name</th>
+                            <th style="width:130px;" scope="col">Added</th>
+                            <th style="width:130px;" scope="col">Edited</th>
+                            @*<th scope="col"></th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (MasterFile itm in Model.UnassignedFiles)
+                        {
+                            <tr>
+                                <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
+                                <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
+                                <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                                    @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                                    {
+                                    <span>@itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft</span>
+                                    }
+                                </td>
+                                <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
+                                <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
+                                <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
+                                @*<td align="right">
+                                        <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
+                                    </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
         }
     }
 
