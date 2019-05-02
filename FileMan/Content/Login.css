@@ -23,7 +23,7 @@
     display: block;
     position: absolute;
     width: 400px;
-    height: 110% !important;
+    height: 100% !important;
     overflow-y: hidden;
     right: 0;
     background-color: #fdfdfd;
@@ -110,7 +110,7 @@
 }
 
 .login-box {
-    height: 400px;
+    height: 100%;
     margin-top: auto;
     margin-bottom: auto;
     padding: 20px 75px;
@@ -193,7 +193,18 @@ input:-webkit-autofill:active {
 
 .buttons-bottom {
     margin: 40px 0px;
+    width: 100%;
 }
+    .buttons-bottom, .buttons-bottom > a, .buttons-bottom > input {
+        display: inline-block;
+        vertical-align: middle;
+    }
+        .buttons-bottom > input {
+            float:right;
+        }
+        .buttons-bottom > a {
+            float: left;
+        }
 
 .btn {
     float: right;
@@ -225,8 +236,20 @@ a {
 }
 
 .login-footer {
+    position: absolute;
     text-align: center;
     font-size: 12px;
     color: darkslategray;
-    margin-top: 40px;
+    margin-top: auto;
+    bottom: 15px;
+}
+
+.req-star {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color: rgba(255,0,0,0.5);
+}
+.input-line {
+    position: relative;
 }

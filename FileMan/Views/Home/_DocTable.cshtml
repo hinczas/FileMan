@@ -23,7 +23,7 @@
         {
             <tr>
                 <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
-                    <i class="fas fa-folder"></i>
+                    <i class="fas fa-reply"></i>
                 </td>
                 <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
             </tr>
@@ -37,8 +37,7 @@
                 <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
                 <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
                 <td align="right">
-                    <span style="cursor:pointer;" class="span4 proj-div" data-toggle="modal" data-target="#@itm.Name"><span><i class="fas fa-info-circle"></i></span></span>
-                    <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="fas fa-times-circle"></i></span>
+                    <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="far fa-trash-alt"></i></span>
                 </td>
             </tr>
         }

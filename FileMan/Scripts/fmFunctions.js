@@ -1,14 +1,4 @@
-﻿//// 
-//// Listeners
-////
-$('#catForm').find('input').keypress(function (e) {
-    // Enter pressed?
-    if (e.which == 10 || e.which == 13) {
-        $('#submitBtn').trigger("click");
-        //this.form.submit();
-    }
-});
-////
+﻿////
 //// AJAX calls
 ////
 function mainSearch(_form) {
@@ -23,6 +13,29 @@ function mainSearch(_form) {
             $('.sub-container').html(d); //replaces previous HTML with action
         }
     });
+}
+function renameCategory(_form) {
+    var link = "/Folders/Rename/";
+    var dt = $(_form).serialize();
+
+    var inp = $('#newCatName').val()
+    var name = $.trim(inp) != "";
+    if (name != "") {
+        $.ajax({
+            type: "post",
+            url: link,
+            data: dt,
+            success: function (response) {
+                if (response.success) {
+                    _hideModal('#renameModal');
+                    _renameNode(response.id, response.name)
+                    goToFolder(response.parentId);
+                } else {
+                    alert(response.responseText);
+                }
+            }
+        });
+    }
 }
 
 function goToFolder(id, redirect = true) {
@@ -91,21 +104,37 @@ function deleteCategory(id) {
 }
 
 function createCategory(_form, _url, _pn) {
-    var dt = $(_form).serialize();
-    $.ajax({
-        url: _url,
-        type: 'post',
-        data: dt,
-        success: function (response) {
-            if (response.success) {
-                addNode(response.parentId, response.id, response.name);
-                addTableRow(response.parentId);
-                $(_form).trigger("reset");
-            } else {
-                alert(response.responseText);
+
+    var inp = $('#catNameInp').val()
+    var name = $.trim(inp) != "";
+
+    if (name) {
+        var dt = $(_form).serialize();
+
+        $.ajax({
+            url: _url,
+            type: 'post',
+            data: dt,
+            success: function (response) {
+                if (response.success) {
+                    //addNode(response.parentId, response.id, response.name);
+                    addMultipleNodes(response.folders, response.parentId);
+                    addTableRow(response.parentId);
+                    $(_form).trigger("reset");
+                } else {
+                    alert(response.responseText);
+                }
             }
-        }
-    });
+        });
+    }
+}
+
+function addMultipleNodes(list, pid) {
+    if (list !== "undefined" && list.length > 0) {
+        $.each(list, function (k, v) {
+            addNode(pid, v.Id, v.Name);
+        });
+    }
 }
 
 async function deleteDocument(did, pid) {
@@ -290,6 +319,17 @@ function addTableRow(id) {
     });
 }
 
+
+
+function enterSubmit(e, _button) {
+    //var e = $(_form).find('input');
+    // Enter pressed?
+    if (e.which == 10 || e.which == 13) {
+        $(_button).trigger("click");
+        //this.form.submit();
+    }
+}
+
 function collapseAll() {
     $('#jstree_div').jstree('close_all');
 }
@@ -321,6 +361,7 @@ $(function () {
 
 function searchMain(e) {
     var value = $(e).val().toLowerCase();
+
     $("#mainTable tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
@@ -430,9 +471,18 @@ function _updateNodeQte(id) {
             //var node = $('#jstree_div').jstree(true).get_node(id)
             //var parent = node.parent;
             //node.a_attr.data_quantity = ret;
-            //$("#jstree_div").jstree(true).refresh_node(node);
-            var nid = "#"+id+"_anchor";
-            $(nid).attr("data_quantity", ret);
+            ////$("#jstree_div").jstree(true).refresh_node(node);
+            var node = $('#jstree_div').jstree('get_node', id);
+            $('#jstree_div').jstree('get_node', id).a_attr['data_quantity'] = ret;
+            $('#jstree_div').jstree(true).redraw(true);
+            //$('#jstree_div').jstree(true).refresh();
+            //var nid = "#"+id+"_anchor";
+            //$(nid).attr("data_quantity", ret);
         }
     });
+}
+function _renameNode(id, name) {
+    $("#jstree_div").jstree('rename_node', id, name);
+    //var nid = "#" + id + "_anchor";
+   // $(nid).text('<i class="jstree-icon jstree-themeicon fas fa-folder jstree-themeicon-custom" role="presentation"></i>'+name);
 }

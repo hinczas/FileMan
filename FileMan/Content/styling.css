@@ -38,15 +38,16 @@ input[hidden] {
     .row-menu .input-lg {
         max-width: 250px;
     }
-    .row-menu .col-sm-1, .row-menu .col-sm-2, .row-menu .col-sm-3, .row-menu .col-sm-4, .row-menu .col-sm-5, .row-menu .col-sm-6 {
-        padding: 0px 5px 0px 5px;
-    }
+.row-menu .col-sm-1, .row-menu .col-sm-2, .row-menu .col-sm-3, .row-menu .col-sm-4, .row-menu .col-sm-5, .row-menu .col-sm-6, .row-menu .col-sm-7 {
+    padding: 0px 5px 0px 5px;
+}
     .row-menu .btn {
         min-width:60px;
     }
 
 .in-card-search {
     width: 100%;
+    max-width: 100%;
     border-top: 0;
     border-left: 0;
     border-right: 0;
@@ -87,7 +88,7 @@ input[hidden] {
     padding-top: 15px;
 }
 
-.col-md-3, .col-md-9 {
+.col-md-3, .col-md-6, .col-md-9 {
     padding: 0px;
 }
 
@@ -156,6 +157,13 @@ input[hidden] {
 .pl-2 {
     padding-left: 2em;
 }
+.pl-15 {
+    padding-left: 15px;
+}
+.pl-30 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
 
 /* ICONS */
 .fa, .far, .fas {
@@ -166,10 +174,19 @@ input[hidden] {
     color: #fdd835;
 }
 .fa-folder-plus {
+    /* Have to override font size as folder icon too small */
+    font-size: 21px; 
+    margin-top: -2px;
     color: #c8b900;
+}
+.fa-file-upload {
+    color: #607d8b;
 }
 .fa-file {
     color: #607d8b;
+}
+.fa-reply {
+    transform: rotate(90deg);
 }
 .fa-file-medical {
     color: #34515e;
@@ -178,9 +195,12 @@ input[hidden] {
     color: #1e88e5;
     font-size: 20px;
 }
-.fa-times-circle {
-    color: #e53935;
+.fa-trash-alt {
+    color: #607d8b;
     font-size: 20px;
+}
+.fa-trash-alt:hover {
+    color: #b91511;
 }
 .fa-pen-square {
     color: #8bc34a;
@@ -194,6 +214,18 @@ input[hidden] {
     margin-right: 5px;
 }
 
+.info-icon-inside {
+    right: 12px;
+    top: 6px;
+    color: rgba(0,0,0,0.5);
+}
+.info-icon-inside:hover {
+    cursor:help;
+    color: rgba(0,0,0,0.8);
+}
+.info-input-icon {
+    padding-right: 24px !important;
+}
 .modal-body {
     max-height: 500px;
     overflow-y: auto;
@@ -300,6 +332,12 @@ legend {
     .dropdown-menu > li:hover {
         background-color: #e0e0e0;
     }
+
+
+.modal-content {
+    border-radius: 0;
+}
+
 /* Bootstrap override END */
 
 /* scroll bar */
@@ -341,4 +379,75 @@ legend {
 .nor:hover {
     background-color: #e0e0e0;
     cursor: pointer;
+}
+
+.td-head {
+    font-weight: 700;
+    width: 100px;
+}
+
+.td-value {
+    max-width: 745px;
+}
+
+.tools-row {
+    padding: 0px 30px !important;
+}
+
+/* Positions */
+.pos-rel {
+    position:relative;
+}
+.pos-abs {
+    position: absolute;
+}
+.pos-fix {
+    position: fixed;
+}
+
+.btn-group-tools {
+    margin-bottom: 10px;
+    float: left;
+    border: 1px solid #ddd;
+    max-height: 30px;
+    overflow-y: hidden;
+}
+.btn-group-options {
+    margin-left:5px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    max-height: 30px;
+}
+    .btn-group-options span, .btn-group-options .dropdown {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: -1px;
+        margin-right: -1px;
+    }
+    .btn-group-options button {
+        padding: 6px;
+        max-height: 30px;
+        width:30px;
+    }
+.btn-group-options span {
+    padding: 5px;
+}
+
+#mainSearchButton {
+    width:38px;
+    margin-left: -1px;
+    border-radius: 0px !important;
+}
+#mainSearchForm input  {
+    margin-right: -1px;
+}
+
+.border-ccc {
+    border: 1px solid #ccc !important;
+}
+.input-wide {
+    max-width:100%;
+    width: 100%;
 }

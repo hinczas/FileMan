@@ -2,6 +2,7 @@
 using FileMan.Context;
 using FileMan.Models;
 using FileMan.Models.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,28 +32,40 @@ namespace FileMan.Controllers
         {
             if (ModelState.IsValid)
             {
-                var added = DateTime.Now;
-                var changelog = string.Format("{0} - Folder created \n", added);
-                var parent = _db.Folder.Find(item.Pid);
-                var parentPath = parent == null || parent.IsRoot ? "" : parent.Path;
-                var path = Path.Combine(parentPath, item.Name);
-
-                var changelogParent = string.Format("{0} - Subfolder created : {1} \n", added, item.Name);
-                if (parent != null)
+                string[] names = item.Name.Trim().Trim(';').Split(';').ToArray();
+                var folders = new List<FolderJsonViewModel>();
+                foreach(string n in names)
                 {
-                    string oldChng = parent.Changelog;
-                    parent.Changelog = oldChng + changelogParent;
+                    string name = n.Trim();
+
+                    var added = DateTime.Now;
+                    var changelog = string.Format("{0} - Folder created \n", added);
+                    var parent = _db.Folder.Find(item.Pid);
+                    var parentPath = parent == null || parent.IsRoot ? "" : parent.Path;
+                    var path = Path.Combine(parentPath, name);
+
+                    var changelogParent = string.Format("{0} - Subfolder created : {1} \n", added, name);
+                    if (parent != null)
+                    {
+                        string oldChng = parent.Changelog;
+                        parent.Changelog = oldChng + changelogParent;
+                    }
+
+                    item.Name = name;
+                    item.Parent = parent;
+                    item.Path = path;
+                    item.Added = added;
+                    item.Changelog = changelog;
+
+                    _db.Folder.Add(item);
+                    _db.SaveChanges();
+
+                    folders.Add(new FolderJsonViewModel() { Id = item.Id, Name = item.Name });
                 }
 
-                item.Parent = parent;
-                item.Path = path;
-                item.Added = added;
-                item.Changelog = changelog;
+                //var convertedJson = JsonConvert.SerializeObject(folders, Formatting.Indented);
 
-                _db.Folder.Add(item);
-                _db.SaveChanges();
-
-                return Json(new { success = true, responseText = "Node successfully added", name = item.Name, id = item.Id, parentId = item.Pid }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = "Node successfully added", name = item.Name, id = item.Id, parentId = item.Pid, folders = folders }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { success = false, responseText = "Invalid data passed", reload = false }, JsonRequestBehavior.AllowGet);
@@ -63,19 +76,7 @@ namespace FileMan.Controllers
         {
             if (!ModelState.IsValid)
                 return false;
-
-            //long c, o, n;
-
-            //if (string.IsNullOrEmpty(model.Id) || string.IsNullOrEmpty(oldP) || string.IsNullOrEmpty(newP))
-            //    return false;
-
-            //bool cb = long.TryParse(currN, out c);
-            //bool ob = long.TryParse(oldP, out o);
-            //bool nb = long.TryParse(newP, out n);
-
-            //if (!cb || !ob || !nb)
-            //    return false;
-            
+                        
             var oldParent = _db.Folder.Find(model.OldParId);
             var current = _db.Folder.Find(model.Id);
             var newParent = _db.Folder.Find(model.NewParId);
@@ -93,6 +94,35 @@ namespace FileMan.Controllers
             await UpdatePathAsync(model.Id, newParentPath);
 
             return true;
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Rename(string name, long id)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return Json(new { success = false, responseText = "name cannot be empty", id = id, parentId = id }, JsonRequestBehavior.AllowGet);
+            }
+
+            var folder = _db.Folder.Find(id);
+
+            if (folder==null)
+            {
+                return Json(new { success = false, responseText = "Cannot find category", id = id, parentId = id }, JsonRequestBehavior.AllowGet);
+            }
+            try
+            {
+                string newName = name.Trim();
+                string newPath = ReplaceLastOccurrence(folder.Path, folder.Name, newName);
+                folder.Name = newName;
+                folder.Path = newPath;
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = true, responseText = "Renamed ok", id = id, parentId = id, name = newName }, JsonRequestBehavior.AllowGet);
+            } catch (Exception e)
+            {
+                return Json(new { success = false, responseText = e.Message, id = id, parentId = id }, JsonRequestBehavior.AllowGet);
+            }
         }
 
 
@@ -188,6 +218,17 @@ namespace FileMan.Controllers
             string ret = fol.Files == null || fol.Files.Count < 1 ? "" : string.Format("({0})", fol.Files.Count);
 
             return ret;
+        }
+
+        public static string ReplaceLastOccurrence(string Source, string Find, string Replace)
+        {
+            int place = Source.LastIndexOf(Find);
+
+            if (place == -1)
+                return Source;
+
+            string result = Source.Remove(place, Find.Length).Insert(place, Replace);
+            return result;
         }
     }
 }

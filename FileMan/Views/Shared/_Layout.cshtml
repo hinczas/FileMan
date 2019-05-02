@@ -91,75 +91,42 @@
         @Scripts.Render("~/bundles/bootstrap")
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
         <script src="~/Scripts/fmFunctions.js"></script>
+        <script src="~/Scripts/fmListeners.js"></script>
 
-        <script>
-            $(document)
-                .ready(function () {
+    <script>
+        $(document)
+            .ready(function () {
 
-                    var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
-                    var folId = "@Url.RequestContext.RouteData.Values["id"]";
-                    var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
-                    var url = "/Home/GetTree?id=" + id;
-                    $.get(url,
-                        function (data) {
-                            $('#jstree_div').jstree({
-                                "plugins": ["search" , "dnd", "sort"],
-                                'core': {
-                                    'check_callback': true,
-                                    'data': data
-                                }
-                            });
-                            //return data;
-                            var my_timer = setTimeout(function () {
-                                $('#loadingDiv').hide();
-                                $('#hideAll').delay(100).fadeOut(100);
-                                $('body').removeClass('modal-open');
-                            }, 1000);                            
-                        }
-                    )
+                var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
+                var folId = "@Url.RequestContext.RouteData.Values["id"]";
+                var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
+                var url = "/Home/GetTree?id=" + id;
+                $.get(url,
+                    function (data) {
+                        $('#jstree_div').jstree({
+                            "plugins": ["search", "dnd", "sort"],
+                            'core': {
+                                'check_callback': true,
+                                'data': data
+                            }
+                        });
+                        //return data;
+                        var my_timer = setTimeout(function () {
+                            $('#loadingDiv').hide();
+                            $('#hideAll').delay(100).fadeOut(100);
+                            $('body').removeClass('modal-open');
+                        }, 1000);
+                    }
+                )
 
-                })
-                .ajaxStart(function () {
-                    $('#workingDiv').show();
-                })
-                .ajaxStop(function () {
-                    $('#workingDiv').hide();
-                });
-
-            $(function () {
-                $('#jstree_div').bind("select_node.jstree", function (e, data) {
-                    $('#jstree_div').jstree('save_state');
-                });
-
-                $('#jstree_div').on("activate_node.jstree", function (e, data) {
-                    //window.location.href = data.node.a_attr.href;
-
-                    var link = data.node.a_attr.href;
-                    $.ajax({
-                        type: "get",
-                        url: link,
-                        success: function (d) {
-                            /* d is the HTML of the returned response */
-                            $('.sub-container').html(d); //replaces previous HTML with action
-
-                            ChangeUrl("Index", link);
-                        }
-                    });
-                })
-
-                var to = false;
-                $('#jstree_div_q').keyup(function () {
-                    if (to) { clearTimeout(to); }
-                    to = setTimeout(function () {
-                        var v = $('#jstree_div_q').val();
-                        $('#jstree_div').jstree(true).search(v);
-                    }, 250);
-                });
+            })
+            .ajaxStart(function () {
+                $('#workingDiv').show();
+            })
+            .ajaxStop(function () {
+                $('#workingDiv').hide();
             });
-
-                
-        </script>
-
+    </script>
         @RenderSection("scripts", required: false)
 
 </body>

@@ -18,4 +18,10 @@ namespace FileMan.Models.ViewModels
         public long OldParId { get; set; }
         public long NewParId { get; set; }
     }
+
+    public class FolderJsonViewModel
+    {
+        public Int64 Id { get; set; }
+        public string Name { get; set; }
+    }
 }

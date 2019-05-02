@@ -27,13 +27,15 @@
                     </div>
                     <div class="sub-text">Log into existing account</div>
                     @Html.ValidationSummary("", new { @class = "text-danger" })
-                    <div>
+                    <div class="input-line">
                         @Html.TextBoxFor(m => m.Email, new { @type = "text", placeholder = "Email...", @required = "", @class = "text-input" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        <span class="req-star">*</span>
                     </div>
-                    <div>
+                    <div class="input-line">
                         @Html.PasswordFor(m => m.Password, new { @type = "password", placeholder = "Password...", @required = "", @class = "text-input" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        <span class="req-star">*</span>
                     </div>
                     <div>
                         <div class="checkbox">
@@ -46,11 +48,11 @@
                         <input type="submit" class="btn btn-login" value="Log in" />
                     </div>
                 }
+                <div class="login-footer">
+                    &copy; @DateTime.Now.Year - Rafal Maricnek
+                </div>
             </div>
 
-            <div class="login-footer">
-                &copy; @DateTime.Now.Year - Rafal Maricnek
-            </div>
         </div>
     </div>
 </div>
