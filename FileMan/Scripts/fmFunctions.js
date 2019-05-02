@@ -486,3 +486,20 @@ function _renameNode(id, name) {
     //var nid = "#" + id + "_anchor";
    // $(nid).text('<i class="jstree-icon jstree-themeicon fas fa-folder jstree-themeicon-custom" role="presentation"></i>'+name);
 }
+
+function refreshTree() {
+    var id = $("#jstree_div").jstree("get_selected");
+    if (id.length < 1) {
+        id = -1;
+    } else {
+        id = id[0];
+    }
+    var url = "/Home/GetTree?id=" + id;
+    $.get(url,
+        function (data) {
+            $('#jstree_div').jstree(true).settings.core.data = data;
+            $('#jstree_div').jstree(true).refresh();
+            $('#jstree_div').jstree(true).redraw(true);
+        }
+    )
+}

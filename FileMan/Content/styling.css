@@ -206,7 +206,7 @@ input[hidden] {
     color: #8bc34a;
     font-size: 20px;
 }
-.fa-angle-double-up, .fa-angle-double-down {
+.fa-angle-double-up, .fa-angle-double-down, .fa-sync {
     color: white;
 }
 .fa-exclamation-triangle {
