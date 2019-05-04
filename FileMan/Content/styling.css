@@ -130,6 +130,10 @@ input[hidden] {
     float: left;
 }
 
+.toggleDiv dt, .toggleDiv dd {
+    margin-bottom:2px;       
+}
+
 .pl {
     padding-left: 0.5em;
 }
@@ -450,4 +454,10 @@ legend {
 .input-wide {
     max-width:100%;
     width: 100%;
+}
+
+.danger {
+    font-weight:600;
+    font-size: 14px;
+    color: #e30e4e;
 }

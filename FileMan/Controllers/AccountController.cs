@@ -155,8 +155,7 @@ namespace FileMan.Controllers
                 {
                     ShowChangelog = false,
                     ShowUncategorisedRoot = true,
-                    UncategorisedVisible = true,
-                    UseDocuViewer = true
+                    UncategorisedVisible = true
                 };
                 var joinDate = DateTime.Now;
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings, JoinDate = joinDate, FirstName = model.FirstName, Surname = model.Surname };

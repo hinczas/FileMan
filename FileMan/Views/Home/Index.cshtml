@@ -45,8 +45,12 @@
                     <i class="fas fa-cog"></i>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><span class="nor">Move</span></li>
+                    <li><span class="dis">Move</span></li>
                     <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+                    @if (!Model.Current.IsRoot)
+                    {
+                        <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                    }
                     <li role="separator" class="divider"></li>
                     <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
                 </ul>

@@ -1,0 +1,148 @@
+﻿@model FileMan.Models.IndexViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Manage";
+}
+<div class="col-md-12">
+    <ol class="breadcrumb" style="margin-bottom:10px;">
+        <li class="js-link disp-align-ver" onclick="@Model.ReturnFunction"><i class="fas fa-angle-left"></i>&emsp13;<span> back to <b>previous page</b></span></li>
+    </ol>
+</div>
+
+<div class="col-md-12">
+    <div class="settings">
+        <div>
+            <h4>Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    name:
+                </dt>
+                <dd>
+                    @Model.FirstName
+                </dd>
+                <dt>
+                    surname:
+                </dt>
+                <dd>
+                    @Model.Surname
+                </dd>
+                <dt>
+                    email:
+                </dt>
+                <dd>
+                    <a href="mailto:@User.Identity.GetUserName()">@User.Identity.GetUserName() </a>
+                </dd>
+                <dt>
+                    joined:
+                </dt>
+                <dd>
+                    @Model.JoinDate
+                </dd>
+            </dl>
+            <h4>Account</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>Password:</dt>
+                <dd>
+                    [
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Change your password", "ChangePassword")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Create", "SetPassword")
+                    }
+                    ]
+                </dd>
+                <dt>External Logins:</dt>
+                <dd>
+                    @Model.Logins.Count [
+                    @Html.ActionLink("Manage", "ManageLogins") ]
+                </dd>
+
+                <dt>Two-Factor Auth:</dt>
+                <dd>
+                    <p>
+                        There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                        for details on setting up this ASP.NET application to support two-factor authentication.
+                    </p>
+                </dd>
+            </dl>
+
+
+            <h4>Settings</h4>
+            <hr />
+            @using (Html.BeginForm("SaveSettings", "Manage", FormMethod.Post, new { style = "padding-left: 0px;", id = "userSettingsForm" }))
+            {
+                <h5>Layout</h5>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Id" value=@Model.SettingsId />
+                <dl class="dl-horizontal">
+                    <dt>
+                        <input type="checkbox" @(Model.UncatVisible ? "checked" : "") name="UncategorisedVisible" data-toggle="toggle" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Show <b>uncategorised</b> documents
+                    </dd>
+                    <dt>
+                        <input type="checkbox" @(Model.ShowOnRoot ? "checked" : "") data-toggle="toggle" name="ShowUncategorisedRoot" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Show <b>uncategorised</b> documents in the root directory <b>only</b>
+                    </dd>
+                    <dt>
+                        <input type="checkbox" @(Model.ShowChangelog ? "checked" : "") data-toggle="toggle" name="ShowChangelog" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Show <b>changelog</b> on document details page
+                    </dd>
+                </dl>
+
+                <h5>Navigation tree</h5>
+                <dl class="dl-horizontal">
+                    <dt>
+                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Enable tree search
+                    </dd>
+                    <dt>
+                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Enable drag 'n' drop categories
+                    </dd>
+                    <dt>
+                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Auto-sort tree
+                    </dd>
+                    <dt>
+                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                    </dt>
+                    <dd>
+                        Use context menu
+                    </dd>
+
+                </dl>
+
+                <h5>Miscellaneous</h5>
+                <dl class="dl-horizontal">
+                    <dt>
+                        <input type="checkbox" data-toggle="toggle" data-size="mini" id="forceDeleteCheck"/>
+                    </dt>
+                    <dd>
+                        Enable force delete categories <br /><span class="danger">This will allow deleting non-empty categories! <br />All sub-categories will be recursively deleted. <br />All documents will be recursively uncategorised!</span>                     
+                    </dd>
+                </dl>
+
+                <div class="container" style="align-items:center; width:100%; padding:0px;">
+                    <button type="button" class="btn btn-success float-r" id="submitBtn" onclick="saveSettings('#userSettingsForm')">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

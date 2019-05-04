@@ -21,6 +21,9 @@ namespace FileMan.Models
         public DateTime JoinDate { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
+        public string ReturnFunction { get; set; }
+        public string ReturnLabel { get; set; }
+        public UserSetting Settings { get; set; }
     }
 
     public class ManageLoginsViewModel

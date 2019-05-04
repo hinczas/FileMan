@@ -14,6 +14,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="~/Content/loaders.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
+
+    <script>
+        $(function () {
+            if (typeof (history.pushState) != "undefined") {
+                var newUrl = "/";
+                var obj = { Page: "Home", Url: newUrl };
+                history.pushState(obj, obj.Page, obj.Url);
+            }
+        })
+    </script>
 </head>
 <body class="modal-open">
     <div id="hideAll"></div>
@@ -89,18 +100,23 @@
         </footer>
     </div>
 
-        @Scripts.Render("~/bundles/bootstrap")
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-        <script src="~/Scripts/fmFunctions.js"></script>
-        <script src="~/Scripts/fmListeners.js"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="~/Scripts/fmFunctions.js"></script>
+    <script src="~/Scripts/fmListeners.js"></script>
+    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
 
     <script>
         $(document)
             .ready(function () {
+                //EraseUrl();
 
                 var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
                 var folId = "@Url.RequestContext.RouteData.Values["id"]";
-                var id = folId == "" || folNa != "Home" ? -1 : Number(folId);
+                if (folNa !== "Home") {
+                    folId = "@Request.QueryString["pid"]";
+                }
+                var id = folId == "" ? -1 : Number(folId);
                 var url = "/Home/GetTree?id=" + id;
                 $.get(url,
                     function (data) {
@@ -120,15 +136,9 @@
                     }
                 )
 
-            })
-            .ajaxStart(function () {
-                $('#workingDiv').show();
-            })
-            .ajaxStop(function () {
-                $('#workingDiv').hide();
             });
     </script>
-        @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 
 </body>
 </html>

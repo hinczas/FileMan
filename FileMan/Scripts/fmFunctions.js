@@ -84,7 +84,7 @@ function goToEditFile(id, pid = null) {
     });
 }
 
-function deleteCategory(id) {
+function deleteCategory(id, redirect = false) {
     var confirmed = confirm('Are you sure you wish to delete this Category?');
 
     if (confirmed) {
@@ -93,7 +93,11 @@ function deleteCategory(id) {
             type: 'post',
             success: function (response) {
                 if (response.success) {
-                    addTableRow(response.parentId);
+                    if (redirect) {
+                        goToFolder(response.parentId);
+                    } else {
+                        addTableRow(response.parentId);
+                    }
                     removeNode(id);
                 } else {
                     alert(response.responseText);
@@ -319,6 +323,39 @@ function addTableRow(id) {
     });
 }
 
+function goToManage(id) {
+    var link = "/Manage/PartialIndex/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+            //if (redirect) {
+            //    activateNode(id);
+            //    ChangeUrl("Index", link);
+            //}
+        }
+    });
+}
+
+
+function saveSettings(_form) {
+    var dt = $(_form).serialize();
+
+    $.ajax({
+        url: "/Manage/SaveSettings/",
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                alert(response.responseText);
+            } else {
+                alert(response.responseText);
+            }
+        }
+    });
+}
 
 
 function enterSubmit(e, _button) {
@@ -345,6 +382,14 @@ function activateNode(id) {
 
 function selectNode(id) {
     $('#jstree_div').jstree('select_node', id);
+}
+
+function EraseUrl() {
+    if (typeof (history.pushState) != "undefined") {
+        var newUrl = "/";
+        var obj = { Page: "Home", Url: newUrl };
+        history.pushState(obj, obj.Page, obj.Url);
+    }
 }
 
 function ChangeUrl(page, url) {
@@ -503,3 +548,4 @@ function refreshTree() {
         }
     )
 }
+

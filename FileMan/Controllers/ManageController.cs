@@ -9,6 +9,7 @@ using Microsoft.Owin.Security;
 using FileMan.Models;
 using FileMan.Context;
 using System.Data.Entity;
+using FileMan.Classes;
 
 namespace FileMan.Controllers
 {
@@ -56,6 +57,42 @@ namespace FileMan.Controllers
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
+            string retTo = "folder";
+            long? retId = -1;
+
+            string retFun = "";
+            SessionState ss;
+
+            if (Session["SessionState"] != null)
+            {
+                ss = (SessionState)Session["SessionState"];
+                retTo = ss.ReturnTo;
+                retId = ss.ReturnId;
+            }
+            else
+            {
+                ItemService _is = new ItemService();
+
+                retId = _is.GetRoot().Id;
+                ss = new SessionState("manage", -1, (long)retId, null);
+            }
+
+            switch (retTo)
+            {
+                case "folder":
+                    retFun = string.Format("goToFolder({0})", ss.ReturnId);
+                    break;
+                case "file":
+                    retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
+                    break;
+                case "edit":
+                    retFun = string.Format("goToEditFile({0},{1})", ss.ReturnId, ss.CatId);
+                    break;
+                default:
+                    retFun = string.Format("goToFolder({0})", retId);
+                    break;
+            }
+
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -78,13 +115,87 @@ namespace FileMan.Controllers
                 ShowOnRoot = user.UserSetting.ShowUncategorisedRoot,
                 UncatVisible = user.UserSetting.UncategorisedVisible,
                 ShowChangelog = user.UserSetting.ShowChangelog,
-                UseDocuViewer = user.UserSetting.UseDocuViewer,
                 SettingsId = user.UserSetting.Id,
                 JoinDate = user.JoinDate,
                 FirstName = user.FirstName,
-                Surname = user.Surname
+                Surname = user.Surname,
+                ReturnFunction = retFun,
+                Settings = user.UserSetting
             };
+            Session["SessionState"] = new SessionState("manage", -1, -1, string.Empty, null, retTo, retId);
             return View(model);
+        }
+
+        public async Task<ActionResult> PartialIndex(ManageMessageId? message)
+        {
+            string retTo = "folder";
+            long? retId = -1;
+
+            string retFun = "";
+            SessionState ss;
+
+            if (Session["SessionState"] != null)
+            {
+                ss = (SessionState)Session["SessionState"];
+                retTo = ss.ReturnTo;
+                retId = ss.ReturnId;
+            }
+            else
+            {
+                ItemService _is = new ItemService();
+
+                retId = _is.GetRoot().Id;
+                ss = new SessionState("manage", -1, (long)retId, null);
+            }
+
+            switch (retTo)
+            {
+                case "folder":
+                    retFun = string.Format("goToFolder({0})", ss.ReturnId);
+                    break;
+                case "file":
+                    retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
+                    break;
+                case "edit":
+                    retFun = string.Format("goToEditFile({0},{1})", ss.ReturnId, ss.CatId);
+                    break;
+                default:
+                    retFun = string.Format("goToFolder({0})", retId);
+                    break;
+            }
+
+            ViewBag.StatusMessage =
+                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+                : message == ManageMessageId.Error ? "An error has occurred."
+                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : "";
+
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            var model = new IndexViewModel
+            {
+                HasPassword = HasPassword(),
+                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+                Logins = await UserManager.GetLoginsAsync(userId),
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ShowOnRoot = user.UserSetting.ShowUncategorisedRoot,
+                UncatVisible = user.UserSetting.UncategorisedVisible,
+                ShowChangelog = user.UserSetting.ShowChangelog,
+                SettingsId = user.UserSetting.Id,
+                JoinDate = user.JoinDate,
+                FirstName = user.FirstName,
+                Surname = user.Surname,
+                ReturnFunction = retFun,
+                Settings = user.UserSetting
+
+            };
+            Session["SessionState"] = new SessionState("manage", -1, -1, string.Empty, null, retTo, retId);
+            return PartialView(model);
         }
 
         //
@@ -120,7 +231,7 @@ namespace FileMan.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible, string UseDocuViewer)
+        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible)
         {
             DatabaseCtx _db = new DatabaseCtx();
             UserSetting settings = _db.UserSetting.Find(Id);
@@ -129,11 +240,10 @@ namespace FileMan.Controllers
                 settings.ShowChangelog = ShowChangelog==null ? false : true;
                 settings.ShowUncategorisedRoot = ShowUncategorisedRoot == null ? false : true;
                 settings.UncategorisedVisible = UncategorisedVisible == null ? false : true;
-                settings.UseDocuViewer = UseDocuViewer == null ? false : true;
                 _db.SaveChanges();
-                return Redirect(Request.UrlReferrer.ToString());
+                return Json(new { success = true, responseText = "Settings saved", reload = false }, JsonRequestBehavior.AllowGet);
             }
-            return Redirect(Request.UrlReferrer.ToString());
+            return Json(new { success = false, responseText = "User settings not found", reload = true }, JsonRequestBehavior.AllowGet);
         }
 
         //

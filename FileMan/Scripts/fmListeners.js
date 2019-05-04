@@ -2,6 +2,14 @@
 //// Listeners
 ////
 
+$(document)
+    .ajaxStart(function () {
+        $('#workingDiv').show();
+    })
+    .ajaxStop(function () {
+        $('#workingDiv').hide();
+    });
+
 $(document).on("keypress", "form", function (event) {
     return event.keyCode != 13;
 });
@@ -26,7 +34,17 @@ $(function () {
                 ChangeUrl("Index", link);
             }
         });
-    })
+    });
+
+
+    $('#forceDeleteCheck').change(function () {
+        if ($(this).prop('checked')) {
+            alert("Warning!\nWhen deleting categories, all sub-categories will be deleted as well.\nAll recursive documents will be uncategorised!"); //checked
+        }
+        else {
+            alert("Info\nOnly empty Categories cn be deleted."); //not checked
+        }
+    });
 
     var to = false;
     $('#jstree_div_q').keyup(function () {
@@ -36,4 +54,7 @@ $(function () {
             $('#jstree_div').jstree(true).search(v);
         }, 250);
     });
+});
+
+$(document).ready(function () {
 });

@@ -34,6 +34,8 @@ namespace FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
 
+            Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
+
             return View(file);
         }
 
@@ -42,6 +44,8 @@ namespace FileMan.Controllers
 
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+
+            Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
 
             return PartialView(file);
         }
@@ -145,6 +149,8 @@ namespace FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
 
+            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
+
             return View(file);
         }
 
@@ -152,6 +158,8 @@ namespace FileMan.Controllers
         {
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+
+            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
 
             return PartialView(file);
         }
@@ -172,7 +180,7 @@ namespace FileMan.Controllers
                 mf.Changelog = mf.Changelog + string.Format("{0} - Document edited \n", date);
 
                 _db.SaveChanges();
-
+                
                 return Json(new { success = true, responseText = "Document updated", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { success = false, responseText = "Cannot update Document. Data issue.", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);

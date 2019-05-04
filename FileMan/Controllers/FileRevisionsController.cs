@@ -38,7 +38,6 @@ namespace FileMan.Controllers
             FileRevision file = _db.FileRevision.Find(id);
             string userId = User.Identity.GetUserId();
             ApplicationUser user = _is.GetASPUser(userId);
-            bool useDocu = user.UserSetting.UseDocuViewer;
 
 
             if (file == null)
@@ -47,18 +46,18 @@ namespace FileMan.Controllers
             }
             else
             {
-                if (useDocu && DataFeeder.DocuCompatible(file.Extension))
-                {
-                    return View(file);
-                }
-                else
-                {
+                //if (useDocu && DataFeeder.DocuCompatible(file.Extension))
+                //{
+                //    return View(file);
+                //}
+                //else
+                //{
                     string mimeType = MimeTypeMap.GetMimeType(file.Extension);
                     string fileName = file.MasterFile.Number + "-" + file.Draft + "-" + file.MasterFile.Name + "-" + file.Name;
                     Response.AddHeader("Content-Disposition", "inline; filename=" + fileName);
 
                     return File(file.FullPath, mimeType);
-                }                    
+                //}                    
             }            
         }
 
