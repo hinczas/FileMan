@@ -487,3 +487,7 @@ legend {
         vertical-align: middle;
         color: #607d8b;
     }
+
+.draggable.over {
+    background-color: rgba(253, 216, 53, 0.4);
+}

@@ -54,7 +54,12 @@ $(function () {
             $('#jstree_div').jstree(true).search(v);
         }, 250);
     });
+
+
+    var cols = document.querySelectorAll('.draggable');
+    [].forEach.call(cols, function (col) {
+        col.addEventListener('dragenter', handleDragEnter, false);
+        col.addEventListener('dragleave', handleDragLeave, false);
+    });
 });
 
-$(document).ready(function () {
-});

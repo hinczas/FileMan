@@ -579,6 +579,7 @@ function allowDrop(ev) {
 
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.effectAllowed = "copy";
 }
 
 function drop(ev) {
@@ -587,4 +588,12 @@ function drop(ev) {
     var targetId = ev.currentTarget.id.replace("cat_", "").replace("doc_", "");
     var meh = "";
     moveNode(sourceId, targetId);
+}
+
+function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
 }

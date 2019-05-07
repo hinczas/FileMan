@@ -155,7 +155,7 @@
                 }
                 else
                 {
-                    <tr  ondragover="allowDrop(event)" id="cat_@Model.Current.Parent.Id">
+                    <tr  ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
                         <td style="cursor:pointer;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-reply"></i>
                         </td>
@@ -164,7 +164,7 @@
                 }
                 @foreach (Folder itm in Model.ChildrenDirs)
                 {
-                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" draggable="true" ondragstart="drag(event)" id="cat_@itm.Id">
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" draggable="true" ondragstart="drag(event)" id="cat_@itm.Id">
                         <td style="cursor:pointer;" scope="row" onclick="goToFolder(@itm.Id)">
                             <i class="fas fa-folder"></i>
                         </td>
@@ -188,7 +188,7 @@
         <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
-            <tr title="@itm.Description"  draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
+            <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                 <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
                     <i class="fas fa-file"></i>
                 </td>
