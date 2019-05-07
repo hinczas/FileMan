@@ -14,6 +14,19 @@ function mainSearch(_form) {
         }
     });
 }
+function goToSearch(id, search, scope) {
+    var link = "/Home/TreeIndex/";
+    var dt = { id: id, search: search, scope: scope };
+    $.ajax({
+        type: "get",
+        url: link,
+        data: dt,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+        }
+    });
+}
 function renameCategory(_form) {
     var link = "/Folders/Rename/";
     var dt = $(_form).serialize();
@@ -349,9 +362,10 @@ function saveSettings(_form) {
         data: dt,
         success: function (response) {
             if (response.success) {
-                alert(response.responseText);
+                //alert(response.responseText);
             } else {
                 alert(response.responseText);
+                goToManage(null);
             }
         }
     });

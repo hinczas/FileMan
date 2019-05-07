@@ -32,7 +32,7 @@ namespace FileMan.Controllers
         {
 
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
             Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
 
@@ -43,7 +43,7 @@ namespace FileMan.Controllers
         {
 
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
             Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
 
@@ -147,7 +147,7 @@ namespace FileMan.Controllers
         public ActionResult Edit(int id, long? pid)
         {
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
             Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
 
@@ -157,7 +157,7 @@ namespace FileMan.Controllers
         public ActionResult PartialEdit(int id, long? pid)
         {
             string userId = User.Identity.GetUserId();
-            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, pid);
+            MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
             Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
 

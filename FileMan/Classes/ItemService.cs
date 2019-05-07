@@ -54,7 +54,7 @@ namespace FileMan.Classes
             return bc;
         }
 
-        public MasterFileViewModel GetMasterFileViewModel(long id, string userId, long? pid)
+        public MasterFileViewModel GetMasterFileViewModel(long id, string userId, SessionState ss, long? pid)
         {
             var item = _db.MasterFile.Find(id);
             if (item==null)
@@ -103,6 +103,7 @@ namespace FileMan.Classes
                 Promote = promote,
                 ShowChangelog = changelog
             };
+                                 
             Folder par;
             if (pid!=null)
             {
@@ -114,6 +115,27 @@ namespace FileMan.Classes
 
             file.RedirectId = par.Id;
             file.RedirectLabel = par.Name;
+
+            string retFun = "";
+
+            switch(ss.ReturnTo)
+            {
+                case "folder":
+                    retFun = string.Format("goToFolder({0})", ss.ReturnId);
+                    break;
+                case "file":
+                    retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
+                    break;
+                case "search":
+                    retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
+                    file.RedirectLabel = "search";
+                    break;
+                default:
+                    retFun = string.Format("goToFolder({0})", par.Id);
+                    break;
+            }
+
+            file.RedirectFun = retFun;
 
             return file;
         }

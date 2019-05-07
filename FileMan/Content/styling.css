@@ -447,7 +447,9 @@ legend {
 #mainSearchForm input  {
     margin-right: -1px;
 }
-
+#mainSearchForm {
+    margin-top: 10px !important;
+}
 .border-ccc {
     border: 1px solid #ccc !important;
 }
@@ -461,3 +463,27 @@ legend {
     font-size: 14px;
     color: #e30e4e;
 }
+
+.complex-a {
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+    color: black !important;
+}
+    .complex-a:hover {
+        text-decoration: none;
+        color: blue !important;
+    }
+    .complex-a:hover > img, .complex-a:hover > span, .complex-a:hover > i {
+        text-decoration: none;
+        color: blue !important;
+    }
+    .complex-a > img, .complex-a > span, .complex-a > i {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .complex-a > i {
+        display: inline-block;
+        vertical-align: middle;
+        color: #607d8b;
+    }

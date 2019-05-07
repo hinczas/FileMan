@@ -88,6 +88,9 @@ namespace FileMan.Controllers
                 case "edit":
                     retFun = string.Format("goToEditFile({0},{1})", ss.ReturnId, ss.CatId);
                     break;
+                case "search":
+                    retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
+                    break;
                 default:
                     retFun = string.Format("goToFolder({0})", retId);
                     break;
@@ -122,7 +125,7 @@ namespace FileMan.Controllers
                 ReturnFunction = retFun,
                 Settings = user.UserSetting
             };
-            Session["SessionState"] = new SessionState("manage", -1, -1, string.Empty, null, retTo, retId);
+            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, retTo, retId);
             return View(model);
         }
 
@@ -159,6 +162,9 @@ namespace FileMan.Controllers
                 case "edit":
                     retFun = string.Format("goToEditFile({0},{1})", ss.ReturnId, ss.CatId);
                     break;
+                case "search":
+                    retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
+                    break;
                 default:
                     retFun = string.Format("goToFolder({0})", retId);
                     break;
@@ -194,7 +200,7 @@ namespace FileMan.Controllers
                 Settings = user.UserSetting
 
             };
-            Session["SessionState"] = new SessionState("manage", -1, -1, string.Empty, null, retTo, retId);
+            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, retTo, retId);
             return PartialView(model);
         }
 
@@ -231,15 +237,21 @@ namespace FileMan.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaveSettings(long Id, string ShowChangelog, string ShowUncategorisedRoot, string UncategorisedVisible)
+        public ActionResult SaveSettings(long Id, UserSetting Settings)
         {
             DatabaseCtx _db = new DatabaseCtx();
             UserSetting settings = _db.UserSetting.Find(Id);
             if (settings!=null)
             {
-                settings.ShowChangelog = ShowChangelog==null ? false : true;
-                settings.ShowUncategorisedRoot = ShowUncategorisedRoot == null ? false : true;
-                settings.UncategorisedVisible = UncategorisedVisible == null ? false : true;
+                settings.ShowChangelog = Settings.ShowChangelog;
+                settings.ShowUncategorisedRoot = Settings.ShowUncategorisedRoot;
+                settings.UncategorisedVisible = Settings.UncategorisedVisible;
+                settings.TreeSearch = Settings.TreeSearch;
+                settings.TreeContext = Settings.TreeContext;
+                settings.TreeDnD = Settings.TreeDnD;
+                settings.TreeSort = Settings.TreeSort;
+                settings.ForceDelete = Settings.ForceDelete;
+
                 _db.SaveChanges();
                 return Json(new { success = true, responseText = "Settings saved", reload = false }, JsonRequestBehavior.AllowGet);
             }

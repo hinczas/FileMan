@@ -2,6 +2,8 @@
 using FileMan.Context;
 using FileMan.Models;
 using FileMan.Models.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,13 +21,26 @@ namespace FileMan.Controllers
     {
         private ItemService _is;
         private DatabaseCtx _db;
+        private ApplicationUserManager _userManager;
 
         public FoldersController()
         {
             _is = new ItemService();
             _db = new DatabaseCtx();
         }
-        
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Pid,Type,Name,Description,Comment")] Folder item)
@@ -34,9 +49,18 @@ namespace FileMan.Controllers
             {
                 string[] names = item.Name.Trim().Trim(';').Split(';').ToArray();
                 var folders = new List<FolderJsonViewModel>();
-                foreach(string n in names)
+                var clean = names.Where(a => !string.IsNullOrEmpty(a.Trim())).Select(s => s.Trim()).Distinct().ToList();
+                var currentFolders = _db.Folder.Where(a => a.Pid == item.Pid).Select(b => b.Name.Trim().ToLower()).ToList();
+
+
+                foreach(string n in clean)
                 {
                     string name = n.Trim();
+
+                    if (currentFolders.Contains(name.ToLower()))
+                    {
+                        continue;
+                    }
 
                     var added = DateTime.Now;
                     var changelog = string.Format("{0} - Folder created \n", added);
@@ -134,6 +158,9 @@ namespace FileMan.Controllers
         // GET: Folders/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
             Folder item = _db.Folder.Find(id);
             long? pid = item.Pid;
             if (item != null)
@@ -142,19 +169,25 @@ namespace FileMan.Controllers
                 int files = item.Files.Count();
                 int folders = _db.Folder.Where(a => a.Pid == id).Count();
 
-                //if (files != 0 || folders != 0)
-                //{
-                //    TempData["Error"] = true;
-                //    TempData["Message"] = "Cannot delete non-empty directory.";
-                //    return Json(new { success = false, responseText = "Cannot delete non-empty directory." }, JsonRequestBehavior.AllowGet);
-
-                //} else
-                //{
-                //_db.Folder.Remove(item);
-                await DeleteChildCategoriesAsync(item.Id);
-                //await _db.SaveChangesAsync();
-                //}
-                return Json(new { success = true, responseText = "Category deleted.", parentId = pid }, JsonRequestBehavior.AllowGet);
+                if (user.UserSetting.ForceDelete)
+                {
+                    await DeleteChildCategoriesAsync(item.Id);
+                    return Json(new { success = true, responseText = "Category and all content deleted.", parentId = pid }, JsonRequestBehavior.AllowGet);
+                } else
+                {
+                    if (files != 0 || folders != 0)
+                    {
+                        TempData["Error"] = true;
+                        TempData["Message"] = "Cannot delete non-empty directory.";
+                        return Json(new { success = false, responseText = "Cannot delete non-empty directory." }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        _db.Folder.Remove(item);
+                        await _db.SaveChangesAsync();
+                    }
+                    return Json(new { success = true, responseText = "Category deleted.", parentId = pid }, JsonRequestBehavior.AllowGet);
+                }                
             }
 
             return Json(new { success = false, responseText = "Error occured" }, JsonRequestBehavior.AllowGet);

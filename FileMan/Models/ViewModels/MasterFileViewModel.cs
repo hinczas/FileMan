@@ -26,5 +26,6 @@ namespace FileMan.Models.ViewModels
         public bool ShowChangelog { get; set; }
         public long RedirectId { get; set; }
         public string RedirectLabel { get; set; }
+        public string RedirectFun { get; set; }
     }
 }

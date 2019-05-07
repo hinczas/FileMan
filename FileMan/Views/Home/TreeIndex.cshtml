@@ -29,52 +29,46 @@
         <li class="active">@Model.Current.Name</li>
     </ol>
 </div>
+
 <div class="row pl-30 tools-row">
-    <div class="float-l">
-        <div class="btn-group btn-group-sm btn-group-tools" role="group">
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
-            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
-            <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
-        </div>
-    </div>
-    <div class="float-l">
-        <div class="btn-group btn-group-sm btn-group-options" role="group">
-            <span><b>@Model.Current.Name</b> options</span>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><span class="dis">Move</span></li>
-                    <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                    @if (!Model.Current.IsRoot)
-                    {
-                        <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
-                    }
-                    <li role="separator" class="divider"></li>
-                    <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="float-r">
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm" }))
+    @{
+        var ss = (SessionState)Session["SessionState"];
+        bool search = ss.Location.Equals("search");
+        if (search)
         {
-            @Html.AntiForgeryToken()
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" onkeypress="enterSubmit(event, '#mainSearchButton')" placeholder="Search for.." name="search" style="width:200px;" />
-                <select name="scope" class="form-control" style="max-width:150px;">
-                    <option value=1>Number &amp; Name</option>
-                    <option value=2>Number, Name, Description &amp; Comment </option>
-                </select>
-                <!--button class="btn btn-default form-control" type="submit" style="width:38px;"><i class="fas fa-search"></i></button -->
-                <button class="btn-default form-control border-ddd" type="button" onclick="mainSearch(mainSearchForm)" id="mainSearchButton"><i class="fas fa-search"></i></button>
-
-            </div><!-- /input-group -->
-
+            <p>Search results for: <b>@ss.Search</b> <a href="@ss."></a></p>
         }
-    </div>
-
+        else
+        {
+            <div class="float-l">
+                <div class="btn-group btn-group-sm btn-group-tools" role="group">
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
+                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
+                    <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
+                </div>
+            </div>
+            <div class="float-r">
+                <div class="btn-group btn-group-sm btn-group-options" role="group">
+                    <span><b>@Model.Current.Name</b></span>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><span class="dis">Move</span></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+                            @if (!Model.Current.IsRoot)
+                            {
+                                <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                            }
+                            <li role="separator" class="divider"></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 </div>
 
 
@@ -89,7 +83,7 @@
                     <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
                     <input type="hidden" class="form-control" name="Type" value="dir" />
                     <div class="col-sm-4 pos-rel">
-                        <input type="text" autocomplete="off" class="form-control form-control-sm info-input-icon" name="Name" placeholder="Name..." onkeypress="enterSubmit(event, '#submitBtn')" id="catNameInp" autofocus />
+                        <input type="text" autocomplete="off" maxlength="32" class="form-control form-control-sm info-input-icon" name="Name" placeholder="Name..." onkeypress="enterSubmit(event, '#submitBtn')" id="catNameInp" autofocus />
                         <span class="pos-abs info-icon-inside" title="Required. Use ; as delimiter for multiple names"><i class="fas fa-question-circle"></i></span>
                     </div>
                     <div class="col-sm-7">
@@ -160,7 +154,6 @@
                     <th style="width:15px;" scope="col"></th>
                     <th style="width:200px;" scope="col"></th>
                     <th style="width:380px; max-width:250px;" scope="col"></th>
-                    <th style="width:30px;" scope="col"></th>
                 </tr>
             </thead>
             <tbody id="mainTable">
@@ -170,7 +163,7 @@
                         <td scope="row">
                             <i class="fas fa-folder"></i>
                         </td>
-                        <td colspan="5">...</td>
+                        <td colspan="4">...</td>
                     </tr>
                 }
                 else
@@ -179,7 +172,7 @@
                         <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-reply"></i>
                         </td>
-                        <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
+                        <td colspan="4" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
                     </tr>
                 }
                 @foreach (Folder itm in Model.ChildrenDirs)
@@ -190,18 +183,6 @@
                         </td>
                         <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
                         <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
-                        <td align="right">
-                            @*<div class="dropdown">
-                                <i class="fas fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-                                <ul class="dropdown-menu">
-                                    <li><span class="dis">Move</span></li>
-                                    <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-                                </ul>
-                            </div>*@
-                            <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="far fa-trash-alt"></i></span>
-                        </td>
                     </tr>
                 }
             </tbody>
@@ -211,11 +192,10 @@
     <table class="table table-condensed table-hover">
         <thead class="thead-dark">
             <tr>
-                <th style="width:15px;" scope="col"></th>
-                <th style="width:70px;" scope="col">Number</th>
-                <th style="width:25px;" scope="col">Ver</th>
-                <th style="width:455px;" scope="col">Name</th>
-                @*<th style="width:30px;" scope="col"></th>*@
+                <th scope="col"></th>
+                <th scope="col">Number</th>
+                <th scope="col">Name</th>
+                <th scope="col">Ver</th>
             </tr>
         </thead>
         <tbody id="mainTable">
@@ -226,29 +206,18 @@
                         <i class="fas fa-file"></i>
                     </td>
                     <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
+                    <td>
                         @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                         {
-                            <span>@itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft</span>
-                            //@Html.ActionLink(itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault().Draft, "GetFile", "FileRevisions", new { id = itm.Revisions.Select(a => a.Id).Max() }, new { title = "Directory" })
+                            var draft = itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault();
+                            <a href="FileRevisions/GetFile/@draft.Id" class="complex-a">
+                                <img class="icon" src="~/Content/Images/Icons/32px/@draft.Icon" />
+                                <span>@draft.Draft</span>
+                                <i class="fas fa-angle-double-down"></i>
+                            </a>
                         }
                     </td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
-                    @*<td align="right">
-
-                            @if (itm.Folders.Count() > 0)
-                            {
-                                <a href="@Url.Action("Edit", "MasterFiles", new { id=itm.Id })"><i class="fas fa-pen-square"></i></a>
-                                <span onclick="deleteDocument(@itm.Id, @Model.Current.Id)" class="cur-point"><i class="fas fa-times-circle"></i></span>
-                            }
-                            else
-                            {
-                                // data-toggle="tooltip" data-placement="top" title="@itm.Description"
-                                <a href="@Url.Action("Details", "MasterFiles", new { id = itm.Id })"><i class="fas fa-info-circle"></i></a>
-                                <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
-                            }
-
-                        </td>*@
                 </tr>
             }
         </tbody>

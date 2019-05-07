@@ -53,7 +53,7 @@ namespace FileMan.Controllers
                 location = "search";
             }
 
-            Session["SessionState"] = new SessionState(location, ivm.Current.Id,-1,search, scope, "folder", ivm.Current.Id); 
+            Session["SessionState"] = new SessionState(location, ivm.Current.Id,-1,search, scope, location, ivm.Current.Id); 
 
             return View(ivm);
         }
@@ -102,7 +102,7 @@ namespace FileMan.Controllers
                 location = "search";
             }
 
-            Session["SessionState"] = new SessionState(location, ivm.Current.Id, -1, search, scope, "folder", ivm.Current.Id);
+            Session["SessionState"] = new SessionState(location, ivm.Current.Id, -1, search, scope, location, ivm.Current.Id);
 
             return PartialView(ivm);
         }

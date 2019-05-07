@@ -38,8 +38,23 @@
                 </button>
                 @Html.ActionLink("FileMan", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+            
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav"></ul>
+                @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm", @class = "navbar-form navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="searchBox" onkeyup="searchMain(this)" onkeypress="enterSubmit(event, '#mainSearchButton')" placeholder="Search for.." name="search" style="width:200px;" />
+                        <select name="scope" class="form-control" style="max-width:150px;">
+                            <option value=1>Number &amp; Name</option>
+                            <option value=2>Number, Name, Description &amp; Comment </option>
+                        </select>
+                        <!--button class="btn btn-default form-control" type="submit" style="width:38px;"><i class="fas fa-search"></i></button -->
+                        <button class="btn-default form-control border-ddd" type="button" onclick="mainSearch(mainSearchForm)" id="mainSearchButton"><i class="fas fa-search"></i></button>
+
+                    </div><!-- /input-group -->
+
+                }
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

@@ -82,22 +82,19 @@
                 <input type="hidden" name="Id" value=@Model.SettingsId />
                 <dl class="dl-horizontal toggleDiv">
                     <dt>
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.Settings.ShowChangelog)
-                            @Html.ValidationMessageFor(model => model.ShowChangelog, "", new { @class = "text-danger" })
-                        </div>
+                            @Html.CheckBoxFor(model => model.Settings.UncategorisedVisible)
                     </dt>
                     <dd>
                         Show <b>uncategorised</b> documents
                     </dd>
                     <dt>
-                        <input type="checkbox" @(Model.ShowOnRoot ? "checked" : "") data-toggle="toggle" name="ShowUncategorisedRoot" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.ShowUncategorisedRoot)
                     </dt>
                     <dd>
                         Show <b>uncategorised</b> documents in the root directory <b>only</b>
                     </dd>
                     <dt>
-                        <input type="checkbox" @(Model.ShowChangelog ? "checked" : "") data-toggle="toggle" name="ShowChangelog" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.ShowChangelog)
                     </dt>
                     <dd>
                         Show <b>changelog</b> on document details page
@@ -107,25 +104,25 @@
                 <h5>Navigation tree</h5>
                 <dl class="dl-horizontal">
                     <dt>
-                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.TreeSearch)
                     </dt>
                     <dd>
                         Enable tree search
                     </dd>
                     <dt>
-                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.TreeDnD)
                     </dt>
                     <dd>
                         Enable drag 'n' drop categories
                     </dd>
                     <dt>
-                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.TreeSort)
                     </dt>
                     <dd>
                         Auto-sort tree
                     </dd>
                     <dt>
-                        <input type="checkbox" data-toggle="toggle" data-size="mini" />
+                            @Html.CheckBoxFor(model => model.Settings.TreeContext)
                     </dt>
                     <dd>
                         Use context menu
@@ -136,7 +133,7 @@
                 <h5>Miscellaneous</h5>
                 <dl class="dl-horizontal">
                     <dt>
-                        <input type="checkbox" data-toggle="toggle" data-size="mini" id="forceDeleteCheck" />
+                            @Html.CheckBoxFor(model => model.Settings.ForceDelete)
                     </dt>
                     <dd>
                         Enable force delete categories <br /><span class="danger">This will allow deleting non-empty categories! <br />All sub-categories will be recursively deleted. <br />All documents will be recursively uncategorised!</span>
