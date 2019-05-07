@@ -492,21 +492,30 @@ $('#jstree_div').on("move_node.jstree", function (e, data) {
     var oldParentID = data.old_parent;
 
     var link = "/Folders/Move/";
-    //$.post(link, { Id: moveitemID, OldParId: oldParentID, NewParId: newParentID },
-    //    function (returnedData) {
-    //        console.log(returnedData);
-    //    });
-    $('#loadingDiv').show();
     $.ajax({
         url: link,
         type: 'post',
         data: { Id: moveitemID, OldParId: oldParentID, NewParId: newParentID },
         success: function () {
-            //alert("done");
-            $('#loadingDiv').hide();
         }
     });
 });
+
+function moveCategory(id, opid, npid) {
+    var link = "/Folders/Move/";
+    $.ajax({
+        url: link,
+        type: 'post',
+        data: { Id: id, OldParId: opid, NewParId: npid },
+        success: function () {
+            moveNode(id, npid);
+        }
+    });
+}
+
+function moveNode(id, pid) {
+    $("#jstree_div").jstree("move_node", id, pid, 0);
+}
 
 function _hideModal(name) {
     $(name).modal('hide');
@@ -563,3 +572,19 @@ function refreshTree() {
     )
 }
 
+/* DRAG 'n' DROP */
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var sourceId = ev.dataTransfer.getData("text").replace("cat_","").replace("doc_","");
+    var targetId = ev.currentTarget.id.replace("cat_", "").replace("doc_", "");
+    var meh = "";
+    moveNode(sourceId, targetId);
+}
