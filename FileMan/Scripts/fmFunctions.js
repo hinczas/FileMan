@@ -43,8 +43,10 @@ function renameCategory(_form) {
                     _hideModal('#renameModal');
                     _renameNode(response.id, response.name)
                     goToFolder(response.parentId);
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -69,10 +71,13 @@ function goToFolder(id, redirect = true) {
 
 function goToFile(id, pid=null) {
     var link = "/MasterFiles/PartialDetails/";
+    if (pid == null) {
+        pid = -1;
+    }
     $.ajax({
         type: "get",
         url: link,
-        data: {id: id, pid: pid},
+        data: { id: id, pid: pid },
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
@@ -84,6 +89,9 @@ function goToFile(id, pid=null) {
 
 function goToEditFile(id, pid = null) {
     var link = "/MasterFiles/PartialEdit/";
+    if (pid == null) {
+        pid = -1;
+    }
     $.ajax({
         type: "get",
         url: link,
@@ -112,8 +120,10 @@ function deleteCategory(id, redirect = false) {
                         addTableRow(response.parentId);
                     }
                     removeNode(id);
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -138,8 +148,10 @@ function createCategory(_form, _url, _pn) {
                     addMultipleNodes(response.folders, response.parentId);
                     addTableRow(response.parentId);
                     $(_form).trigger("reset");
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -172,8 +184,10 @@ async function deleteDocument(did, pid) {
                         goToFile(did);
                     }
                     //_updateNodeQte(pid);
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -191,8 +205,10 @@ function createDocument(_form, _pid) {
                 _hideModal('#filModal');
                 goToFolder(_pid, false);
                 _updateNodeQte(_pid);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
             }
         }
     });
@@ -207,8 +223,10 @@ function editDocument(_form, _pid) {
         success: function (response) {
             if (response.success) {
                 goToFile(response.id, response.parentId);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
             }
         }
     });
@@ -225,8 +243,27 @@ function moveDocument(_form) {
                 _hideModal('#movModal');
                 goToFile(response.id, response.parentId);
                 _updateNodes(response.affFolIds);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
+function moveDnDDocument(id, opid, npid) {
+    $.ajax({
+        url: '/MasterFiles/MoveFileAsync/',
+        type: 'post',
+        data: {id: id, opid: opid, npid: npid},
+        success: function (response) {
+            if (response.success) {
+                _updateNodes(response.affFolIds);
+                ftInfo(response.responseText);
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
             }
         }
     });
@@ -247,8 +284,10 @@ function moveDocuments(_form) {
                 if (response.success) {
                     goToFolder(response.parentId, false);
                     _updateNodeQte(response.parentId);
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -280,8 +319,10 @@ function addDraft(_form) {
             if (response.success) {
                 _hideModal('#revModal');
                 goToFile(response.id, response.parentId);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
             }
         }
     });
@@ -299,8 +340,10 @@ function uncategorise(_id, _pid) {
                     _hideModal('#movModal');
                     goToFile(response.id, response.parentId);
                     _updateNodes(response.affFolIds);
+                    ftInfo(response.responseText);
                 } else {
                     alert(response.responseText);
+                    ftError(response.responseText);
                 }
             }
         });
@@ -317,8 +360,10 @@ function promote(_form) {
             if (response.success) {
                 _hideModal('#promModal');
                 goToFile(response.id, response.parentId);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
             }
         }
     });
@@ -363,8 +408,10 @@ function saveSettings(_form) {
         success: function (response) {
             if (response.success) {
                 //alert(response.responseText);
+                ftInfo(response.responseText);
             } else {
                 alert(response.responseText);
+                ftError(response.responseText);
                 goToManage(null);
             }
         }
@@ -451,7 +498,25 @@ function checkAllItems(e) {
     })
 }
 
+function _getCurrentTime() {
+    var d = new Date();
+    var n = d.toLocaleTimeString();
 
+    return n;
+}
+
+function ftError(e) {
+    var n = _getCurrentTime();
+    $('#ft-error').html(n+" - "+e);
+}
+function ftInfo(e) {
+    var n = _getCurrentTime();
+    $('#ft-info').html(n + " - " + e);
+}
+function ftMessage(e) {
+    var n = _getCurrentTime();
+    $('#ft-msg').html(n + " - " + e);
+}
 
 function removeNode(id) {
     $("#jstree_div").jstree('delete_node', id);
@@ -491,12 +556,22 @@ $('#jstree_div').on("move_node.jstree", function (e, data) {
     //old parent
     var oldParentID = data.old_parent;
 
+    var pid = $('#currentPid').val();
+
     var link = "/Folders/Move/";
     $.ajax({
         url: link,
         type: 'post',
         data: { Id: moveitemID, OldParId: oldParentID, NewParId: newParentID },
-        success: function () {
+        success: function (response) {
+            if (response.success) {
+                ftInfo(response.responseText);
+                if (pid == newParentID || pid == oldParentID) {
+                    addTableRow(pid);
+                }
+            } else {
+                ftError(response.responseText);
+            }
         }
     });
 });
@@ -507,8 +582,13 @@ function moveCategory(id, opid, npid) {
         url: link,
         type: 'post',
         data: { Id: id, OldParId: opid, NewParId: npid },
-        success: function () {
-            moveNode(id, npid);
+        success: function (response) {
+            if (response.success) {
+                ftInfo(response.responseText);
+                moveNode(id, npid);
+            } else {
+                ftError(response.responseText);
+            }
         }
     });
 }
@@ -575,6 +655,7 @@ function refreshTree() {
 /* DRAG 'n' DROP */
 function allowDrop(ev) {
     ev.preventDefault();
+    
 }
 
 function drag(ev) {
@@ -584,14 +665,24 @@ function drag(ev) {
 
 function drop(ev) {
     ev.preventDefault();
-    var sourceId = ev.dataTransfer.getData("text").replace("cat_","").replace("doc_","");
-    var targetId = ev.currentTarget.id.replace("cat_", "").replace("doc_", "");
-    var meh = "";
-    moveNode(sourceId, targetId);
+    var sourceId = ev.dataTransfer.getData("text");
+    var doc = sourceId.startsWith("doc_");
+    var npid = ev.currentTarget.id.replace("cat_", "");
+    var pid = $('#currentPid').val();
+
+    if (doc) {
+        var id = sourceId.replace("doc_", "");
+        moveDnDDocument(id, pid, npid);
+        goToFolder(pid, false);
+    } else {
+        var id = sourceId.replace("cat_", "");
+        moveNode(id, npid);
+        addTableRow(pid);
+    }
 }
 
 function handleDragEnter(e) {
-    this.classList.add('over');
+    this.classList.add('over');       
 }
 
 function handleDragLeave(e) {

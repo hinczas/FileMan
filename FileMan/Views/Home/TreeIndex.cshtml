@@ -17,6 +17,7 @@
         </div>
     }
 }
+<input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
     <ol class="breadcrumb" style="margin-bottom:10px;">
         @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
@@ -168,8 +169,8 @@
                 }
                 else
                 {
-                    <tr>
-                        <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
+                        <td style="cursor:pointer;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-reply"></i>
                         </td>
                         <td colspan="4" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
@@ -177,8 +178,8 @@
                 }
                 @foreach (Folder itm in Model.ChildrenDirs)
                 {
-                    <tr>
-                        <td scope="row" style="cursor:pointer;" onclick="goToFolder(@itm.Id)">
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" draggable="true" ondragstart="drag(event)" id="cat_@itm.Id">
+                        <td style="cursor:pointer;" scope="row" onclick="goToFolder(@itm.Id)">
                             <i class="fas fa-folder"></i>
                         </td>
                         <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
@@ -201,7 +202,7 @@
         <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
-                <tr title="@itm.Description">
+                <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                     <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
                         <i class="fas fa-file"></i>
                     </td>
@@ -231,9 +232,6 @@
     {
         @Html.AntiForgeryToken()
         <div class="col-md-12">
-            <p></p><br />
-            <p></p><br />
-            <p></p><br />
             <input type="hidden" name="Id" value=@Model.Current.Id />
             <div class="panel-group">
                 <div class="panel panel-warning">
@@ -268,7 +266,7 @@
                             <tbody>
                                 @foreach (MasterFile itm in Model.UnassignedFiles)
                                 {
-                                    <tr>
+                                    <tr draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">

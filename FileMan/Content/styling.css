@@ -491,3 +491,43 @@ legend {
 .draggable.over {
     background-color: rgba(253, 216, 53, 0.4);
 }
+
+.fixed-ft {
+    position: fixed;
+    bottom:0px;
+    left:0px;
+    height:25px;
+    width:100%;
+    display:inline-block;
+    vertical-align: middle;
+    z-index: 1030;
+}
+.ft-container {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #0c5e5e;
+    color: #fafafa !important;
+    font-family: "Nunito";
+    font-size: 14px;
+    font-weight: 400;
+    padding: 3px 15px;
+}
+    .ft-container > .cpright {
+        padding-left:15px;
+        padding-right:15px;
+    }
+    .ft-container > div {
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+    }
+    .ft-container > .ft-icon {
+        margin-right: 5px;
+    }
+    .ft-container > .ft-placeholder {
+        min-width:300px;
+        margin-right: 15px;
+    }

@@ -105,12 +105,12 @@ namespace FileMan.Classes
             };
                                  
             Folder par;
-            if (pid!=null)
+            if (pid!=null && pid > 0)
             {
                 par = _db.Folder.Find(pid);
             } else
             {
-                par = GetRoot();
+                par = _db.Folder.Find(ss.CatId);
             }
 
             file.RedirectId = par.Id;
@@ -118,22 +118,24 @@ namespace FileMan.Classes
 
             string retFun = "";
 
-            switch(ss.ReturnTo)
-            {
-                case "folder":
-                    retFun = string.Format("goToFolder({0})", ss.ReturnId);
-                    break;
-                case "file":
-                    retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
-                    break;
-                case "search":
-                    retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
-                    file.RedirectLabel = "search";
-                    break;
-                default:
-                    retFun = string.Format("goToFolder({0})", par.Id);
-                    break;
-            }
+            //switch(ss.ReturnTo)
+            //{
+            //    case "folder":
+            //        retFun = string.Format("goToFolder({0})", ss.ReturnId);
+            //        break;
+            //    case "file":
+            //        retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
+            //        break;
+            //    case "search":
+            //        retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
+            //        file.RedirectLabel = "search";
+            //        break;
+            //    default:
+            //        retFun = string.Format("goToFolder({0})", par.Id);
+            //        break;
+            //}
+
+            retFun = string.Format("goToFolder({0})", ss.CatId);
 
             file.RedirectFun = retFun;
 

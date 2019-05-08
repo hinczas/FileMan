@@ -96,17 +96,17 @@ namespace FileMan.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Move([Bind(Include ="Id,OldParId,NewParId")] FolderMovelViewModel model)
+        public async Task<JsonResult> Move([Bind(Include ="Id,OldParId,NewParId")] FolderMovelViewModel model)
         {
             if (!ModelState.IsValid)
-                return false;
-                        
+                return Json(new { success = false, responseText = "Invalid model state" }, JsonRequestBehavior.AllowGet);
+
             var oldParent = _db.Folder.Find(model.OldParId);
             var current = _db.Folder.Find(model.Id);
             var newParent = _db.Folder.Find(model.NewParId);
 
             if (oldParent == null || current == null || newParent == null)
-                return false;
+                return Json(new { success = false, responseText = "Connot find all directories for the move" }, JsonRequestBehavior.AllowGet);
 
             string oldParentPath = oldParent.Path;
             string newParentPath = newParent.IsRoot ? "" : newParent.Path;
@@ -117,7 +117,7 @@ namespace FileMan.Controllers
 
             await UpdatePathAsync(model.Id, newParentPath);
 
-            return true;
+            return Json(new { success = true, responseText = current.Name+" succesfully moved from "+oldParent.Name+" to "+newParent.Name }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -125,14 +125,14 @@ namespace FileMan.Controllers
         {
             if (string.IsNullOrEmpty(name))
             {
-                return Json(new { success = false, responseText = "name cannot be empty", id = id, parentId = id }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, responseText = "Name cannot be empty", id = id, parentId = id }, JsonRequestBehavior.AllowGet);
             }
 
             var folder = _db.Folder.Find(id);
 
             if (folder==null)
             {
-                return Json(new { success = false, responseText = "Cannot find category", id = id, parentId = id }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, responseText = "Cannot find category "+id, id = id, parentId = id }, JsonRequestBehavior.AllowGet);
             }
             try
             {
@@ -147,7 +147,7 @@ namespace FileMan.Controllers
                     await UpdatePathAsync(id, newPath);
                 }
 
-                return Json(new { success = true, responseText = "Renamed ok", id = id, parentId = id, name = newName }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = "Renamed to "+ newName + " ok", id = id, parentId = id, name = newName }, JsonRequestBehavior.AllowGet);
             } catch (Exception e)
             {
                 return Json(new { success = false, responseText = e.Message, id = id, parentId = id }, JsonRequestBehavior.AllowGet);

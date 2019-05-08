@@ -110,8 +110,27 @@
             </div>
         </div>
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - FileMan</p>
+        <footer class="fixed-ft">
+            <div class="ft-container">
+                <div class="ft-icon"><i class="fas fa-terminal"></i></div>
+                <div class="ft-placeholder ft-ajax" id="ft-ajax"></div>
+
+                <div class="ft-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="ft-placeholder ft-info" id="ft-info"></div>
+
+                <div class="ft-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="ft-placeholder ft-error" id="ft-error"></div>
+
+                <div class="ft-icon"><i class="far fa-comment-dots"></i></div>
+                <div class="ft-placeholder ft-msg" id="ft-msg"></div>
+
+                <div class="float-r">
+                    ver. @ViewContext.Controller.GetType().Assembly.GetName().Version
+                </div>
+                <div class="cpright float-r">
+                    <p>&copy; @DateTime.Now.Year - FileMan</p>
+                </div>
+            </div>
         </footer>
     </div>
 

@@ -17,6 +17,7 @@
         </div>
     }
 }
+<input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
     <ol class="breadcrumb" style="margin-bottom:10px;">
         @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
@@ -30,33 +31,44 @@
     </ol>
 </div>
 <div class="row pl-30 tools-row">
-    <div class="float-l">
-        <div class="btn-group btn-group-sm btn-group-tools" role="group">
-            <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
-            <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
-            <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
-        </div>
-    </div>
-    <div class="float-r">
-        <div class="btn-group btn-group-sm btn-group-options" role="group">
-            <span><b>@Model.Current.Name</b></span>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    <i class="fas fa-cog"></i>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><span class="dis">Move</span></li>
-                    <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                    @if (!Model.Current.IsRoot)
-                    {
-                        <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
-                    }
-                    <li role="separator" class="divider"></li>
-                    <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-                </ul>
+    @{
+        var ss = (SessionState)Session["SessionState"];
+        bool search = ss.Location.Equals("search");
+        if (search)
+        {
+            <p>Search results for: <b>@ss.Search</b> <a href="@ss."></a></p>
+        }
+        else
+        {
+            <div class="float-l">
+                <div class="btn-group btn-group-sm btn-group-tools" role="group">
+                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
+                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
+                    <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
+                </div>
             </div>
-        </div>
-    </div>
+            <div class="float-r">
+                <div class="btn-group btn-group-sm btn-group-options" role="group">
+                    <span><b>@Model.Current.Name</b></span>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><span class="dis">Move</span></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+                            @if (!Model.Current.IsRoot)
+                            {
+                                <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                            }
+                            <li role="separator" class="divider"></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 </div>
 
 <!-- New Category -->
@@ -155,7 +167,7 @@
                 }
                 else
                 {
-                    <tr  ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
+                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
                         <td style="cursor:pointer;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-reply"></i>
                         </td>
@@ -188,24 +200,24 @@
         <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
-            <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
-                <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
-                    <i class="fas fa-file"></i>
-                </td>
-                <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
-                <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
-                <td>
-                    @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                    {
-                        var draft = itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault();
-                        <a href="FileRevisions/GetFile/@draft.Id" class="complex-a">
-                            <img class="icon" src="~/Content/Images/Icons/32px/@draft.Icon" />
-                            <span>@draft.Draft</span>
-                            <i class="fas fa-angle-double-down"></i>
-                        </a>
-                    }
-                </td>
-            </tr>
+                <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
+                    <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
+                        <i class="fas fa-file"></i>
+                    </td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
+                    <td>
+                        @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                        {
+                            var draft = itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault();
+                            <a href="FileRevisions/GetFile/@draft.Id" class="complex-a">
+                                <img class="icon" src="~/Content/Images/Icons/32px/@draft.Icon" />
+                                <span>@draft.Draft</span>
+                                <i class="fas fa-angle-double-down"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
@@ -218,9 +230,6 @@
     {
         @Html.AntiForgeryToken()
         <div class="col-md-12">
-            <p></p><br />
-            <p></p><br />
-            <p></p><br />
             <input type="hidden" name="Id" value=@Model.Current.Id />
             <div class="panel-group">
                 <div class="panel panel-warning">
@@ -255,7 +264,7 @@
                             <tbody>
                                 @foreach (MasterFile itm in Model.UnassignedFiles)
                                 {
-                                    <tr>
+                                    <tr draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">

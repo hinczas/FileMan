@@ -6,7 +6,6 @@
             <th style="width:15px;" scope="col"></th>
             <th style="width:200px;" scope="col"></th>
             <th style="width:380px; max-width:250px;" scope="col"></th>
-            <th style="width:30px;" scope="col"></th>
         </tr>
     </thead>
     <tbody id="mainTable">
@@ -16,29 +15,26 @@
                 <td scope="row">
                     <i class="fas fa-folder"></i>
                 </td>
-                <td colspan="5">...</td>
+                <td colspan="4">...</td>
             </tr>
         }
         else
         {
-            <tr>
-                <td scope="row" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">
+            <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
+                <td style="cursor:pointer;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
                     <i class="fas fa-reply"></i>
                 </td>
-                <td colspan="5" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
+                <td colspan="4" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
             </tr>
         }
         @foreach (Folder itm in Model.ChildrenDirs)
         {
-            <tr>
-                <td scope="row" style="cursor:pointer;" onclick="goToFolder(@itm.Id)">
+            <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" draggable="true" ondragstart="drag(event)" id="cat_@itm.Id">
+                <td style="cursor:pointer;" scope="row" onclick="goToFolder(@itm.Id)">
                     <i class="fas fa-folder"></i>
                 </td>
                 <td style="cursor:pointer;" onclick="goToFolder(@itm.Id)">@itm.Name</td>
-                <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" data-container="body" data-toggle="tooltip" data-placement="top" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
-                <td align="right">
-                    <span class="cur-point" onclick="deleteCategory(@itm.Id)"><i class="far fa-trash-alt"></i></span>
-                </td>
+                <td style="cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:250px;" title="@itm.Description" onclick="goToFolder(@itm.Id)">@itm.Description</td>
             </tr>
         }
     </tbody>

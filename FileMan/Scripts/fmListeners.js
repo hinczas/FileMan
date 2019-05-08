@@ -5,9 +5,19 @@
 $(document)
     .ajaxStart(function () {
         $('#workingDiv').show();
+        var n = _getCurrentTime();
+        $('#ft-ajax').html("<p>" + n + " - Ajax START</p>");
     })
     .ajaxStop(function () {
         $('#workingDiv').hide();
+        var n = _getCurrentTime();
+        $('#ft-ajax').html("<p>" + n + " - Ajax END</p>");
+
+        var cols = document.querySelectorAll('.draggable');
+        [].forEach.call(cols, function (col) {
+            col.addEventListener('dragenter', handleDragEnter, false);
+            col.addEventListener('dragleave', handleDragLeave, false);
+        });
     });
 
 $(document).on("keypress", "form", function (event) {

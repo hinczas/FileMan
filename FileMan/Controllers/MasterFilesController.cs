@@ -30,7 +30,6 @@ namespace FileMan.Controllers
         // GET: MasterFiles/Details/5
         public ActionResult Details(int id, long? pid)
         {
-
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
@@ -100,44 +99,7 @@ namespace FileMan.Controllers
                 //_db.MasterFile.Add(item);
                 _db.SaveChanges();
 
-                //if (file != null)
-                //{
-                //    extension = Path.GetExtension(file.FileName).Replace(".", "").ToUpper();
-                //    string icon = DataFeeder.GetIcon(extension);
-                //    var revision = 1;
-                //    var filname = System.IO.Path.GetFileNameWithoutExtension(file.FileName)+"_v"+revision+"."+extension.ToLower();
-                //    var fullpath = Path.Combine(rootPath, number, filname);
-                //    string draft = _is.Increment(string.Empty);
-
-                //    FileRevision rf = new FileRevision()
-                //    {
-                //        MasterFileId = item.Id,
-                //        Revision = revision,
-                //        Name = file.FileName,
-                //        Comment = item.Comment,
-                //        FullPath = fullpath,
-                //        Extension = extension,
-                //        Draft = draft,
-                //        Type = "draft",
-                //        Added = added,
-                //        Icon = icon
-                //    };
-
-
-                //    file.SaveAs(fullpath);
-
-                //    var md5 = MD5.Create();
-                //    string hash = _is.GetMd5Hash(md5,fullpath);
-                //    rf.Md5hash = hash;
-
-                //    item.Extension = extension;
-                //    item.Changelog = item.Changelog + string.Format("{0} - Revision added : {1} \n", added, filname);
-
-                //    _db.FileRevision.Add(rf);
-                //    _db.SaveChanges();
-                //}
-
-                return Json(new { success = true, responseText = "Document created", parentId = FolderId }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = "New document created", parentId = FolderId }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { success = false, responseText = "Invalid model state", parentId = FolderId }, JsonRequestBehavior.AllowGet);
@@ -181,9 +143,9 @@ namespace FileMan.Controllers
 
                 _db.SaveChanges();
                 
-                return Json(new { success = true, responseText = "Document updated", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = item.Number + " document updated", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { success = false, responseText = "Cannot update Document. Data issue.", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = false, responseText = "Cannot update document "+item.Number + ". Data issue.", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
         // POST: MasterFiles/Delete/5
@@ -209,7 +171,7 @@ namespace FileMan.Controllers
                     await _db.SaveChangesAsync();
                 }
 
-                return Json(new { success = true, responseText = "Document removed", parentId = folderId }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = item.Number + " document removed", parentId = folderId }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -248,9 +210,9 @@ namespace FileMan.Controllers
                 _db.SaveChanges();
             } else
             {
-                return Json(new { success = false, responseText = "Could not fid document", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, responseText = "Could not find document "+id, id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { success = true, responseText = "Document promoted", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = true, responseText = item.Number + " document promoted", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MoveFile(long Id, long[] folders, long pid)
@@ -266,7 +228,7 @@ namespace FileMan.Controllers
                     master.Folders = new List<Folder>();
                     master.Changelog = master.Changelog + string.Format("{0} - Uncategorised \n", DateTime.Now);
                     _db.SaveChanges();
-                    return Json(new { success = true, responseText = "Document uncategorised", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, responseText = master.Number + " document uncategorised", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
                 }
 
                 var toAdd = folders.Except(assigned);
@@ -289,7 +251,7 @@ namespace FileMan.Controllers
                 master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
                 _db.SaveChanges();
 
-                return Json(new { success = true, responseText = "Document updated", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = master.Number + " document updated", id = Id, parentId = pid, affFolIds = affected }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception e)
             {
@@ -298,5 +260,44 @@ namespace FileMan.Controllers
             
         }
 
+
+
+        public async Task<ActionResult> MoveFileAsync(long Id, long opid, long npid)
+        {
+            try
+            {
+                MasterFile master = _db.MasterFile.Find(Id);
+                Folder oldPa = _db.Folder.Find(opid);
+                Folder newPa = _db.Folder.Find(npid);
+
+                if (master==null)
+                    return Json(new { success = false, responseText = "Cannot find source document "+Id, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
+
+                if (oldPa == null)
+                    return Json(new { success = false, responseText = "Cannot find source category "+opid, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
+
+                if (newPa == null)
+                    return Json(new { success = false, responseText = "Cannot find target category "+npid, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
+
+
+                if (master.Folders==null)
+                {
+                    master.Folders = new List<Folder>();
+                    await _db.SaveChangesAsync();
+                }
+
+                master.Folders.Remove(oldPa);
+                master.Folders.Add(newPa);
+                await _db.SaveChangesAsync();
+                return Json(new { success = true, responseText = master.Number+" document moved", id = Id, parentId = npid, affFolIds = new long[2] { opid, npid} }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, responseText = e.Message, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
+            }
+
+
+        }
     }
 }
