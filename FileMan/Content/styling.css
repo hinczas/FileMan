@@ -177,6 +177,31 @@ input[hidden] {
 .fa-folder {
     color: #fdd835;
 }
+
+.fa-copy {
+    color: #6b00ac;
+}
+
+.fa-file {
+    color: #607d8b;
+}
+
+.fa-cogs {
+    color: #009700;
+}
+
+.fa-tasks {
+    color: #0075d8;
+}
+
+.fa-archive {
+    color: #c40400;
+}
+
+.fa-pen-square {
+    color: #8bc34a;
+}
+
 .fa-folder-plus {
     /* Have to override font size as folder icon too small */
     font-size: 21px; 
@@ -184,9 +209,6 @@ input[hidden] {
     color: #c8b900;
 }
 .fa-file-upload {
-    color: #607d8b;
-}
-.fa-file {
     color: #607d8b;
 }
 .fa-reply {
@@ -342,6 +364,68 @@ legend {
     border-radius: 0;
 }
 
+/* navbar header */
+.navbar {
+    min-height: 74px !important;
+}
+.nav-container {
+    width:100% !important;
+    display: inline-block;
+    vertical-align:middle;
+    padding-top:12px;
+}
+.navbar-header {
+    min-width: 150px;
+    text-align: center;
+    margin-left: 0 !important;
+}
+.navbar-brand {
+    margin-left: 0 !important;
+    float: left;
+    height: 50px;
+    padding: 5px 15px !important;
+    font-size: 28px;
+    line-height: 20px;
+    font-weight: 900;
+    font-family: Nunito;
+}
+    .navbar-brand > .app-name {
+        margin-bottom: 5px !important;
+    }
+    .navbar-brand > .app-icons {
+        font-size: 8px !important;
+    }
+.nav-btn {
+    display: grid;
+    height: 50px;
+    min-width: 50px;
+    max-width: 75px;
+    padding: 5px;
+    color: #9d9d9d;
+    text-align: center;
+    font-family: "Nunito";
+}
+    .nav-btn:hover {
+        cursor: pointer;
+        color: #42a5f5 !important;
+        transform: scale(1.05);
+    }
+    .nav-btn:hover > .nav-btn-icon {
+        color: #42a5f5;
+    }
+.nav-btn-icon {
+    text-align: center;
+    font-size: 22px;
+    height: 30px;
+    vertical-align: bottom;
+    color: #9d9d9d;
+    margin-top: 0 !important;
+}
+.nav-btn-label {
+    display: table-row;
+    font-size: 12px;
+    line-height: 1;
+}
 /* Bootstrap override END */
 
 /* scroll bar */

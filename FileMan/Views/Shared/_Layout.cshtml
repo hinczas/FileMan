@@ -29,17 +29,71 @@
 <body class="modal-open">
     <div id="hideAll"></div>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
+        <div class="container nav-container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("FileMan", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <div class="navbar-brand">
+                    <div class="app-name">FileMan</div>
+                    <div class="app-icons">
+                        <div class="icons">
+                            <i class="fas fa-folder"></i>
+                            <i class="fas fa-copy"></i>
+                            <i class="fas fa-cogs"></i>
+                            <i class="fas fa-archive"></i>
+                            <i class="fas fa-tasks"></i>
+                            <i class="fas fa-file"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
             <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <div class="nav-btn">
+                            <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
+                            <span class="nav-btn-label">back</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-btn">
+                            <i class="fas fa-file-medical nav-btn-icon"></i>
+                            <span class="nav-btn-label">doc</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-btn">
+                            <i class="fas fa-folder-plus nav-btn-icon"></i>
+                            <span class="nav-btn-label">cat</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nav-btn">
+                            <i class="fas fa-upload nav-btn-icon"></i>
+                            <span class="nav-btn-label">import</span>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <div class="nav-btn" type="button" data-toggle="dropdown">
+                            <i class="fas fa-cog nav-btn-icon"></i>
+                            <span class="nav-btn-label">tools</span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li><span class="dis">Move</span></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+                            @if (!Model.Current.IsRoot)
+                            {
+                                <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                            }
+                            <li role="separator" class="divider"></li>
+                            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
+                        </ul>
+                    </li>
+                </ul>
+
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm", @class = "navbar-form navbar-right" }))
                 {
                     @Html.AntiForgeryToken()
