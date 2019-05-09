@@ -53,6 +53,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
+                        <div class="nav-btn" onclick="goToFolder()">
+                            <i class="fas fa-home nav-btn-icon"></i>
+                            <span class="nav-btn-label">home</span>
+                        </div>
+                    </li>
+                    <li>
                         <div class="nav-btn">
                             <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
                             <span class="nav-btn-label">back</span>
@@ -86,7 +92,7 @@
                             <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
                             @if (!Model.Current.IsRoot)
                             {
-                                <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                                <li><span func="deleteCategory(@Model.Current.Id, true)" class="del" title="Delete category" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Delete</span></li>
                             }
                             <li role="separator" class="divider"></li>
                             <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
@@ -198,6 +204,8 @@
         $(document)
             .ready(function () {
                 //EraseUrl();
+
+                $("#delSpan").off('onclick');
 
                 var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
                 var folId = "@Url.RequestContext.RouteData.Values["id"]";

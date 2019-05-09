@@ -1,12 +1,19 @@
 ﻿//// 
 //// Listeners
 ////
+window.onerror = function (message, url, lineNumber) {
+    ftError(message);
+    return true;
+};  
 
 $(document)
     .ajaxStart(function () {
         $('#workingDiv').show();
         var n = _getCurrentTime();
         $('#ft-ajax').html("<p>" + n + " - Ajax START</p>");
+    })
+    .ajaxError(function (event, jqxhr, settings, thrownError) {
+        ftError(thrownError);
     })
     .ajaxStop(function () {
         $('#workingDiv').hide();
@@ -73,3 +80,18 @@ $(function () {
     });
 });
 
+//$(".del").mouseenter(function () {
+//    var that = this;
+//    timer = setTimeout(function () {
+//        $(that).css('cursor', 'pointer');
+//        $(that).on('click', function () {
+//            var func = $(that).attr("func");
+
+//            var x = eval(func);
+//        });
+//    }, 2000);
+//}).mouseleave(function () {
+//    $(".del").off('click');
+//    $(".del").css('cursor', 'not-allowed');
+//    clearTimeout(timer);
+//});

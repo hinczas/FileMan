@@ -32,6 +32,7 @@ namespace FileMan.Context
                         .HasOptional(c => c.Parent)
                         .WithMany(r => r.Children)
                         .HasForeignKey(c => c.Pid);
+
         }
     }
 }

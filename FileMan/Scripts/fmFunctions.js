@@ -1,6 +1,9 @@
 ﻿////
 //// AJAX calls
 ////
+var timer;
+
+
 function mainSearch(_form) {
     var link = "/Home/TreeIndex/";
     var dt = $(_form).serialize();
@@ -62,7 +65,11 @@ function goToFolder(id, redirect = true) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
             if (redirect) {
-                activateNode(id);
+                if (id == null) {
+                    deselectTree();
+                } else {
+                    activateNode(id);
+                }
                 ChangeUrl("Index", link);
             }
         }
@@ -543,6 +550,9 @@ function addNode(pid, id, name) {
     $('#jstree_div').jstree('open_node', parent);
 }
 
+function deselectTree() {
+    $('#jstree_div').jstree("deselect_all");
+}
 
 $('#jstree_div').on("move_node.jstree", function (e, data) {
 
@@ -688,3 +698,22 @@ function handleDragEnter(e) {
 function handleDragLeave(e) {
     this.classList.remove('over');
 }
+
+function mouseEnterHandler(e) {
+    var that = e;
+    timer = setTimeout(function () {
+        $(that).css('cursor', 'pointer');
+        $(that).on('click', function () {
+            var func = $(that).attr("func");
+
+            var x = eval(func);
+        });
+    }, 2000);
+}
+
+function mouseLeaveHandler(e) {
+    $(e).off('click');
+    $(e).css('cursor', 'not-allowed');
+    clearTimeout(timer);
+}
+

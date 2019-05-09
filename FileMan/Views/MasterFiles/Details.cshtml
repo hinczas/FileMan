@@ -74,7 +74,7 @@
                         @if (Model.Current.Folders != null && Model.Current.Folders.Count() != 0)
                         {
                             <li>
-                                <span onclick="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del">Uncategorise</span>
+                                <span func="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Uncategorise</span>
                             </li>
                         }
                     </ul>

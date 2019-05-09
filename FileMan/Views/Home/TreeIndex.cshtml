@@ -60,7 +60,7 @@
                             <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
                             @if (!Model.Current.IsRoot)
                             {
-                                <li><span class="del" onclick="deleteCategory(@Model.Current.Id, true)" title="Delete category">Delete</span></li>
+                                <li><span func="deleteCategory(@Model.Current.Id, true)" class="del" title="Delete category" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Delete</span></li>
                             }
                             <li role="separator" class="divider"></li>
                             <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
@@ -193,7 +193,7 @@
     <table class="table table-condensed table-hover">
         <thead class="thead-dark">
             <tr>
-                <th scope="col"></th>
+                <th style="width:25px;" scope="col"></th>
                 <th scope="col">Number</th>
                 <th scope="col">Name</th>
                 <th scope="col">Ver</th>

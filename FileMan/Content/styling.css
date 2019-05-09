@@ -458,12 +458,16 @@ legend {
 }
 .del {
     font-weight: 500;
-    cursor: pointer;
+    cursor: not-allowed;
+    background: linear-gradient(to right, #c40400 50%, white 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
 }
-.del:hover {
-    color:white;
-    background-color:darkred;
-}
+    .del:hover {
+        color: white;
+        background-position: left bottom;
+        transition: all 2s linear;
+    }
 .nor:hover {
     background-color: #e0e0e0;
     cursor: pointer;
