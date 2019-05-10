@@ -1,4 +1,4 @@
-﻿using FileMan.Models;
+﻿using Raf.FileMan.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace FileMan.Context
+namespace Raf.FileMan.Context
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -45,6 +45,5 @@ namespace FileMan.Context
             base.OnModelCreating(modelBuilder);
 
         }
-
     }
 }

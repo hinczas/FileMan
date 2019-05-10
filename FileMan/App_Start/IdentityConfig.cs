@@ -10,11 +10,11 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using FileMan.Models;
-using FileMan.Context;
+using Raf.FileMan.Models;
+using Raf.FileMan.Context;
 
 
-namespace FileMan
+namespace Raf.FileMan
 {
     public class EmailService : IIdentityMessageService
     {

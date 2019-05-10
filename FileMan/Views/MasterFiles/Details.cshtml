@@ -1,4 +1,4 @@
-﻿@model FileMan.Models.ViewModels.MasterFileViewModel
+﻿@model Raf.FileMan.Models.ViewModels.MasterFileViewModel
 
 <style>
     .row {
@@ -85,6 +85,10 @@
             <thead>
             </thead>
             <tbody>
+                <tr>
+                    <td class="td-head" align="right">Author</td>
+                    <td class="td-value"><span style="white-space: pre-line">@Model.Author</span> </td>
+                </tr>
                 <tr>
                     <td class="td-head" align="right">Description</td>
                     <td class="td-value"><span style="white-space: pre-line">@Model.Current.Description</span> </td>

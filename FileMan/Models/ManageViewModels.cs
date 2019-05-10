@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace FileMan.Models
+namespace Raf.FileMan.Models
 {
     public class IndexViewModel
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(FileMan.Startup))]
-namespace FileMan
+[assembly: OwinStartupAttribute(typeof(Raf.FileMan.Startup))]
+namespace Raf.FileMan
 {
     public partial class Startup
     {

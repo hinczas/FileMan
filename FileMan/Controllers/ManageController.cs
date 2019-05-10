@@ -6,13 +6,13 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using FileMan.Models;
-using FileMan.Context;
+using Raf.FileMan.Models;
+using Raf.FileMan.Context;
 
 using System.Data.Entity;
-using FileMan.Classes;
+using Raf.FileMan.Classes;
 
-namespace FileMan.Controllers
+namespace Raf.FileMan.Controllers
 {
     [Authorize]
     public class ManageController : Controller

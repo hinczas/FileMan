@@ -1,7 +1,7 @@
-﻿using FileMan.Classes;
+﻿using Raf.FileMan.Classes;
 
-using FileMan.Models;
-using FileMan.Models.ViewModels;
+using Raf.FileMan.Models;
+using Raf.FileMan.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Newtonsoft.Json;
@@ -12,10 +12,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using FileMan.Context;
+using Raf.FileMan.Context;
 
 
-namespace FileMan.Controllers
+namespace Raf.FileMan.Controllers
 {
     [Authorize]
     public class FoldersController : Controller
@@ -53,8 +53,10 @@ namespace FileMan.Controllers
                 var clean = names.Where(a => !string.IsNullOrEmpty(a.Trim())).Select(s => s.Trim()).Distinct().ToList();
                 var currentFolders = _db.Folder.Where(a => a.Pid == item.Pid).Select(b => b.Name.Trim().ToLower()).ToList();
 
+                string userId = User.Identity.GetUserId();
+                var user = _db.Users.Find(userId);
 
-                foreach(string n in clean)
+                foreach (string n in clean)
                 {
                     string name = n.Trim();
 
@@ -81,6 +83,7 @@ namespace FileMan.Controllers
                     item.Path = path;
                     item.Added = added;
                     item.Changelog = changelog;
+                    item.User = user;
 
                     _db.Folder.Add(item);
                     _db.SaveChanges();

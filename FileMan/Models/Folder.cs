@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace FileMan.Models
+namespace Raf.FileMan.Models
 {
     [Table("Folder")]
     public class Folder

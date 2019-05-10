@@ -1,7 +1,7 @@
-﻿using FileMan.Classes;
+﻿using Raf.FileMan.Classes;
 
-using FileMan.Models;
-using FileMan.Models.ViewModels;
+using Raf.FileMan.Models;
+using Raf.FileMan.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using FileMan.Context;
+using Raf.FileMan.Context;
 
-namespace FileMan.Controllers
+namespace Raf.FileMan.Controllers
 {
     [Authorize]
     public class MasterFilesController : Controller
@@ -62,10 +62,13 @@ namespace FileMan.Controllers
 
                 var added = DateTime.Now;
                 var changelog = string.Format("{0} - Item created \n", added);
-
+                
+                string userId = User.Identity.GetUserId();
+                var user = _db.Users.Find(userId);
 
                 item.Added = added;
                 item.Changelog = changelog;
+                item.User = user;
                 _db.MasterFile.Add(item);
                 _db.SaveChanges();
 

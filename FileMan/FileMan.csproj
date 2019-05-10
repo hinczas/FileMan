@@ -14,7 +14,7 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileMan</RootNamespace>
+    <RootNamespace>Raf.FileMan</RootNamespace>
     <AssemblyName>FileMan</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
@@ -237,73 +237,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201811271526372_initUsers.cs" />
-    <Compile Include="Migrations\201811271526372_initUsers.Designer.cs">
-      <DependentUpon>201811271526372_initUsers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811271527438_initItems.cs" />
-    <Compile Include="Migrations\201811271527438_initItems.Designer.cs">
-      <DependentUpon>201811271527438_initItems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811281115583_cascade.cs" />
-    <Compile Include="Migrations\201811281115583_cascade.Designer.cs">
-      <DependentUpon>201811281115583_cascade.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811290856193_newModels.cs" />
-    <Compile Include="Migrations\201811290856193_newModels.Designer.cs">
-      <DependentUpon>201811290856193_newModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201811290907192_deleteItems.cs" />
-    <Compile Include="Migrations\201811290907192_deleteItems.Designer.cs">
-      <DependentUpon>201811290907192_deleteItems.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812030905366_revComment.cs" />
-    <Compile Include="Migrations\201812030905366_revComment.Designer.cs">
-      <DependentUpon>201812030905366_revComment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812031140104_issueDraft.cs" />
-    <Compile Include="Migrations\201812031140104_issueDraft.Designer.cs">
-      <DependentUpon>201812031140104_issueDraft.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812050832596_revisionType.cs" />
-    <Compile Include="Migrations\201812050832596_revisionType.Designer.cs">
-      <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812051323392_fileFolderMultiRel.cs" />
-    <Compile Include="Migrations\201812051323392_fileFolderMultiRel.Designer.cs">
-      <DependentUpon>201812051323392_fileFolderMultiRel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812070948080_fileExtension.cs" />
-    <Compile Include="Migrations\201812070948080_fileExtension.Designer.cs">
-      <DependentUpon>201812070948080_fileExtension.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812101014041_settingsForUser.cs" />
-    <Compile Include="Migrations\201812101014041_settingsForUser.Designer.cs">
-      <DependentUpon>201812101014041_settingsForUser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812101037052_linkSettings.cs" />
-    <Compile Include="Migrations\201812101037052_linkSettings.Designer.cs">
-      <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812090848212_fileIcon.cs" />
-    <Compile Include="Migrations\201812090848212_fileIcon.Designer.cs">
-      <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812110846397_pendingOnes.cs" />
-    <Compile Include="Migrations\201812110846397_pendingOnes.Designer.cs">
-      <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812111446592_md5Sum.cs" />
-    <Compile Include="Migrations\201812111446592_md5Sum.Designer.cs">
-      <DependentUpon>201812111446592_md5Sum.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812120900208_useDocuViewerSett.cs" />
-    <Compile Include="Migrations\201812120900208_useDocuViewerSett.Designer.cs">
-      <DependentUpon>201812120900208_useDocuViewerSett.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812120915113_userDetails.cs" />
-    <Compile Include="Migrations\201812120915113_userDetails.Designer.cs">
-      <DependentUpon>201812120915113_userDetails.cs</DependentUpon>
+    <Compile Include="Migrations\201905101110057_init.cs" />
+    <Compile Include="Migrations\201905101110057_init.Designer.cs">
+      <DependentUpon>201905101110057_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -473,24 +409,6 @@
     <Content Include="Content\styling.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="GdPicture.NET.14.filters.64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GdPicture.NET.14.filters.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GdPicture.NET.14.image.gdimgplug.64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GdPicture.NET.14.image.gdimgplug.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GdPicture.NET.14.jbig2.encoder.64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="GdPicture.NET.14.jbig2.encoder.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="ApplicationInsights.config">
@@ -558,7 +476,6 @@
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login_old.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -609,60 +526,12 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811271526372_initUsers.resx">
-      <DependentUpon>201811271526372_initUsers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811271527438_initItems.resx">
-      <DependentUpon>201811271527438_initItems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811281115583_cascade.resx">
-      <DependentUpon>201811281115583_cascade.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811290856193_newModels.resx">
-      <DependentUpon>201811290856193_newModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201811290907192_deleteItems.resx">
-      <DependentUpon>201811290907192_deleteItems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812030905366_revComment.resx">
-      <DependentUpon>201812030905366_revComment.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812031140104_issueDraft.resx">
-      <DependentUpon>201812031140104_issueDraft.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812050832596_revisionType.resx">
-      <DependentUpon>201812050832596_revisionType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812051323392_fileFolderMultiRel.resx">
-      <DependentUpon>201812051323392_fileFolderMultiRel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812070948080_fileExtension.resx">
-      <DependentUpon>201812070948080_fileExtension.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812101014041_settingsForUser.resx">
-      <DependentUpon>201812101014041_settingsForUser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812101037052_linkSettings.resx">
-      <DependentUpon>201812101037052_linkSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812090848212_fileIcon.resx">
-      <DependentUpon>201812090848212_fileIcon.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812110846397_pendingOnes.resx">
-      <DependentUpon>201812110846397_pendingOnes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812111446592_md5Sum.resx">
-      <DependentUpon>201812111446592_md5Sum.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812120900208_useDocuViewerSett.resx">
-      <DependentUpon>201812120900208_useDocuViewerSett.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812120915113_userDetails.resx">
-      <DependentUpon>201812120915113_userDetails.cs</DependentUpon>
-    </EmbeddedResource>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <EmbeddedResource Include="Migrations\201905101110057_init.resx">
+      <DependentUpon>201905101110057_init.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

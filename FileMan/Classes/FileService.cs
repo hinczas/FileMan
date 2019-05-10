@@ -1,4 +1,4 @@
-﻿using FileMan.Models;
+﻿using Raf.FileMan.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FileMan.Classes
+namespace Raf.FileMan.Classes
 {
     public class FileService
     {

@@ -5,11 +5,11 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
-using FileMan.Models;
-using FileMan.Context;
+using Raf.FileMan.Models;
+using Raf.FileMan.Context;
 
 
-namespace FileMan
+namespace Raf.FileMan
 {
     public partial class Startup
     {

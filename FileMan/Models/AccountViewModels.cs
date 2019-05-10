@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace FileMan.Models
+namespace Raf.FileMan.Models
 {
     public class ExternalLoginConfirmationViewModel
     {

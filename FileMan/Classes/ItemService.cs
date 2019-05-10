@@ -1,5 +1,5 @@
-﻿using FileMan.Models;
-using FileMan.Models.ViewModels;
+﻿using Raf.FileMan.Models;
+using Raf.FileMan.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,9 +11,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
-using FileMan.Context;
+using Raf.FileMan.Context;
 
-namespace FileMan.Classes
+namespace Raf.FileMan.Classes
 {
     public class ItemService
     {
@@ -101,7 +101,8 @@ namespace FileMan.Classes
                 LatestIssue = lIssue,
                 FolderList = foldersList,
                 Promote = promote,
-                ShowChangelog = changelog
+                ShowChangelog = changelog,
+                Author = string.Format("{0}, {1}", item.User.Surname, item.User.FirstName)
             };
                                  
             Folder par;
@@ -167,7 +168,7 @@ namespace FileMan.Classes
             var childrenDir = chilDrs.Count() > 0 ? chilDrs.OrderBy(a=>a.Name).ToList() : new List<Folder>();
 
             var chilFls = item.Files;
-            var childrenFil = chilFls.Count() > 0 ? chilFls.OrderBy(a => a.Name).ToList() : new List<MasterFile>();
+            var childrenFil = chilFls !=null && chilFls.Count() > 0 ? chilFls.OrderBy(a => a.Name).ToList() : new List<MasterFile>();
 
             var uns = _db.MasterFile.Where(a => a.Folders.Count == 0);
             var unassigned = uns.Count() > 0 ? uns.ToList() : new List<MasterFile>();
@@ -278,9 +279,10 @@ namespace FileMan.Classes
             return ivm;
         }
 
-        public long CreateRoot()
+        public long CreateRoot(string userId)
         {
             string path = ConfigurationManager.AppSettings["ROOT_DIR"];
+            var user = _db.Users.Find(userId);
             Directory.CreateDirectory(path);
             Folder item = new Folder()
             {
@@ -288,7 +290,8 @@ namespace FileMan.Classes
                 Type= "root",
                 Path = path,
                 Description = "Root directory",
-                Added = DateTime.Now
+                Added = DateTime.Now,
+                User = user
             };
             _db.Folder.Add(item);
             _db.SaveChanges();

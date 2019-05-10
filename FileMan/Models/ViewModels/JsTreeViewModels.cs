@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FileMan.Models.ViewModels
+namespace Raf.FileMan.Models.ViewModels
 {
     public class JSTNode
     {

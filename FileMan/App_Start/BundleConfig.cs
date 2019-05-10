@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace FileMan
+namespace Raf.FileMan
 {
     public class BundleConfig
     {

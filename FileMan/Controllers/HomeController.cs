@@ -1,7 +1,7 @@
-﻿using FileMan.Classes;
+﻿using Raf.FileMan.Classes;
 
-using FileMan.Models;
-using FileMan.Models.ViewModels;
+using Raf.FileMan.Models;
+using Raf.FileMan.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using FileMan.Context;
+using Raf.FileMan.Context;
 
-namespace FileMan.Controllers
+namespace Raf.FileMan.Controllers
 {
     [Authorize]
     public class HomeController : Controller
@@ -39,7 +39,7 @@ namespace FileMan.Controllers
             {
                 if (items == 0)
                 {
-                    long newId = _is.CreateRoot();
+                    long newId = _is.CreateRoot(userId);
                     ivm = _is.GetItemViewModel(newId, userId);
 
                 }
@@ -73,7 +73,7 @@ namespace FileMan.Controllers
             {
                 if (items == 0)
                 {
-                    long newId = _is.CreateRoot();
+                    long newId = _is.CreateRoot(userId);
                     ivm = _is.GetItemViewModel(newId, userId);
 
                 }

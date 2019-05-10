@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Web.UI;
 using System.Web.WebPages;
 
-namespace FileMan.Models.ViewModels
+namespace Raf.FileMan.Models.ViewModels
 {
 
     public class ItemViewModel

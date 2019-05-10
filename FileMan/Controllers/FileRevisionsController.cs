@@ -1,6 +1,6 @@
-﻿using FileMan.Classes;
+﻿using Raf.FileMan.Classes;
 
-using FileMan.Models;
+using Raf.FileMan.Models;
 using Microsoft.AspNet.Identity;
 using MimeTypes;
 using System;
@@ -10,9 +10,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
-using FileMan.Context;
+using Raf.FileMan.Context;
 
-namespace FileMan.Controllers
+namespace Raf.FileMan.Controllers
 {
     [Authorize]
     public class FileRevisionsController : Controller
