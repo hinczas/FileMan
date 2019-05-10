@@ -29,13 +29,33 @@ namespace Raf.FileMan.Classes
         /// </summary>
         /// <param name="id">Current directory ID</param>
         /// <returns>List<Item> - list of all parent direcotries</returns>
-        private List<Folder> GetBreadcrumbs(long id)
+        private List<BreadItem> GetBreadcrumbs(long id)
         {
             var item = _db.Folder.Find(id);
-            List<Folder> bc = new List<Folder>();
-            while (item.Parent != null)
+            List<BreadItem> bc = new List<BreadItem>();
+            while (item != null)
             {
-                bc.Add(item.Parent);
+                var br = new BreadItem()
+                {
+                    Name = item.Name,
+                    Id = item.Id,
+                    HasChildren = false,
+                    Current = id == item.Id
+                };
+
+                if (item.Children != null && item.Children.Count > 0)
+                {
+                    var tmp = item.Children.OrderBy(o => o.Name).Select(a => new BreadItem()
+                    {
+                        Name = a.Name,
+                        Id = a.Id
+                    })
+                    .ToList();
+                    br.HasChildren = true;
+                    br.Children = tmp;
+                }
+                bc.Add(br);
+
                 item = item.Parent;
             }
             return bc;

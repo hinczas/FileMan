@@ -5,29 +5,38 @@
     ViewBag.Title = "Home Page";
 }
 
-@if (TempData["Error"] != null)
-{
-    if ((bool)TempData["Error"])
-    {
-        <div class="col-sm-12">
-            <div class="alert alert-danger alert-dismissible" role="alert" style="margin:0px 0px 10px 0px; padding:8px 15px 8px 15px;">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin-right:21px;"><span aria-hidden="true">&times;</span></button>
-                <strong>Warning!</strong> @TempData["Message"]
-            </div>
-        </div>
-    }
-}
 <input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
-    <ol class="breadcrumb" style="margin-bottom:10px;">
+    <ol class="breadcrumbz">
         @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
         {
             for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
             {
-                <li style="cursor:pointer; color:royalblue;" title="@Model.Breadcrumbs.ElementAt(i).Name" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</li>
+                <li class="btn-group btn-group-sm bread-btn-grp">
+                    @if (!@Model.Breadcrumbs.ElementAt(i).Current)
+                    {
+                        <button type="button" class="btn" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn" >@Model.Breadcrumbs.ElementAt(i).Name</button>
+                    }
+                    @if (Model.Breadcrumbs.ElementAt(i).HasChildren)
+                    {
+                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-caret-right"></i>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-left">
+                            @foreach (var ch in Model.Breadcrumbs.ElementAt(i).Children)
+                            {
+                                <li><span class="nor nor-sm" onclick="goToFolder(@ch.Id)"><i class="fas fa-folder"></i> @ch.Name</span></li>
+                            }
+                        </ul>
+                    }
+                </li>
             }
         }
-        <li class="active">@Model.Current.Name</li>
     </ol>
 </div>
 

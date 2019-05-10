@@ -15,11 +15,20 @@ namespace Raf.FileMan.Models.ViewModels
         public Folder Current { get; set; }
         public List<Folder> ChildrenDirs { get; set; }
         public List<MasterFile> ChildrenFiles { get; set; }
-        public List<Folder> Breadcrumbs { get; set; }
+        public List<BreadItem> Breadcrumbs { get; set; }
         public List<MasterFile> UnassignedFiles { get; set; }
 
         public List<FolderPartialViewModel> FolderList { get; set; }
         public bool Error { get; set; }
         public string ErrorMessage { get; set; }
+    }
+
+    public class BreadItem
+    {
+        public string Name { get; set; }
+        public long Id { get; set; }
+        public bool HasChildren { get; set; }
+        public bool Current { get; set; }
+        public List<BreadItem> Children { get; set; }
     }
 }
