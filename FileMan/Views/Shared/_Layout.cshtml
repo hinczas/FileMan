@@ -90,10 +90,10 @@
                         <ul class="dropdown-menu">
                             <li><span class="dis">Move</span></li>
                             <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                            @if (!Model.Current.IsRoot)
+                            @*@if (!Model.Current.IsRoot)
                             {
                                 <li><span func="deleteCategory(@Model.Current.Id, true)" class="del" title="Delete category" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Delete</span></li>
-                            }
+                            }*@
                             <li role="separator" class="divider"></li>
                             <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
                         </ul>
