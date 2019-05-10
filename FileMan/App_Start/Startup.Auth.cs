@@ -8,6 +8,7 @@ using Owin;
 using FileMan.Models;
 using FileMan.Context;
 
+
 namespace FileMan
 {
     public partial class Startup
@@ -16,7 +17,7 @@ namespace FileMan
         public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(AppDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

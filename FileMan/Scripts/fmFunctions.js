@@ -692,11 +692,12 @@ function drop(ev) {
 }
 
 function handleDragEnter(e) {
-    this.classList.add('over');       
+    this.classList.add('over');  
 }
 
 function handleDragLeave(e) {
     this.classList.remove('over');
+    clearTimeout(timer);
 }
 
 function mouseEnterHandler(e) {
@@ -716,4 +717,3 @@ function mouseLeaveHandler(e) {
     $(e).css('cursor', 'not-allowed');
     clearTimeout(timer);
 }
-

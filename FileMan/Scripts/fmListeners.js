@@ -38,8 +38,6 @@ $(function () {
     });
 
     $('#jstree_div').on("activate_node.jstree", function (e, data) {
-        //window.location.href = data.node.a_attr.href;
-
         var link = data.node.a_attr.href;
         $.ajax({
             type: "get",
@@ -79,19 +77,3 @@ $(function () {
         col.addEventListener('dragleave', handleDragLeave, false);
     });
 });
-
-//$(".del").mouseenter(function () {
-//    var that = this;
-//    timer = setTimeout(function () {
-//        $(that).css('cursor', 'pointer');
-//        $(that).on('click', function () {
-//            var func = $(that).attr("func");
-
-//            var x = eval(func);
-//        });
-//    }, 2000);
-//}).mouseleave(function () {
-//    $(".del").off('click');
-//    $(".del").css('cursor', 'not-allowed');
-//    clearTimeout(timer);
-//});

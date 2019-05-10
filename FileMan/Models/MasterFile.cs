@@ -26,6 +26,8 @@ namespace FileMan.Models
         public DateTime? Edited { get; set; }
         public long? Issue { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
+
         public virtual List<Folder> Folders { get; set; }
         public virtual List<FileRevision> Revisions { get; set; }
 

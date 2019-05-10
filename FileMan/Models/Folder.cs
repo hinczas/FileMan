@@ -25,6 +25,8 @@ namespace FileMan.Models
         public DateTime? Added { get; set; }
         public DateTime? Edited { get; set; }
 
+        public virtual ApplicationUser User { get; set; }
+
         public virtual List<MasterFile> Files { get; set; }
         public virtual List<Folder> Children { get; set; }
 

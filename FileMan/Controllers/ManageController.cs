@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using FileMan.Models;
 using FileMan.Context;
+
 using System.Data.Entity;
 using FileMan.Classes;
 
@@ -239,7 +240,7 @@ namespace FileMan.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SaveSettings(long Id, UserSetting Settings)
         {
-            DatabaseCtx _db = new DatabaseCtx();
+            AppDbContext _db = new AppDbContext();
             UserSetting settings = _db.UserSetting.Find(Id);
             if (settings!=null)
             {

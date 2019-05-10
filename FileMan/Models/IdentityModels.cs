@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -19,6 +20,9 @@ namespace FileMan.Models
         public string FirstName { get; set; }
         public string Surname { get; set; }
 
+        public virtual ICollection<Folder> Categories { get; set; }
+        public virtual ICollection<MasterFile> Documents { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -26,18 +30,5 @@ namespace FileMan.Models
             // Add custom user claims here
             return userIdentity;
         }
-    }
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
-        {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
-    }
+    }    
 }

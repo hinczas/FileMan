@@ -1,5 +1,4 @@
-﻿using FileMan.Context;
-using FileMan.Models;
+﻿using FileMan.Models;
 using FileMan.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,16 +11,17 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using FileMan.Context;
 
 namespace FileMan.Classes
 {
     public class ItemService
     {
-        private DatabaseCtx _db;
+        private AppDbContext _db;
 
         public ItemService()
         {
-            _db = new DatabaseCtx();
+            _db = new AppDbContext();
         }
 
         /// <summary>
@@ -496,7 +496,7 @@ namespace FileMan.Classes
 
         public ApplicationUser GetASPUser(string userId)
         {
-            ApplicationDbContext adb = new ApplicationDbContext();
+            AppDbContext adb = new AppDbContext();
             return adb.Users.Find(userId);
         }
 

@@ -1,5 +1,5 @@
 ﻿using FileMan.Classes;
-using FileMan.Context;
+
 using FileMan.Models;
 using Microsoft.AspNet.Identity;
 using MimeTypes;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
+using FileMan.Context;
 
 namespace FileMan.Controllers
 {
@@ -18,12 +19,12 @@ namespace FileMan.Controllers
     {
         // GET: MasterFiles
         private ItemService _is;
-        private DatabaseCtx _db;
+        private AppDbContext _db;
 
         public FileRevisionsController()
         {
             _is = new ItemService();
-            _db = new DatabaseCtx();
+            _db = new AppDbContext();
         }
 
         public ActionResult FileAction(long[] revisions, string action)

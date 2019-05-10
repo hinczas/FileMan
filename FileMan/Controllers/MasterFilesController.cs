@@ -1,5 +1,5 @@
 ﻿using FileMan.Classes;
-using FileMan.Context;
+
 using FileMan.Models;
 using FileMan.Models.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using FileMan.Context;
 
 namespace FileMan.Controllers
 {
@@ -19,12 +20,12 @@ namespace FileMan.Controllers
     {
         // GET: MasterFiles
         private ItemService _is;
-        private DatabaseCtx _db;
+        private AppDbContext _db;
 
         public MasterFilesController()
         {
             _is = new ItemService();
-            _db = new DatabaseCtx();
+            _db = new AppDbContext();
         }
 
         // GET: MasterFiles/Details/5

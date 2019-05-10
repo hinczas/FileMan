@@ -1,5 +1,5 @@
 ﻿using FileMan.Classes;
-using FileMan.Context;
+
 using FileMan.Models;
 using FileMan.Models.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using FileMan.Context;
 
 
 namespace FileMan.Controllers
@@ -20,13 +21,13 @@ namespace FileMan.Controllers
     public class FoldersController : Controller
     {
         private ItemService _is;
-        private DatabaseCtx _db;
+        private AppDbContext _db;
         private ApplicationUserManager _userManager;
 
         public FoldersController()
         {
             _is = new ItemService();
-            _db = new DatabaseCtx();
+            _db = new AppDbContext();
         }
 
         public ApplicationUserManager UserManager
