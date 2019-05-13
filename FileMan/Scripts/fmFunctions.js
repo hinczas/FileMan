@@ -395,6 +395,25 @@ function promote(_form) {
     });
 }
 
+function editDraft(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/FileRevisions/EditDraftCommentAsync/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#editRevModal');
+                goToFile(response.id, response.parentId);
+                ftInfo(response.responseText);
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
 function addTableRow(id) {
     var link = "/Home/GetDocTable/" + id;
     $.ajax({

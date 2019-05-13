@@ -16,6 +16,7 @@ namespace Raf.FileMan.Models.ViewModels
         public List<Folder> Breadcrumbs { get; set; }
         public long LatestRevision { get; set; }
         public long LatestRevisionId { get; set; }
+        public string LatestRevisionComm { get; set; }
         public int RevisionsCount { get; set; }
         public string RevisionName { get; set; }
         public string DraftVersion { get; set; }
@@ -29,6 +30,7 @@ namespace Raf.FileMan.Models.ViewModels
         public string RedirectFun { get; set; }
         public string Author { get; set; }
         public bool Locked { get; set; }
+        public string LockedBy { get; set; }
         public bool Lockable { get; set; }
     }
 }

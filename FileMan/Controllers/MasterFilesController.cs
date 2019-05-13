@@ -133,15 +133,18 @@ namespace Raf.FileMan.Controllers
             if (!item.Locked && !isLocked)
                 return Json(new { success = false, responseText = "Document already unlocked" }, JsonRequestBehavior.AllowGet);
 
+            var date = DateTime.Now;
             if (isLocked)
             {
                 item.UserLock = userId;
+                item.Changelog = item.Changelog + string.Format("{0} - Document locked by {1}, {2} \n", date, user.Surname, user.FirstName);
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, responseText = string.Format("{0} locked by {1}, {2}", item.Number, user.Surname, user.FirstName) }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 item.UserLock = null;
+                item.Changelog = item.Changelog + string.Format("{0} - Document unlocked by {1}, {2} \n", date, user.Surname, user.FirstName);
                 await _db.SaveChangesAsync();
                 return Json(new { success = true, responseText = string.Format("{0} unlocked by {1}, {2}", item.Number, user.Surname, user.FirstName) }, JsonRequestBehavior.AllowGet);
             }
@@ -150,8 +153,7 @@ namespace Raf.FileMan.Controllers
         // GET: MasterFiles/Edit/5
         public ActionResult Edit(int id, long? pid)
         {
-            var item = _db.MasterFile.Find(id);
-            if (item.Locked)
+            if (!Editable(id))
             {
                 return RedirectToAction("Details", new { id, pid });
             }
@@ -165,8 +167,7 @@ namespace Raf.FileMan.Controllers
 
         public ActionResult PartialEdit(int id, long? pid)
         {
-            var item = _db.MasterFile.Find(id);
-            if (item.Locked)
+            if (!Editable(id))
             {
                 return RedirectToAction("PartialDetails", new { id, pid });
             }
@@ -185,6 +186,9 @@ namespace Raf.FileMan.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (!Editable(item.Id))
+                    return Json(new { success = false, responseText = "Document locked by another user", id = item.Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+
                 var date = DateTime.Now;
                 MasterFile mf = _db.MasterFile.Find(item.Id);
                 mf.Name = item.Name;
@@ -207,9 +211,9 @@ namespace Raf.FileMan.Controllers
             try
             {
                 MasterFile item =await _db.MasterFile.FindAsync(id);
-                if (item.Locked)
+                if (!Editable(id))
                 {
-                    return Json(new { success = false, responseText = "Document locked by another user", parentId = folderId }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = false, responseText = "Document locked by another user", id = id, parentId = folderId }, JsonRequestBehavior.AllowGet);
                 }
 
                 if (folderId < 0)
@@ -242,7 +246,8 @@ namespace Raf.FileMan.Controllers
         public ActionResult Promote(long id, string Comment, long pid)
         {
             MasterFile item = _db.MasterFile.Find(id);
-            if (item.Locked)
+
+            if (!Editable(id))
             {
                 return Json(new { success = false, responseText = "Document locked by another user", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
             }
@@ -258,9 +263,8 @@ namespace Raf.FileMan.Controllers
                 item.Changelog = item.Changelog + string.Format("{0} - Promoted to Issue : {1} \n", DateTime.Now, issue);
                 if (!string.IsNullOrEmpty(Comment))
                 {
-                    item.Comment = item.Comment + 
-                                    "\n" + 
-                                    Comment;
+                    string comm = string.IsNullOrEmpty(item.Comment) ? Comment : item.Comment + "\n" + Comment;
+                    item.Comment = comm;
                 }
                 if (fr != null)
                 {
@@ -280,7 +284,7 @@ namespace Raf.FileMan.Controllers
         {
             try {
                 MasterFile master = _db.MasterFile.Find(Id);
-                if (master.Locked)
+                if (!Editable(Id))
                 {
                     return Json(new { success = false, responseText = "Document locked by another user", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
                 }
@@ -333,7 +337,7 @@ namespace Raf.FileMan.Controllers
                 MasterFile master = _db.MasterFile.Find(Id);
                 Folder oldPa = _db.Folder.Find(opid);
                 Folder newPa = _db.Folder.Find(npid);
-                if (master.Locked)
+                if (!Editable(Id))
                 {
                     return Json(new { success = false, responseText = "Document locked by another user", id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
                 }
@@ -365,7 +369,17 @@ namespace Raf.FileMan.Controllers
                 return Json(new { success = false, responseText = e.Message, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
             }
 
+        }
 
+        private bool Editable(long id)
+        {
+            MasterFile master = _db.MasterFile.Find(id);
+            var userId = User.Identity.GetUserId();
+            if (master.Locked && !master.UserLock.Equals(userId))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

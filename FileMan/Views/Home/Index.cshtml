@@ -40,7 +40,7 @@
     </ol>
 </div>
 
-@*<div class="row pl-30 tools-row">
+<div class="row pl-30 tools-row">
     @{
         var ss = (SessionState)Session["SessionState"];
         bool search = ss.Location.Equals("search");
@@ -79,7 +79,7 @@
             </div>
         }
     }
-</div>*@
+</div>
 
 <!-- New Category -->
 <div class="col-sm-12">
@@ -210,24 +210,30 @@
         <tbody id="mainTable">
             @foreach (MasterFile itm in Model.ChildrenFiles)
             {
-                <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
-                    <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
-                        <i class="fas fa-file"></i>
-                    </td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
-                    <td>
-                        @if (itm.Revisions != null && itm.Revisions.Count() > 0)
-                        {
-                            var draft = itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault();
-                            <a href="FileRevisions/GetFile/@draft.Id" class="complex-a">
-                                <img class="icon" src="~/Content/Images/Icons/32px/@draft.Icon" />
-                                <span>@draft.Draft</span>
-                                <i class="fas fa-angle-double-down"></i>
-                            </a>
-                        }
-                    </td>
-                </tr>
+            <tr title="@itm.Description" draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
+                <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
+                    <i class="fas fa-file"></i>
+                </td>
+                <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
+                    @itm.Number
+                    @if (itm.Locked)
+                    {
+                        <i class="fas fa-lock lock-sm" title="Locked"></i>
+                    }
+                </td>
+                <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
+                <td>
+                    @if (itm.Revisions != null && itm.Revisions.Count() > 0)
+                    {
+                        var draft = itm.Revisions.OrderByDescending(a => a.Id).Take(1).FirstOrDefault();
+                        <a href="FileRevisions/GetFile/@draft.Id" class="complex-a">
+                            <img class="icon" src="~/Content/Images/Icons/32px/@draft.Icon" />
+                            <span>@draft.Draft</span>
+                            <i class="fas fa-angle-double-down"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>
@@ -276,7 +282,13 @@
                                 {
                                     <tr draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                                            @itm.Number
+                                            @if (itm.Locked)
+                                            {
+                                                <i class="fas fa-lock lock-sm" title="Locked"></i>
+                                            }
+                                        </td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                                             @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                                             {
@@ -286,9 +298,6 @@
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
-                                        @*<td align="right">
-                                                <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
-                                            </td>*@
                                     </tr>
                                 }
                             </tbody>

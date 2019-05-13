@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Raf.FileMan.Context;
+using System.Threading.Tasks;
 
 namespace Raf.FileMan.Controllers
 {
@@ -116,6 +117,39 @@ namespace Raf.FileMan.Controllers
             return Json(new { success = false, responseText = "Invalid model", id = item.MasterFileId, parentId = pid }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditDraftCommentAsync(long id, string comment, long fid, long pid)
+        {
+            if (ModelState.IsValid)
+            {
+                var draft = await _db.FileRevision.FindAsync(id);
+                
+                if (draft != null)
+                {
+                    var parent = draft.MasterFile;
+                    if (!Editable(parent.Id))
+                    {
+                        return Json(new { success = false, responseText = "Document locked by another user", id = fid, parentId = pid }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    var date = DateTime.Now;
+
+                    draft.Comment = comment;
+                    parent.Changelog = parent.Changelog + string.Format("{0} - Draft [{1}] updated \n", date, draft.Draft);
+
+                    await _db.SaveChangesAsync();
+
+                    return Json(new { success = true, responseText = "Draft "+draft.Draft+" updated", id = fid, parentId = pid }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, responseText = "Could not find the requested revision", id = fid, parentId = pid }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { success = false, responseText = "Invalid model", id = fid, parentId = pid }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetFile(long id)
         {
             FileRevision rev = _db.FileRevision.Find(id);
@@ -125,6 +159,18 @@ namespace Raf.FileMan.Controllers
             string fileName = rev.MasterFile.Number + "-" + rev.Draft + "-" + rev.MasterFile.Name + "-" + rev.Name;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
 
+        }
+
+
+        private bool Editable(long id)
+        {
+            MasterFile master = _db.MasterFile.Find(id);
+            var userId = User.Identity.GetUserId();
+            if (master.Locked && !master.UserLock.Equals(userId))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

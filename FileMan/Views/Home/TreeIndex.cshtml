@@ -215,7 +215,13 @@
                     <td scope="row" style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
                         <i class="fas fa-file"></i>
                     </td>
-                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Number</td>
+                    <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
+                        @itm.Number
+                        @if (itm.Locked)
+                        {
+                            <i class="fas fa-lock lock-sm" title="Locked"></i>
+                        }
+                    </td>
                     <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">@itm.Name</td>
                     <td>
                         @if (itm.Revisions != null && itm.Revisions.Count() > 0)
@@ -277,7 +283,13 @@
                                 {
                                     <tr draggable="true" ondragstart="drag(event)" id="doc_@itm.Id">
                                         <td scope="row"><input type="checkbox" class="form-check-input" name="files" value=@itm.Id style="margin-top:2px;"></td>
-                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Number</td>
+                                        <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
+                                            @itm.Number
+                                            @if (itm.Locked)
+                                            {
+                                                <i class="fas fa-lock lock-sm" title="Locked"></i>
+                                            }
+                                        </td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">
                                             @if (itm.Revisions != null && itm.Revisions.Count() > 0)
                                             {
@@ -287,9 +299,6 @@
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Name</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Added</td>
                                         <td style="cursor:pointer;" onclick="goToFile(@itm.Id)">@itm.Edited</td>
-                                        @*<td align="right">
-                                                <a href="@Url.Action("Edit", "MasterFiles", new { id = itm.Id })"><i class="fas fa-pen-square"></i></a>
-                                            </td>*@
                                     </tr>
                                 }
                             </tbody>

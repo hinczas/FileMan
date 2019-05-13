@@ -84,6 +84,7 @@ namespace Raf.FileMan.Classes
             var revisions = item.Revisions;
             var latRev = revisions.Count == 0 ? 0 : revisions.Select(a => a.Revision).Max();
             var revId = revisions.Count == 0 ? 0 : revisions.OrderByDescending(a => a.Revision).Take(1).Select(b => b.Id).FirstOrDefault();
+            var revCmnt = revisions.Count == 0 ? "" : revisions.OrderByDescending(a => a.Revision).Take(1).Select(b => b.Comment).FirstOrDefault();
             var revNam = revisions.Count == 0 ? "N/A" : revisions.Where(a => a.Id == revId).FirstOrDefault().Name;
             var revCnt = revisions.Count == 0 ? 0 : revisions.Count();
 
@@ -107,6 +108,9 @@ namespace Raf.FileMan.Classes
 
             bool promote = !issue.Equals(draft) && revisions.Count() != 0;
 
+            var lockUser = _db.Users.Find(item.UserLock);
+
+            string lu = lockUser == null ? "unknown" : string.Format("{0}, {1}", lockUser.Surname, lockUser.FirstName);
 
             MasterFileViewModel file = new MasterFileViewModel()
             {
@@ -124,7 +128,9 @@ namespace Raf.FileMan.Classes
                 ShowChangelog = changelog,
                 Author = string.Format("{0}, {1}", item.User.Surname, item.User.FirstName),
                 Locked = item.Locked,
-                Lockable = !item.Locked || item.UserLock.Equals(userId)
+                LockedBy= lu,
+                Lockable = !item.Locked || item.UserLock.Equals(userId),
+                LatestRevisionComm = revCmnt
             };
                                  
             Folder par;

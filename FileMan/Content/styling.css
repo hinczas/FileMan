@@ -261,7 +261,12 @@ input[hidden] {
 .fa-lock-open {
     color: #0075d8;
 }
-
+.lock-lg {
+    vertical-align: middle;
+}
+.lock-sm {
+    font-size: 12px !important;
+}
 .info-icon-inside {
     right: 12px;
     top: 6px;
