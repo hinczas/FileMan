@@ -241,6 +241,14 @@
     <Compile Include="Migrations\201905101110057_init.Designer.cs">
       <DependentUpon>201905101110057_init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905130746141_checkOut.cs" />
+    <Compile Include="Migrations\201905130746141_checkOut.Designer.cs">
+      <DependentUpon>201905130746141_checkOut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905130753561_computedField.cs" />
+    <Compile Include="Migrations\201905130753561_computedField.Designer.cs">
+      <DependentUpon>201905130753561_computedField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\FileRevision.cs" />
@@ -531,6 +539,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201905101110057_init.resx">
       <DependentUpon>201905101110057_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905130746141_checkOut.resx">
+      <DependentUpon>201905130746141_checkOut.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905130753561_computedField.resx">
+      <DependentUpon>201905130753561_computedField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -255,6 +255,12 @@ input[hidden] {
     color: #fca020;
     margin-right: 5px;
 }
+.fa-lock {
+    color: #c40400;
+}
+.fa-lock-open {
+    color: #0075d8;
+}
 
 .info-icon-inside {
     right: 12px;
@@ -665,3 +671,8 @@ legend {
         .bread-btn-grp:hover > button:hover {
             background-color: #d1d1d1;
         }
+
+.cp-link {
+    background-color: #fff !important;
+    border: none !important;
+}

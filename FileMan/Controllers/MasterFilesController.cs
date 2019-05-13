@@ -34,7 +34,7 @@ namespace Raf.FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
-            Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
+            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id);
 
             return View(file);
         }
@@ -45,7 +45,7 @@ namespace Raf.FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
-            Session["SessionState"] = new SessionState("file", (long)pid, id, string.Empty, null, "file", id);
+            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id);
 
             return PartialView(file);
         }
@@ -109,9 +109,52 @@ namespace Raf.FileMan.Controllers
             return Json(new { success = false, responseText = "Invalid model state", parentId = FolderId }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> UserLock(long id, bool isLocked)
+        {
+            MasterFile item = await _db.MasterFile.FindAsync(id);
+
+            if (item==null)
+                return Json(new { success = false, responseText = "Cannot find specified Document" }, JsonRequestBehavior.AllowGet);
+
+            var userId = User.Identity.GetUserId();
+            var user = _db.Users.Find(userId);
+
+            if (item.Locked && !item.UserLock.Equals(userId))
+            {
+                var lUser = _db.Users.Find(item.UserLock);
+                string name = lUser == null ? "unknown" : string.Format("{0}, {1}", lUser.Surname, lUser.FirstName);
+                return Json(new { success = false, responseText = "Document locked by another user ("+name+")" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (item.Locked && isLocked)
+                return Json(new { success = false, responseText = "Document already locked out" }, JsonRequestBehavior.AllowGet);
+
+            if (!item.Locked && !isLocked)
+                return Json(new { success = false, responseText = "Document already unlocked" }, JsonRequestBehavior.AllowGet);
+
+            if (isLocked)
+            {
+                item.UserLock = userId;
+                await _db.SaveChangesAsync();
+                return Json(new { success = true, responseText = string.Format("{0} locked by {1}, {2}", item.Number, user.Surname, user.FirstName) }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                item.UserLock = null;
+                await _db.SaveChangesAsync();
+                return Json(new { success = true, responseText = string.Format("{0} unlocked by {1}, {2}", item.Number, user.Surname, user.FirstName) }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: MasterFiles/Edit/5
         public ActionResult Edit(int id, long? pid)
         {
+            var item = _db.MasterFile.Find(id);
+            if (item.Locked)
+            {
+                return RedirectToAction("Details", new { id, pid });
+            }
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
@@ -122,6 +165,11 @@ namespace Raf.FileMan.Controllers
 
         public ActionResult PartialEdit(int id, long? pid)
         {
+            var item = _db.MasterFile.Find(id);
+            if (item.Locked)
+            {
+                return RedirectToAction("PartialDetails", new { id, pid });
+            }
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
@@ -159,6 +207,11 @@ namespace Raf.FileMan.Controllers
             try
             {
                 MasterFile item =await _db.MasterFile.FindAsync(id);
+                if (item.Locked)
+                {
+                    return Json(new { success = false, responseText = "Document locked by another user", parentId = folderId }, JsonRequestBehavior.AllowGet);
+                }
+
                 if (folderId < 0)
                 {
                     var fols = item.Folders.Select(s => s.Id).ToArray();
@@ -189,6 +242,10 @@ namespace Raf.FileMan.Controllers
         public ActionResult Promote(long id, string Comment, long pid)
         {
             MasterFile item = _db.MasterFile.Find(id);
+            if (item.Locked)
+            {
+                return Json(new { success = false, responseText = "Document locked by another user", id = id, parentId = pid }, JsonRequestBehavior.AllowGet);
+            }
             if (item != null)
             {
                 long curIssue = item.Issue == null ? 0 : (long)item.Issue;
@@ -223,6 +280,11 @@ namespace Raf.FileMan.Controllers
         {
             try {
                 MasterFile master = _db.MasterFile.Find(Id);
+                if (master.Locked)
+                {
+                    return Json(new { success = false, responseText = "Document locked by another user", id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);
+                }
+
                 var assigned = master.Folders.Select(a => a.Id).ToArray();
 
                 var affected = folders==null ? assigned : assigned.Union(folders).ToArray();
@@ -263,9 +325,7 @@ namespace Raf.FileMan.Controllers
             }
             
         }
-
-
-
+               
         public async Task<ActionResult> MoveFileAsync(long Id, long opid, long npid)
         {
             try
@@ -273,6 +333,10 @@ namespace Raf.FileMan.Controllers
                 MasterFile master = _db.MasterFile.Find(Id);
                 Folder oldPa = _db.Folder.Find(opid);
                 Folder newPa = _db.Folder.Find(npid);
+                if (master.Locked)
+                {
+                    return Json(new { success = false, responseText = "Document locked by another user", id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);
+                }
 
                 if (master==null)
                     return Json(new { success = false, responseText = "Cannot find source document "+Id, id = Id, parentId = opid }, JsonRequestBehavior.AllowGet);

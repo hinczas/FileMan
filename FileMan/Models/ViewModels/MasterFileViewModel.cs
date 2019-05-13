@@ -28,5 +28,7 @@ namespace Raf.FileMan.Models.ViewModels
         public string RedirectLabel { get; set; }
         public string RedirectFun { get; set; }
         public string Author { get; set; }
+        public bool Locked { get; set; }
+        public bool Lockable { get; set; }
     }
 }

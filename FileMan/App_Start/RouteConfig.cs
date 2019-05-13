@@ -20,6 +20,12 @@ namespace Raf.FileMan
             );
 
             routes.MapRoute(
+                name: "Share",
+                url: "Share/{id}",
+                defaults: new { controller = "MasterFiles", action = "Details" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Redirect", id = UrlParameter.Optional }

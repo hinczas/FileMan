@@ -26,6 +26,18 @@ namespace Raf.FileMan.Models
         public DateTime? Edited { get; set; }
         public long? Issue { get; set; }
 
+        public string UserLock { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public bool Locked
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(UserLock);
+            }
+            private set { }
+        }
+
         public virtual ApplicationUser User { get; set; }
 
         public virtual List<Folder> Folders { get; set; }

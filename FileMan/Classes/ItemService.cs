@@ -122,7 +122,9 @@ namespace Raf.FileMan.Classes
                 FolderList = foldersList,
                 Promote = promote,
                 ShowChangelog = changelog,
-                Author = string.Format("{0}, {1}", item.User.Surname, item.User.FirstName)
+                Author = string.Format("{0}, {1}", item.User.Surname, item.User.FirstName),
+                Locked = item.Locked,
+                Lockable = !item.Locked || item.UserLock.Equals(userId)
             };
                                  
             Folder par;

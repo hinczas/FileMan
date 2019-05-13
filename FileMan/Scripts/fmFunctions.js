@@ -76,6 +76,25 @@ function goToFolder(id, redirect = true) {
     });
 }
 
+function lockDocument(id, doLock, pid) {
+    var link = "/MasterFiles/UserLock/";
+    var dt = { id: id, isLocked: doLock };
+    $.ajax({
+        type: "post",
+        url: link,
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                ftInfo(response.responseText);
+                goToFile(id, pid);
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
 function goToFile(id, pid=null) {
     var link = "/MasterFiles/PartialDetails/";
     if (pid == null) {
@@ -716,4 +735,17 @@ function mouseLeaveHandler(e) {
     $(e).off('click');
     $(e).css('cursor', 'not-allowed');
     clearTimeout(timer);
+}
+
+
+function copyToClip(element) {
+    /* Get the text field */
+    var copyText = $(element);
+
+    /* Select the text field */
+    copyText.focus();
+    copyText.select();
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
 }

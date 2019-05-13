@@ -52,30 +52,60 @@
                     <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
                 </h4>
                 <div class="dropdown pull-right">
+                    <span>
+                        @if (Model.Locked)
+                        {
+                            <i class="fas fa-lock"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-lock-open"></i>
+                        }
+                    </span>
                     <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" alt="Tools">
                         <i class="fas fa-cog"></i>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><span data-toggle="modal" data-target="#movModal" class="nor">Move</span></li>
-                        <li><span data-toggle="modal" data-target="#revModal" class="nor">Add draft</span></li>
-                        @if (Model.Promote)
+                        <li><span data-toggle="modal" data-target="#shareModal" class="nor">Share</span></li>
+                        @if (Model.Locked)
                         {
-                            <li><span data-toggle="modal" data-target="#promModal" class="nor">Promote</span></li>
+                            if (Model.Lockable)
+                            {
+                                <li>
+                                    <span onclick="lockDocument(@Model.Current.Id, false, @Model.RedirectId)" class="nor">Unlock</span>
+                                </li>
+                            }
+                            else
+                            {
+                                <li><span class="dis" title="Locked by another user">Unlock</span></li>
+                            }
                         }
                         else
                         {
-                            <li><span class="dis">Promote</span></li>
-                        }
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <span onclick="goToEditFile(@Model.Current.Id, @Model.RedirectId)" class="nor">Edit</span>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        @if (Model.Current.Folders != null && Model.Current.Folders.Count() != 0)
-                        {
+                            <li><span data-toggle="modal" data-target="#movModal" class="nor">Move</span></li>
+                            <li><span data-toggle="modal" data-target="#revModal" class="nor">Add draft</span></li>
+                            if (Model.Promote)
+                            {
+                                <li><span data-toggle="modal" data-target="#promModal" class="nor">Promote</span></li>
+                            }
+                            else
+                            {
+                                <li><span class="dis">Promote</span></li>
+                            }
+                            <li role="separator" class="divider"></li>
                             <li>
-                                <span func="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Uncategorise</span>
+                                <span onclick="goToEditFile(@Model.Current.Id, @Model.RedirectId)" class="nor">Edit</span>
                             </li>
+                            <li>
+                                <span onclick="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="nor">Lock</span>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            if (Model.Current.Folders != null && Model.Current.Folders.Count() != 0)
+                            {
+                                <li>
+                                    <span func="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Uncategorise</span>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
@@ -369,6 +399,33 @@
                     <button type="button" name="action" value="cp" class="btn btn-primary" onclick="promote('#promFileForm')">Save</button>
                 </div>
             }
+        </div>
+    </div>
+</div>
+
+<!-- Share Modal -->
+<div id="shareModal" class="modal fade" role="dialog">
+    <div class="modal-dialog  modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><i class="fas fa-share-alt"></i> Share</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Direct shareable link:</p>
+                    <div class="input-group">
+                        <input type="text" 
+                               class="form-control cp-link" 
+                               id="shareMe" 
+                               value="@(HttpContext.Current.Request.Url.Host)/share/@Model.Current.Number" 
+                               readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><i class="fas fa-clipboard" onclick="copyToClip(shareMe)" title="Click to copy link"></i></button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
         </div>
     </div>
 </div>
