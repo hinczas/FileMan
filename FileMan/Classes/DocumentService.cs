@@ -280,7 +280,7 @@ namespace Raf.FileMan.Classes
 
                     await _db.SaveChangesAsync();
 
-                    return new StatusResult(true, StatusCode.Success, master.Number + " document uncategorised");
+                    return new StatusResult(true, StatusCode.Success, master.Number + " document uncategorised", affected);
                 }
 
                 // Remove from selected categories
