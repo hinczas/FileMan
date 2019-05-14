@@ -39,8 +39,8 @@
         }
     </ol>
 </div>
-
-<div class="row pl-30 tools-row">
+<div class="col-md-12">
+    @*<div class="row pl-30 tools-row">*@
     @{
         var ss = (SessionState)Session["SessionState"];
         bool search = ss.Location.Equals("search");
@@ -114,28 +114,28 @@
         <table class="table table-condensed table-hover table-folders">
             <thead class="thead-dark">
                 <tr>
-                    <th style="width:15px;" scope="col"></th>
-                    <th style="width:200px;" scope="col"></th>
-                    <th style="width:380px; max-width:250px;" scope="col"></th>
+                    <th style="width:25px;" scope="col"></th>
+                    <th scope="col"></th>
+                    <th style="max-width:250px;" scope="col"></th>
                 </tr>
             </thead>
             <tbody id="mainTable">
                 @if (Model.Current.IsRoot)
                 {
                     <tr>
-                        <td scope="row">
+                        <td scope="row" style="width:25px;" >
                             <i class="fas fa-folder"></i>
                         </td>
-                        <td colspan="4">...</td>
+                        <td colspan="2">...</td>
                     </tr>
                 }
                 else
                 {
                     <tr ondrop="drop(event)" ondragover="allowDrop(event)" class="draggable" id="cat_@Model.Current.Parent.Id">
-                        <td style="cursor:pointer;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
+                        <td style="cursor:pointer; width:25px;" scope="row" onclick="goToFolder(@Model.Current.Pid)">
                             <i class="fas fa-reply"></i>
                         </td>
-                        <td colspan="4" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
+                        <td colspan="2" style="cursor:pointer;" onclick="goToFolder(@Model.Current.Pid)">...</td>
                     </tr>
                 }
                 @foreach (Folder itm in Model.ChildrenDirs)

@@ -178,7 +178,7 @@ namespace Raf.FileMan.Controllers
             // Move document
             var result = await _ds.MoveAsync(Id, folders);
 
-            return Json(new { success = result.Success, responseText = result.Message, id = Id, parentId = pid }, JsonRequestBehavior.AllowGet);   
+            return Json(new { success = result.Success, responseText = result.Message, id = Id, parentId = pid, affFolIds= (long[])result.ExtraData }, JsonRequestBehavior.AllowGet);   
         }
                     
         public async Task<ActionResult> MoveFileAsync(long Id, long opid, long npid)

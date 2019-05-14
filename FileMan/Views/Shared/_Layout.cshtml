@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - FileMan</title>
+    <title>FileMan</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -28,6 +28,7 @@
 </head>
 <body class="modal-open">
     <div id="hideAll"></div>
+    <!-- NAVBAR -->
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container nav-container">
             <div class="navbar-header">
@@ -50,6 +51,7 @@
                     </div>
                 </div>
             </div>
+            <!-- NAVBAR-MENU -->
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
@@ -113,7 +115,72 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    
+    <!-- SIDEBAR -->
+    <div class="main-sidebar">
+        <!-- Favs -->
+        <div class="panel panel-side panel-favs">
+            <div class="panel-heading">
+                <a href="#" data-toggle="collapse" data-target="#favs">
+                    <span class="side-icon-holder"><i class="fas fa-star"></i></span>
+                    Favourites
+                </a>
+            </div>
+            <div id="favs" class="panel-collapse collapse collapse-favs">
+                <div class="panel-body">
+                    <ol>
+                        <li>Just one</li>
+                        <li>Just two</li>
+                        <li>Just three</li>
+                        <li>Just four</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Locks -->
+        <div class="panel panel-side panel-locks">
+            <div class="panel-heading">
+                <a href="#" data-toggle="collapse" data-target="#locks">
+                    <span class="side-icon-holder"><i class="fas fa-unlock"></i></span>
+                    My locked items
+                </a>
+            </div>
+            <div id="locks" class="panel-collapse collapse collapse-favs">
+                <div class="panel-body">
+                    <ol>
+                        <li>Just one</li>
+                        <li>Just two</li>
+                        <li>Just three</li>
+                        <li>Just four</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSTree -->
+        <div class="panel panel-side panel-tree">
+            <div class="panel-heading">
+                <a href="#" data-toggle="collapse" data-target="#trees">
+                    <span class="side-icon-holder"><i class="fas fa-sitemap"></i></span>
+                    Categories
+                </a>
+                <span class="ml"><a href="javascript:refreshTree();"><i class="fas fa-sync"></i></a></span>
+                <span class="float-r mr"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
+                <span class="float-r mr"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
+            </div>
+            <div id="trees" class="panel-collapse collapse collapse-tree">
+                <div class="panel-tree">
+                    <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />
+                    <div id="jstree_div"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="body-content">
+        <!-- Loading page -->
         <div id="loadingDiv">
             <div id="load-container">
                 <h3>Loading FileMan...</h3>
@@ -131,6 +198,7 @@
                 </div>
             </div>
         </div>
+        <!-- Little working cogs -->
         <div id="workingDiv">
             <div id="work-container">
                 <b>working...</b>
@@ -140,30 +208,13 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="col-md-12">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h4 class="cus-h4">
-                                Categories
-                            </h4>
-                            <span class="float-l ml"><a href="javascript:refreshTree();"><i class="fas fa-sync"></i></a></span>
-                            <span class="float-r mr"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
-                            <span class="float-r mr"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
-                        </div>
-                        <div class="panel-tree">
-                            <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />
-                            <div id="jstree_div"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-9 sub-container">
+        <!-- Main body -->
+        <div class="row">            
+            <div class="sub-container">
                 @RenderBody()
             </div>
         </div>
-        <hr />
+
         <footer class="fixed-ft">
             <div class="ft-container">
                 <div class="ft-icon"><i class="fas fa-terminal"></i></div>

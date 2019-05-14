@@ -1,19 +1,11 @@
-﻿/*.sidenav {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 70px;
-    left: 0;
-    background-color: #424242;
-    overflow-x: hidden;
-    padding-top: 20px;
+﻿.sub-container {
+    padding-left: 250px;
+    max-width: 100%;
 }
-
-.sub-container {
-    margin-left: 160px;
-}*/
-
+.body-content {
+    min-width: 600px;
+    max-width: 1200px;
+}
 #hideAll {
     position: absolute;
     top: 0;
@@ -74,22 +66,24 @@ input[hidden] {
         outline: none;
     }
 #jstree_div {
-    max-height:726px;
+    height: 100%;
     white-space: nowrap;
     overflow-x: auto;
-    overflow-y:auto;
+    overflow-y: auto;
 }
 
 /* JsTree styling */
 .jstree-anchor {
     position: relative;
+    font-weight: 500 !important;
 }
 
     .jstree-anchor::after {
         content: attr(data_quantity);
         margin-left:5px;
         font-weight:700;
-        color: #8e002b
+        color: #8e002b;
+        font-size: 13px;
         /*position: absolute;
         top: 0px;
         left: 24px;*/
@@ -248,9 +242,9 @@ input[hidden] {
     color: #8bc34a;
     font-size: 20px;
 }
-.fa-angle-double-up, .fa-angle-double-down, .fa-sync {
-    color: white;
-}
+/*.fa-angle-double-up, .fa-angle-double-down, .fa-sync {
+    color: black;
+}*/
 .fa-exclamation-triangle {
     color: #fca020;
     margin-right: 5px;
@@ -329,7 +323,7 @@ a[type="button"] {
 }
     .panel-heading a {
         font-size: 16px;
-        font-weight: 500 !important;
+        font-weight: 500;
     }
     .panel-heading .cus-h4{
         font-size: 16px;
@@ -681,3 +675,48 @@ legend {
     background-color: #fff !important;
     border: none !important;
 }
+
+/* Main sidebar */
+.main-sidebar {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 250px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #efefef;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding: 79px 0px 0px 0px;
+    box-shadow: 0px 0px 2px 0px grey;
+}
+.panel-side {
+    background: inherit !important;
+    font-family: Nunito;
+    font-size: 14px;
+    color: #222;
+}
+    .panel-side a {
+        font-size: 14px;
+        font-weight:600;
+        color: #222;
+    }
+.panel-side > .panel-heading {
+    padding: 5px 15px;
+}
+    .panel-side > .panel-heading .fas {
+        font-size: 14px;
+    }
+.panel-side > .panel-heading:hover {
+    background: #aaa;
+}
+    .panel-side > .panel-heading span {
+        margin-top: 0px;
+    }
+    .panel-side a, .panel-side a:hover {
+        text-decoration: none;
+    }
+.side-icon-holder {
+    float: left;
+    width: 25px;
+}
+/* Main sidebar END */

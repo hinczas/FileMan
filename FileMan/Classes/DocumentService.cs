@@ -303,7 +303,7 @@ namespace Raf.FileMan.Classes
                 master.Changelog = master.Changelog + string.Format("{0} - Document category change \n", DateTime.Now);
                 await _db.SaveChangesAsync();
 
-                return new StatusResult(true, StatusCode.Success, master.Number + " document updated");
+                return new StatusResult(true, StatusCode.Success, master.Number + " document updated", affected);
             }
             catch (Exception e)
             {
