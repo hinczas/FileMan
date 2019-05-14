@@ -39,7 +39,7 @@ namespace Raf.FileMan.Controllers
         {
             FileRevision file = _db.FileRevision.Find(id);
             string userId = User.Identity.GetUserId();
-            ApplicationUser user = _is.GetASPUser(userId);
+            ApplicationUser user = _db.Users.Find(userId);
 
 
             if (file == null)

@@ -27,12 +27,21 @@ namespace Raf.FileMan.Classes
         }
         public StatusCode Status;
         public string Message;
+        public object ExtraData;
 
         public StatusResult (bool Success, StatusCode Status, string Message)
         {
             this.Success = Success;
             this.Status = Status;
             this.Message = Message;
+        }
+
+        public StatusResult(bool Success, StatusCode Status, string Message, object ExtraData)
+        {
+            this.Success = Success;
+            this.Status = Status;
+            this.Message = Message;
+            this.ExtraData = ExtraData;
         }
     }
 }

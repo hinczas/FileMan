@@ -426,35 +426,34 @@ namespace Raf.FileMan.Classes
             return _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
         }
 
-        public Folder GetFolderById(long id)
+        //public Folder GetFolderById(long id)
+        //{
+        //    return _db.Folder.Find(id);
+        //}
+
+        //public Folder GetFolderByName(string name)
+        //{
+        //    var list = _db.Folder.Where(a => a.Name.ToLower().Equals(name.ToLower())).ToList();
+        //    if (list==null || list.Count() != 1)
+        //        return null;
+
+        //    return list.First();
+        //}
+
+        //public Folder GetFolderByPath(string path)
+        //{
+        //    path = path.Replace('/', '\\');
+
+        //    var list = _db.Folder.Where(a => a.Path.ToLower().Equals(path.ToLower())).ToList();
+        //    if (list == null || list.Count() != 1)
+        //        return null;
+
+        //    return list.First();
+        //}
+
+        private ApplicationUser GetASPUser(string userId)
         {
-            return _db.Folder.Find(id);
-        }
-
-        public Folder GetFolderByName(string name)
-        {
-            var list = _db.Folder.Where(a => a.Name.ToLower().Equals(name.ToLower())).ToList();
-            if (list==null || list.Count() != 1)
-                return null;
-
-            return list.First();
-        }
-
-        public Folder GetFolderByPath(string path)
-        {
-            path = path.Replace('/', '\\');
-
-            var list = _db.Folder.Where(a => a.Path.ToLower().Equals(path.ToLower())).ToList();
-            if (list == null || list.Count() != 1)
-                return null;
-
-            return list.First();
-        }
-
-        public ApplicationUser GetASPUser(string userId)
-        {
-            AppDbContext adb = new AppDbContext();
-            return adb.Users.Find(userId);
+            return _db.Users.Find(userId);
         }
 
         public JSTNode JSTree(long id)
