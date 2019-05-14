@@ -54,7 +54,6 @@
                 <div class="btn-group btn-group-sm btn-group-tools" role="group">
                     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
                     <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
-                    <button type="button" class="btn btn-sm btn-default" id="roleFormBtn" data-toggle="collapse" href="#toolsCollapse" role="button" aria-expanded="false" aria-controls="toolsCollapse" title="Upload file"><i class="fas fa-upload"></i></button>
                 </div>
             </div>
             <div class="float-r">
@@ -100,52 +99,6 @@
                     </div>
                     <div class="col-sm-1">
                         <input type="button" value="add" class="btn btn-success btn-sm" id="submitBtn" onclick="createCategory('#catForm', '/Folders/Create/', '@Model.Current.Id')" />
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- File import buttons -->
-<div class="col-sm-12">
-    <div class="row" style="padding-top:0px;">
-        <div class="collapse" id="toolsCollapse">
-            <div class="disp-align-ver row-menu row-menu-nr">
-                @using (Html.BeginForm("ImportFiles", "Folders", FormMethod.Post, new { id = "fileForm", enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="col-sm-1">
-                        <button class="btn btn-primary btn-sm" type="button" id="fileSelect" onclick="fileSelector(this)">open</button>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">
-                                <input type="radio" name="fileType" value="doc" aria-label="docType">
-                            </span>
-                            <input type="text" class="form-control" aria-label="fileText" value="Documents" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">
-                                <input type="radio" name="fileType" value="dir" aria-label="catType" checked>
-                            </span>
-                            <input type="text" class="form-control" aria-label="fileText" value="Directories" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon">
-                                <input type="checkbox" name="intoCurrent" value="@Model.Current.Id" checked>
-                            </span>
-                            <input type="text" class="form-control input-lg" aria-label="fileText" value="Load into current directory" disabled>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <input type="file" name="fileImp" value="Import" id="fileImport" class="disp-none" hidden required />
-
-                        <button class="btn btn-success btn-sm" type="submit" id="fileSelectSave" style="float:right;">upload</button>
                     </div>
                 }
             </div>

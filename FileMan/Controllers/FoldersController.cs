@@ -214,31 +214,7 @@ namespace Raf.FileMan.Controllers
 
             return Json(new { success = true, responseText = "Documents moved", id = Id, parentId = Id }, JsonRequestBehavior.AllowGet);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ImportFiles(HttpPostedFileBase fileImp, string fileType, long? intoCurrent)
-        {
-            if (string.IsNullOrEmpty(fileType))
-                return Redirect(Request.UrlReferrer.ToString());
-                       
-            if (fileImp!=null)
-            {
-                FileService _fs = new FileService();
-
-                if (fileType.Equals("dir"))
-                {
-                    await _fs.ImportCatsAsync(fileImp, fileType, intoCurrent);
-                }
-
-                if (fileType.Equals("doc"))
-                {
-                    await _fs.ImportDocsAsync(fileImp, fileType, intoCurrent);
-                }
-            }
-            return Redirect(Request.UrlReferrer.ToString());
-        }
-
+                
         private async Task UpdatePathAsync(long id, string newPath)
         {
             var folder = _db.Folder.Find(id);

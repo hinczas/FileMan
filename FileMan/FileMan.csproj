@@ -224,9 +224,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Classes\DataFeeder.cs" />
-    <Compile Include="Classes\FileService.cs" />
+    <Compile Include="Classes\DocumentService.cs" />
     <Compile Include="Classes\ItemService.cs" />
     <Compile Include="Classes\MimeTypeMap.cs" />
+    <Compile Include="Classes\StatusCode.cs" />
     <Compile Include="Context\AppDbContext.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FileRevisionsController.cs" />
