@@ -92,7 +92,8 @@
                             else
                             {
                                 <li>
-                                    <span func="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="del" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Lock</span>
+                                    <span onclick="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="nor">Lock</span>
+                                    @*<span func="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="del" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Lock</span>*@
                                 </li>
                             }
 
