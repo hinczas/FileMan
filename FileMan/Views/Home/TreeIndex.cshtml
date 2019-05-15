@@ -83,7 +83,6 @@
 
 <!-- New Category -->
 <div class="col-sm-12">
-    <div class="row" style="padding-top:0px;">
         <div class="collapse" id="catCollapse">
             <div class="disp-align-ver row-menu row-menu-sm">
                 @using (Html.BeginForm("Create", "Folders", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "catForm", role = "form", enctype = "multipart/form-data" }))
@@ -92,8 +91,8 @@
                     <input type="hidden" class="form-control" name="Pid" value="@Model.Current.Id" />
                     <input type="hidden" class="form-control" name="Type" value="dir" />
                     <div class="col-sm-4 pos-rel">
-                        <input type="text" autocomplete="off" maxlength="32" class="form-control form-control-sm info-input-icon" name="Name" placeholder="Name..." onkeypress="enterSubmit(event, '#submitBtn')" id="catNameInp" autofocus />
-                        <span class="pos-abs info-icon-inside" title="Required. Use ; as delimiter for multiple names"><i class="fas fa-question-circle"></i></span>
+                        <input type="text" autocomplete="off" maxlength="32" class="form-control form-control-sm info-input-icon" name="Name" placeholder="Name..." onkeypress="enterSubmit(event, '#submitBtn')" id="catNameInp" title="Use ; as delimiter for multiple names" autofocus />
+                        @*<span class="pos-abs info-icon-inside" title="Use ; as delimiter for multiple names"><i class="fas fa-question-circle"></i></span>*@
                     </div>
                     <div class="col-sm-7">
                         <input type="text" autocomplete="off" class="form-control" name="Description" onkeypress="enterSubmit(event, '#submitBtn')" placeholder="Description..." />
@@ -104,7 +103,6 @@
                 }
             </div>
         </div>
-    </div>
 </div>
 
 <!-- Tables -->
@@ -115,8 +113,8 @@
             <thead class="thead-dark">
                 <tr>
                     <th style="width:25px;" scope="col"></th>
+                    <th style="width:200px;" scope="col"></th>
                     <th scope="col"></th>
-                    <th style="max-width:250px;" scope="col"></th>
                 </tr>
             </thead>
             <tbody id="mainTable">
@@ -156,7 +154,7 @@
         <thead class="thead-dark">
             <tr>
                 <th style="width:25px;" scope="col"></th>
-                <th scope="col">Number</th>
+                <th style="width:200px;" scope="col">Number</th>
                 <th scope="col">Name</th>
                 <th scope="col">Ver</th>
             </tr>

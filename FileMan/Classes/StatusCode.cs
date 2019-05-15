@@ -44,4 +44,11 @@ namespace Raf.FileMan.Classes
             this.ExtraData = ExtraData;
         }
     }
+
+    public struct ItemType
+    {
+        public const int Category = 0;
+        public const int Document = 1;
+        public const int Revision = 2;
+    }
 }

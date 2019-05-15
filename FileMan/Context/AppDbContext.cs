@@ -19,6 +19,7 @@ namespace Raf.FileMan.Context
         public virtual DbSet<MasterFile> MasterFile { get; set; }
         public virtual DbSet<FileRevision> FileRevision { get; set; }
         public virtual DbSet<UserSetting> UserSetting { get; set; }
+        public virtual DbSet<Favourite> Favourite { get; set; }
 
         public static AppDbContext Create()
         {

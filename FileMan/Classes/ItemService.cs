@@ -426,6 +426,93 @@ namespace Raf.FileMan.Classes
             return _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
         }
 
+        public UserSideBarVM GetSidebar(string userId)
+        {
+            var favs = GetFavs(userId);
+            var locks = GetLocks(userId);
+
+            var result = new UserSideBarVM()
+            {
+                Favs = favs,
+                Locks = locks
+            };
+
+            return result;
+        }
+
+
+        private List<LinkItem> GetFavs(string userId)
+        {
+            var result = new List<LinkItem>();
+            var folders = new List<LinkItem>();
+            var files = new List<LinkItem>();
+            var user = _db.Users.Find(userId);
+
+            if (user == null)
+                return result;
+
+            if (user.Favourites == null || user.Favourites.Count < 1)
+                return result;
+
+            foreach (var fav in user.Favourites.OrderBy(a=>a.ItemType).ToList())
+            {
+                // Category
+                if (fav.ItemType == ItemType.Category)
+                {
+                    var folder = _db.Folder.Find(fav.ItemId);
+
+                    var item = new LinkItem()
+                    {
+                        Icon = "fa-folder", // use FontAwesome icon notation
+                        Label = folder.Name,
+                        Extra = folder.Path,
+                        Action = "goToFolder(" + folder.Id + ")"
+                    };
+                    folders.Add(item);
+                }
+
+                // Document
+                if (fav.ItemType == ItemType.Document)
+                {
+                    var file = _db.MasterFile.Find(fav.ItemId);
+
+                    var item = new LinkItem()
+                    {
+                        Icon = "fa-file", // use FontAwesome icon notation
+                        Label = file.Number,
+                        Extra = file.Name,
+                        Action = "goToFile(" + file.Id + ")"
+                    };
+                    files.Add(item);
+                }
+            }
+
+            result.AddRange(folders.OrderBy(o => o.Label).ToList());
+            result.AddRange(files.OrderBy(o => o.Label).ToList());
+
+            return result;
+        }
+
+        private List<LinkItem> GetLocks(string userId)
+        {
+            var locks = _db.MasterFile.Where(a => a.UserLock.Equals(userId));
+
+            if (locks.Count() < 1)
+                return new List<LinkItem>();
+
+            var result = locks.Select(a => new LinkItem()
+            {
+                Icon = "fa-file", // use FontAwesome icon notation
+                Label = a.Number,
+                Extra = a.Name,
+                Action = "goToFile("+a.Id+")"
+            })
+            .OrderBy(o => o.Label)
+            .ToList();
+
+            return result;
+        }
+
         //public Folder GetFolderById(long id)
         //{
         //    return _db.Folder.Find(id);

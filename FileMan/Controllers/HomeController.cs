@@ -140,5 +140,60 @@ namespace Raf.FileMan.Controllers
                     return RedirectToAction("Index");
             }
         }
+
+        public async Task<PartialViewResult> UserSidebar()
+        {
+            var model = _is.GetSidebar(User.Identity.GetUserId());
+
+            return PartialView(model);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> AddFavourite(long id, int itemType)
+        {
+            string userId = User.Identity.GetUserId();
+
+            var fav = new Favourite()
+            {
+                ItemType = itemType,
+                ItemId = id,
+                UserId = userId
+            };
+
+            try
+            {
+                _db.Favourite.Add(fav);
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = true, responseText = "Added to favourites", reload = true }, JsonRequestBehavior.AllowGet);
+            } catch (Exception e)
+            {
+                return Json(new { success = false, responseText = e.InnerException.Message, reload = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DelFavourite(long id)
+        {
+            string userId = User.Identity.GetUserId();
+
+            try
+            {
+                var fav = await _db.Favourite.FindAsync(id);
+                
+                if (fav.UserId.Equals(userId))
+                {
+                    _db.Favourite.Remove(fav);
+                    await _db.SaveChangesAsync();
+                    return Json(new { success = true, responseText = "Removed from favourites", reload = true }, JsonRequestBehavior.AllowGet);
+                }
+                return Json(new { success = false, responseText = "Cannot delete someone else's favourite item", reload = false }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, responseText = e.InnerException.Message, reload = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

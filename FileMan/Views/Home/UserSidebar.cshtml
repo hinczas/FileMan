@@ -1,0 +1,50 @@
+﻿@model Raf.FileMan.Models.ViewModels.UserSideBarVM
+
+<!-- Favs -->
+<div class="panel panel-side panel-favs">
+    <div class="panel-heading">
+        <a href="#" data-toggle="collapse" data-target="#favs">
+            <span class="side-icon-holder"><i class="fas fa-star"></i></span>
+            Favourites
+        </a>
+    </div>
+    <div id="favs" class="panel-collapse collapse collapse-favs">
+        <div class="panel-body">
+            <ol>
+                @foreach (var f in Model.Favs)
+                {
+                <li class="side-link" onclick="@f.Action" title="@f.Extra">
+                    <span class="side-icon-holder"><i class="fas @f.Icon"></i></span>
+                    <span class="side-label-holder">@f.Label</span>
+                    <span class="side-extra-holder">- @f.Extra</span>
+                </li>
+                }
+            </ol>
+        </div>
+    </div>
+</div>
+
+<!-- Locks -->
+<div class="panel panel-side panel-locks">
+    <div class="panel-heading">
+        <a href="#" data-toggle="collapse" data-target="#locks">
+            <span class="side-icon-holder"><i class="fas fa-unlock"></i></span>
+            My locked items
+        </a>
+    </div>
+    <div id="locks" class="panel-collapse collapse collapse-favs">
+        <div class="panel-body">
+            <ol>
+                @foreach (var f in Model.Locks)
+                {
+                <li class="side-link" onclick="@f.Action" title="@f.Extra">
+                    <span class="side-icon-holder"><i class="fas @f.Icon"></i></span>
+                    <span class="side-label-holder">@f.Label</span>
+                    <span class="side-extra-holder">- @f.Extra</span>
+                </li>
+                }
+            </ol>
+        </div>
+    </div>
+</div>
+

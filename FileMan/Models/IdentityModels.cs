@@ -22,6 +22,7 @@ namespace Raf.FileMan.Models
 
         public virtual ICollection<Folder> Categories { get; set; }
         public virtual ICollection<MasterFile> Documents { get; set; }
+        public virtual ICollection<Favourite> Favourites { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
