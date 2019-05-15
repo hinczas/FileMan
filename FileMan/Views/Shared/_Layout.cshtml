@@ -117,69 +117,74 @@
     </div>
     
     <!-- SIDEBAR -->
-    <div class="main-sidebar">
-        <!-- Favs -->
-        <div class="panel panel-side panel-favs">
-            <div class="panel-heading">
-                <a href="#" data-toggle="collapse" data-target="#favs">
-                    <span class="side-icon-holder"><i class="fas fa-star"></i></span>
-                    Favourites
-                </a>
-            </div>
-            <div id="favs" class="panel-collapse collapse collapse-favs">
-                <div class="panel-body">
-                    <ol>
-                        <li>Just one</li>
-                        <li>Just two</li>
-                        <li>Just three</li>
-                        <li>Just four</li>
-                    </ol>
+    <div class="sidebar-container" id="sidebar">
+        <div class="main-sidebar">
+            <!-- Favs -->
+            <div class="panel panel-side panel-favs">
+                <div class="panel-heading">
+                    <a href="#" data-toggle="collapse" data-target="#favs">
+                        <span class="side-icon-holder"><i class="fas fa-star"></i></span>
+                        Favourites
+                    </a>
+                </div>
+                <div id="favs" class="panel-collapse collapse collapse-favs">
+                    <div class="panel-body">
+                        <ol>
+                            <li><span class="side-icon-holder"><i class="fas fa-folder"></i></span>Movies</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000000001</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000002354</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000020501</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Locks -->
-        <div class="panel panel-side panel-locks">
-            <div class="panel-heading">
-                <a href="#" data-toggle="collapse" data-target="#locks">
-                    <span class="side-icon-holder"><i class="fas fa-unlock"></i></span>
-                    My locked items
-                </a>
-            </div>
-            <div id="locks" class="panel-collapse collapse collapse-favs">
-                <div class="panel-body">
-                    <ol>
-                        <li>Just one</li>
-                        <li>Just two</li>
-                        <li>Just three</li>
-                        <li>Just four</li>
-                    </ol>
+            <!-- Locks -->
+            <div class="panel panel-side panel-locks">
+                <div class="panel-heading">
+                    <a href="#" data-toggle="collapse" data-target="#locks">
+                        <span class="side-icon-holder"><i class="fas fa-unlock"></i></span>
+                        My locked items
+                    </a>
+                </div>
+                <div id="locks" class="panel-collapse collapse collapse-favs">
+                    <div class="panel-body">
+                        <ol>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000000001</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000000036</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000000198</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000002354</li>
+                            <li><span class="side-icon-holder"><i class="fas fa-file"></i></span>000020501</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- JSTree -->
-        <div class="panel panel-side panel-tree">
-            <div class="panel-heading">
-                <a href="#" data-toggle="collapse" data-target="#trees">
-                    <span class="side-icon-holder"><i class="fas fa-sitemap"></i></span>
-                    Categories
-                </a>
-                <span class="ml"><a href="javascript:refreshTree();"><i class="fas fa-sync"></i></a></span>
-                <span class="float-r mr"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
-                <span class="float-r mr"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
-            </div>
-            <div id="trees" class="panel-collapse collapse collapse-tree">
-                <div class="panel-tree">
-                    <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />
-                    <div id="jstree_div"></div>
+            <!-- JSTree -->
+            <div class="panel panel-side panel-tree">
+                <div class="panel-heading">
+                    <a href="#" data-toggle="collapse" data-target="#trees">
+                        <span class="side-icon-holder"><i class="fas fa-sitemap"></i></span>
+                        Categories
+                    </a>
+                    <span class="ml"><a href="javascript:refreshTree();"><i class="fas fa-sync"></i></a></span>
+                    <span class="float-r mr"><a href="javascript:expandAll();"><i class="fas fa-angle-double-down"></i></a></span>
+                    <span class="float-r mr"><a href="javascript:collapseAll();"><i class="fas fa-angle-double-up"></i></a></span>
+                </div>
+                <div id="trees" class="panel-collapse collapse collapse-tree">
+                    <div class="panel-tree">
+                        <input type="text" id="jstree_div_q" placeholder="search..." class="in-card-search" />
+                        <div id="jstree_div"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
+        <div id="split-bar"></div>
     </div>
+    
 
-    <div class="body-content">
+    <div class="body-content" id="main">
         <!-- Loading page -->
         <div id="loadingDiv">
             <div id="load-container">

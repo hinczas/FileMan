@@ -1,9 +1,9 @@
 ﻿.sub-container {
-    padding-left: 250px;
     max-width: 100%;
 }
 .body-content {
     min-width: 600px;
+    margin-left: 250px;
     max-width: 1200px;
 }
 #hideAll {
@@ -68,7 +68,7 @@ input[hidden] {
 #jstree_div {
     height: 100%;
     white-space: nowrap;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -317,7 +317,7 @@ a[type="button"] {
     background-color: #a6dead;
 }
 .panel-heading {
-    font-size: 16px !important;
+    /*font-size: 16px;*/
     padding: 0px 0px 0px 15px;
     height: 30px;
 }
@@ -479,7 +479,10 @@ legend {
     ::-webkit-scrollbar-thumb:hover {
         background: #42a5f5;
     }
-
+    ::-webkit-scrollbar-thumb:horizontal {
+        position: absolute;
+        bottom:5px;
+    }
 /* Scroll bar end */
 
 .dis {
@@ -677,23 +680,41 @@ legend {
 }
 
 /* Main sidebar */
-.main-sidebar {
+.sidebar-container {
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 250px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     background-color: #efefef;
+    box-shadow: 0px 0px 2px 0px grey;
+}
+.main-sidebar {
+    height: 100%;
+    height: calc(100% - 25px);
+    width: 100%;
+    width: calc(100% - 3px);
+    float: left;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding: 79px 0px 0px 0px;
-    box-shadow: 0px 0px 2px 0px grey;
+}
+#split-bar {
+    border-left: 1px solid #ccc;
+    height: 100%;
+    height: calc(100% - 25px); /* Full-height: remove this if you want "auto" height */
+    float: right;
+    width: 3px;
+    cursor: col-resize;
 }
 .panel-side {
     background: inherit !important;
     font-family: Nunito;
     font-size: 14px;
-    color: #222;
+    color: #222;    
+}
+.panel-side.panel-tree {
+    margin-bottom: 0px;
 }
     .panel-side a {
         font-size: 14px;
@@ -715,6 +736,15 @@ legend {
     .panel-side a, .panel-side a:hover {
         text-decoration: none;
     }
+
+    .panel-side .panel-body {
+        padding: 0px 15px;
+    }
+        .panel-side .panel-body ol {
+            padding-inline-start: 25px;
+            list-style: none;
+        }
+
 .side-icon-holder {
     float: left;
     width: 25px;

@@ -1,6 +1,10 @@
 ﻿//// 
 //// Listeners
 ////
+var min = 200;
+var max = 600;
+var mainmin = 200;
+
 window.onerror = function (message, url, lineNumber) {
     ftError(message);
     return true;
@@ -76,4 +80,19 @@ $(function () {
         col.addEventListener('dragenter', handleDragEnter, false);
         col.addEventListener('dragleave', handleDragLeave, false);
     });
+});
+
+$('#split-bar').mousedown(function (e) {
+    e.preventDefault();
+    $(document).mousemove(function (e) {
+        e.preventDefault();
+        var x = e.pageX - $('#sidebar').offset().left;
+        if (x > min && x < max && e.pageX < ($(window).width() - mainmin)) {
+            $('#sidebar').css("width", x);
+            $('#main').css("margin-left", x);
+        }
+    })
+});
+$(document).mouseup(function (e) {
+    $(document).unbind('mousemove');
 });
