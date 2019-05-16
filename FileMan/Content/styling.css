@@ -777,3 +777,8 @@ legend {
     .btn-fav.yc {
         color: #e4ba00;
     }
+
+    .comment {
+        max-height: 250px;
+        overflow-y: auto;
+    }
