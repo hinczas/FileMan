@@ -55,36 +55,45 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        <div class="nav-btn" onclick="goToFolder()">
+                        <div class="nav-btn" onclick="goToFolder()" id="navHome" title="Home">
                             <i class="fas fa-home nav-btn-icon"></i>
                             <span class="nav-btn-label">home</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-btn">
+                        <div class="nav-btn" id="navBack" title="Back">
                             <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
                             <span class="nav-btn-label">back</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-btn">
+                        <div class="nav-btn" onclick="location.reload()" id="navRefresh" title="Refresh">
+                            <i class="fas fa-sync nav-btn-icon"></i>
+                            <span class="nav-btn-label">reload</span>
+                        </div>
+                    </li>
+                    <li class="nav-separator"></li>
+                    <li>
+                        <div class="nav-btn" id="navDoc" data-toggle="modal" data-target="#filModal" title="New Document">
                             <i class="fas fa-file-medical nav-btn-icon"></i>
                             <span class="nav-btn-label">doc</span>
                         </div>
                     </li>
                     <li>
-                        <div class="nav-btn">
+                        <div class="nav-btn" id="navCat" data-toggle="collapse" data-target="#catCollapse" title="New Category">
                             <i class="fas fa-folder-plus nav-btn-icon"></i>
                             <span class="nav-btn-label">cat</span>
                         </div>
                     </li>
-                    <li class="dropdown">
-                        <div class="nav-btn" type="button" data-toggle="dropdown">
+                    <li class="nav-separator"></li>
+                    <li class="dropdown nav-dropdown">
+                        <div class="nav-btn" type="button" data-toggle="dropdown" id="navTools">
                             <i class="fas fa-cog nav-btn-icon"></i>
                             <span class="nav-btn-label">tools</span>
                         </div>
                         <ul class="dropdown-menu">
                             <li><span class="dis">Move</span></li>
+                            <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
                             <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
                             <li role="separator" class="divider"></li>
                             <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
@@ -217,8 +226,12 @@
 
                 var folNa = "@Url.RequestContext.RouteData.Values["controller"]";
                 var folId = "@Url.RequestContext.RouteData.Values["id"]";
+
                 if (folNa !== "Home") {
                     folId = "@Request.QueryString["pid"]";
+                    hideNavButton('#navDoc');
+                    hideNavButton('#navCat');
+                    hideNavButton('#navTools');
                 }
                 var id = folId == "" ? -1 : Number(folId);
                 var url = "/Home/GetTree?id=" + id;
@@ -239,6 +252,7 @@
                         }, 1000);
                     }
                 )
+
 
             });
     </script>

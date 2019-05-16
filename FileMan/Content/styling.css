@@ -394,7 +394,22 @@ legend {
 .modal-content {
     border-radius: 0;
 }
+.modal-header, .modal-footer {
+    padding: 5px 15px;
+}
 
+.modal-header-warning {
+    background-color: #c40400;
+    color: white;
+}
+.modal-header-info {
+    background-color: #337ab7;
+    color: white;
+}
+.modal-header-success {
+    background-color: #008000;
+    color: white;
+}
 /* navbar header */
 .navbar {
     min-height: 74px !important;
@@ -426,6 +441,13 @@ legend {
     .navbar-brand > .app-icons {
         font-size: 8px !important;
     }
+.nav-separator {
+    display: grid;
+    height: 50px;
+    width: 1px;
+    /*background-color: #9d9d9d;*/
+    margin: 0px 5px;
+}
 .nav-btn {
     display: grid;
     height: 50px;
@@ -504,6 +526,10 @@ legend {
     }
 .nor:hover {
     background-color: #e0e0e0;
+    cursor: pointer;
+}
+.nor-del:hover {
+    background-color: #c40400;
     cursor: pointer;
 }
 

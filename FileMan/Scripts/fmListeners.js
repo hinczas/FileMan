@@ -31,9 +31,13 @@ $(document)
         });
     });
 
-$(document).on("keypress", "form", function (event) {
-    return event.keyCode != 13;
-});
+//$(document).on("keypress", "form", function (event) {
+//    return event.keyCode != 13;
+//});
+
+$(document).on("keydown", ":input:not(textarea)", function (event) {
+    return event.key != "Enter";
+})
 
 
 $(function () {

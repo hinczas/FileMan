@@ -133,6 +133,10 @@
                     <td class="td-value"><span style="white-space: pre-line"><p class="comment">@Model.Current.Description</p></span> </td>
                 </tr>
                 <tr>
+                    <td class="td-head" align="right">Extra info</td>
+                    <td class="td-value"><span style="white-space: pre-line">@Model.Current.Comment</span> </td>
+                </tr>
+                <tr>
                     <td class="td-head" align="right">Author</td>
                     <td class="td-value"><span style="white-space: pre-line">@Model.Author</span> </td>
                 </tr>
@@ -205,135 +209,81 @@
                         <td class="td-value"><span class="comment" style="white-space: pre-line">@Model.Current.Changelog</span> </td>
                     </tr>
                 }
-                <tr>
-                    <td class="td-head" align="right">Extra info</td>
-                    <td class="td-value"><span style="white-space: pre-line">@Model.Current.Comment</span> </td>
-                </tr>
             </tbody>
         </table>
     </div>
     <br />
     @if (Model.RevisionsCount > 0)
     {
-        @*<div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h4 class="cus-h4">
-                            Latest revisions
-                        </h4>
-                        @if (Model.Lockable)
+        <div class="panel-group">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h4 class="cus-h4">
+                        <a data-toggle="collapse" href="#collapse1">All revisions</a>
+                    </h4>
+                    <span class="badge badge-light">@Model.RevisionsCount</span>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse">
+                    @if (Model.RevisionsCount > 0)
+                    {
+                        using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
                         {
-                            <button class="btn btn-sm btn-primary pull-right" data-toggle="modal" data-target="#editRevModal" type="button" title="Edit latest revision">
-                                <i class="fas fa-cog"></i>
-                            </button>
-                        }
-                    </div>
-                    <table class="table table-striped table-hover table-condensed">
-                        <thead>
-                            <tr>
-                                <th style="font-weight:900; width:15px;" align="right"></th>
-                                <th style="font-weight:900; width:60px;" align="right">Type</th>
-                                <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                                <th style="font-weight:900; width:130px;" align="right">Added</th>
-                                <th style="font-weight:900; width:25px;" align="right"></th>
-                                <th style="font-weight:900; width:15px;" align="right"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (@Model.LatestIssue != null)
-                            {
-                                <tr>
-                                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestIssue.Icon" /></td>
-                                    <td><span class="label label-success">Issue</span> @Model.LatestIssue.Draft</td>
-                                    <td>@Model.LatestIssue.Comment</td>
-                                    <td>@Model.LatestIssue.Added</td>
-                                    <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                                    <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestIssue.Id }, null)</td>
-                                </tr>
-                            }
-                            @if (@Model.LatestDraft != null)
-                            {
-                                <tr>
-                                    <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@Model.LatestDraft.Icon" /></td>
-                                    <td><span class="label label-warning">Draft</span> @Model.LatestDraft.Draft</td>
-                                    <td>@Model.LatestDraft.Comment</td>
-                                    <td>@Model.LatestDraft.Added</td>
-                                    <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                                    <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = Model.LatestDraft.Id }, null)</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>*@
-
-                <div class="panel-group">
-                    <div class="panel panel-warning">
-                        <div class="panel-heading">
-                            <h4 class="cus-h4">
-                                <a data-toggle="collapse" href="#collapse1">All revisions</a>
-                            </h4>
-                            <span class="badge badge-light">@Model.RevisionsCount</span>
-                        </div>
-                        <div id="collapse1" class="panel-collapse collapse">
-                            @if (Model.RevisionsCount > 0)
-                            {
-                                using (Html.BeginForm("FileAction", "FileRevisions", FormMethod.Post, new { style = "padding-left: 0px;" }))
-                                {
-                                    <table class="table table-striped table-hover table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th style="font-weight:900; width:15px;" align="right"></th>
-                                                <th style="font-weight:900; width:35px;" align="right">Rev</th>
-                                                <th style="font-weight:900; width:60px;" align="right">Type</th>
-                                                <th style="font-weight:900; width:250px;" align="right">Comment</th>
-                                                <th style="font-weight:900; width:130px;" align="right">Added</th>
-                                                <th style="font-weight:900; width:25px;" align="right"></th>
-                                                <th style="font-weight:900; width:15px;" align="right"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @{ int counter = 0;}
-                                            @foreach (var rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
-                                            {
-                                            <tr>
-                                                <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
-                                                <td>
-                                                    @if (string.IsNullOrEmpty(rev.Draft))
-                                                    {
-                                                        <span class="label label-success">issue</span>
-                                                    }
-                                                    else
-                                                    {
-                                                        @rev.Draft
-                                                    }
-                                                </td>
-                                                @if (@rev.Type.Equals("issue"))
+                            <table class="table table-striped table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th style="font-weight:900; width:15px;" align="right"></th>
+                                        <th style="font-weight:900; width:35px;" align="right">Rev</th>
+                                        <th style="font-weight:900; width:60px;" align="right">Type</th>
+                                        <th style="font-weight:900; width:250px;" align="right">Comment</th>
+                                        <th style="font-weight:900; width:130px;" align="right">Added</th>
+                                        <th style="font-weight:900; width:25px;" align="right"></th>
+                                        <th style="font-weight:900; width:15px;" align="right"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ int counter = 0;}
+                                    @foreach (var rev in Model.Current.Revisions.OrderByDescending(a => a.Revision))
+                                    {
+                                        <tr>
+                                            <td scope="row"><img class="icon" src="~/Content/Images/Icons/32px/@rev.Icon" /></td>
+                                            <td>
+                                                @if (string.IsNullOrEmpty(rev.Draft))
                                                 {
-                                                    <td><span class="label label-success">Issue</span></td>
+                                                    <span class="label label-success">issue</span>
                                                 }
                                                 else
                                                 {
-                                                    <td><span class="label label-warning">Draft</span></td>
+                                                    @rev.Draft
                                                 }
-                                                <td><p class="comment">@rev.Comment</p></td>
-                                                <td>@rev.Added</td>
-                                                <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
-                                                <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
-                                            </tr>
-                                                counter++;
+                                            </td>
+                                            @if (@rev.Type.Equals("issue"))
+                                            {
+                                                <td><span class="label label-success">Issue</span></td>
                                             }
-                                        </tbody>
-                                    </table>
-                                }
-                            }
-                        </div>
-                    </div>
+                                            else
+                                            {
+                                                <td><span class="label label-warning">Draft</span></td>
+                                            }
+                                            <td><p class="comment">@rev.Comment</p></td>
+                                            <td>@rev.Added</td>
+                                            <td>@Html.ActionLink("download", "GetFile", "FileRevisions", new { id = rev.Id }, null)</td>
+                                            <td>@Html.ActionLink("view", "Details", "FileRevisions", new { id = rev.Id }, null)</td>
+                                        </tr>
+                                        counter++;
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    }
                 </div>
-            }
-            else
-            {
-                <p><i class="fas fa-exclamation-triangle"></i>There are no revisions for this document yet.</p>
-            }
-    </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p><i class="fas fa-exclamation-triangle"></i>There are no revisions for this document yet.</p>
+    }
+</div>
 
 
 <!-- File Modal -->
@@ -345,14 +295,9 @@
             @Html.AntiForgeryToken()
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="container" style="align-items:center; width:100%; padding:0px;">
-                        <h4 style="margin-top:0; margin-bottom:0px;float:left; padding-top:5px;">
-                            Assign category
-                        </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                    <h4>
+                        Assign category
+                    </h4>
                 </div>
                 <div class="modal-body" style="max-height:500px; white-space:nowrap; overflow:auto;">
                     @{
@@ -412,8 +357,7 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">New draft</h4>
+                    <h4>New draft</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12" style="float:none">
@@ -431,7 +375,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" value="Save" class="btn btn-success" id="submitBtn" onclick="addDraft('#revFileForm')">Save</button>
                 </div>
             }
@@ -448,8 +392,7 @@
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Promote</h4>
+                    <h4>Promote</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12" style="float:none">
@@ -462,7 +405,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" name="action" value="cp" class="btn btn-primary" onclick="promote('#promFileForm')">Save</button>
                 </div>
             }
@@ -477,8 +420,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"><i class="fas fa-share-alt"></i> Share</h4>
+                <h4><i class="fas fa-share-alt"></i> Share</h4>
             </div>
             <div class="modal-body">
                 <p>Direct shareable link:</p>
@@ -493,20 +435,22 @@
                     </span>
                 </div><!-- /input-group -->
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Edit Revision Modal -->
 <div id="editRevModal" class="modal fade" role="dialog">
-    <div class="modal-dialog  modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             @using (Html.BeginForm("EditDraftComment", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "editRevForm" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Revision: @Model.DraftVersion</h4>
+                    <h4>Revision: @Model.DraftVersion</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12" style="float:none">
@@ -515,13 +459,13 @@
                         <input type="hidden" class="form-control" name="id" value="@Model.LatestRevisionId" />
                         <p>Edit comment for the latest revision:</p>
                         <div class="form-group">
-                            <textarea rows="3" cols="10" class="form-control" name="comment" placeholder="Revision comment...">@Model.LatestRevisionComm</textarea>
+                            <textarea style="max-width:100% !important;" rows="3" cols="10" class="form-control" name="comment" placeholder="Revision comment...">@Model.LatestRevisionComm</textarea>
                         </div>
 
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" name="action" value="cp" class="btn btn-success" onclick="editDraft('#editRevForm')">Save</button>
                 </div>
             }

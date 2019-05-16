@@ -74,6 +74,9 @@ function mainSearch(_form) {
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
         }
     });
 }
@@ -87,6 +90,9 @@ function goToSearch(id, search, scope) {
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
         }
     });
 }
@@ -132,6 +138,9 @@ function goToFolder(id, redirect = true) {
                 }
                 ChangeUrl("Index", link);
             }
+            showNavButton('#navDoc');
+            showNavButton('#navCat');
+            showNavButton('#navTools');
         }
     });
 }
@@ -170,6 +179,9 @@ function goToFile(id, pid=null) {
             $('.sub-container').html(d); //replaces previous HTML with action
             link = link.replace("PartialDetails","Details")
             ChangeUrl("Details", link);
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
         }
     });
 }
@@ -188,6 +200,9 @@ function goToEditFile(id, pid = null) {
             $('.sub-container').html(d); //replaces previous HTML with action
             link = link.replace("PartialEdit", "Edit")
             ChangeUrl("Edit", link);
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
         }
     });
 }
@@ -495,10 +510,9 @@ function goToManage(id) {
         success: function (d) {
             /* d is the HTML of the returned response */
             $('.sub-container').html(d); //replaces previous HTML with action
-            //if (redirect) {
-            //    activateNode(id);
-            //    ChangeUrl("Index", link);
-            //}
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
         }
     });
 }
@@ -828,4 +842,12 @@ function copyToClip(element) {
 
     /* Copy the text inside the text field */
     document.execCommand("copy");
+}
+
+function hideNavButton(navId) {
+    $(navId).addClass('hidden');
+}
+
+function showNavButton(navId) {
+    $(navId).removeClass('hidden');
 }
