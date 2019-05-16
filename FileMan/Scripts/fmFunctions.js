@@ -3,6 +3,67 @@
 ////
 var timer;
 
+function addFavourite(itemId, itemType) {
+    var link = "/Home/AddFavourite/";
+    var dt = { id: itemId, itemType: itemType };
+    $.ajax({
+        type: "post",
+        url: link,
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                ftInfo(response.responseText);
+                if (response.itemType==0) {
+                    goToFolder(response.itemId);
+                }
+                if (response.itemType == 1) {
+                    goToFile(response.itemId);
+                }
+                getSidebard();
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+function delFavourite(itemId, favId) {
+    var link = "/Home/DelFavourite/";
+    var dt = { id: favId };
+    $.ajax({
+        type: "post",
+        url: link,
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                ftInfo(response.responseText);
+                if (response.itemType == 0) {
+                    goToFolder(response.itemId);
+                }
+                if (response.itemType == 1) {
+                    goToFile(response.itemId);
+                }
+                getSidebard();
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
+function getSidebard() {
+    var link = "/Home/UserSidebar/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('#userSidebar').html(d); //replaces previous HTML with action
+        }
+    });
+}
+
 function mainSearch(_form) {
     var link = "/Home/TreeIndex/";
     var dt = $(_form).serialize();
@@ -86,6 +147,7 @@ function lockDocument(id, doLock, pid) {
             if (response.success) {
                 ftInfo(response.responseText);
                 goToFile(id, pid);
+                getSidebard();
             } else {
                 alert(response.responseText);
                 ftError(response.responseText);

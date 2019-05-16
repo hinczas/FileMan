@@ -60,6 +60,16 @@
             <div class="float-r">
                 <div class="btn-group btn-group-sm btn-group-options" role="group">
                     <span><b>@Model.Current.Name</b></span>
+                    <span>
+                        @if (Model.Favourite)
+                        {
+                            <i class="fas fa-star btn-fav yc cur-point" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star btn-fav yc cur-point" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 0)"></i>
+                        }
+                    </span>
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
                             <i class="fas fa-cog"></i>

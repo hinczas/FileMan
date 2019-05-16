@@ -17,6 +17,8 @@ namespace Raf.FileMan.Models.ViewModels
         public List<MasterFile> ChildrenFiles { get; set; }
         public List<BreadItem> Breadcrumbs { get; set; }
         public List<MasterFile> UnassignedFiles { get; set; }
+        public bool Favourite { get; set; }
+        public long FavId { get; set; }
 
         public List<FolderPartialViewModel> FolderList { get; set; }
         public bool Error { get; set; }

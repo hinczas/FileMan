@@ -165,7 +165,7 @@ namespace Raf.FileMan.Controllers
                 _db.Favourite.Add(fav);
                 await _db.SaveChangesAsync();
 
-                return Json(new { success = true, responseText = "Added to favourites", reload = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, responseText = "Added to favourites", reload = true, itemType = itemType, itemId = id, favId = fav.Id }, JsonRequestBehavior.AllowGet);
             } catch (Exception e)
             {
                 return Json(new { success = false, responseText = e.InnerException.Message, reload = false }, JsonRequestBehavior.AllowGet);
@@ -185,7 +185,7 @@ namespace Raf.FileMan.Controllers
                 {
                     _db.Favourite.Remove(fav);
                     await _db.SaveChangesAsync();
-                    return Json(new { success = true, responseText = "Removed from favourites", reload = true }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, responseText = "Removed from favourites", reload = true, itemType = fav.ItemType, itemId = fav.ItemId, favId = id }, JsonRequestBehavior.AllowGet);
                 }
                 return Json(new { success = false, responseText = "Cannot delete someone else's favourite item", reload = false }, JsonRequestBehavior.AllowGet);
 

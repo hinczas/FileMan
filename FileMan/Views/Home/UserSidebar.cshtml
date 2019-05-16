@@ -8,7 +8,7 @@
             Favourites
         </a>
     </div>
-    <div id="favs" class="panel-collapse collapse collapse-favs">
+    <div id="favs" class="panel-collapse collapse in collapse-favs">
         <div class="panel-body">
             <ol>
                 @foreach (var f in Model.Favs)
@@ -32,7 +32,7 @@
             My locked items
         </a>
     </div>
-    <div id="locks" class="panel-collapse collapse collapse-favs">
+    <div id="locks" class="panel-collapse collapse in collapse-favs">
         <div class="panel-body">
             <ol>
                 @foreach (var f in Model.Locks)

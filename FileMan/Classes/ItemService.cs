@@ -112,6 +112,9 @@ namespace Raf.FileMan.Classes
 
             string lu = lockUser == null ? "unknown" : string.Format("{0}, {1}", lockUser.Surname, lockUser.FirstName);
 
+            var favs = _db.Favourite.Where(a => a.UserId.Equals(userId) && a.ItemId == id && a.ItemType == ItemType.Document).FirstOrDefault();
+            bool fav = favs != null ;
+
             MasterFileViewModel file = new MasterFileViewModel()
             {
                 Current = item,
@@ -130,7 +133,9 @@ namespace Raf.FileMan.Classes
                 Locked = item.Locked,
                 LockedBy= lu,
                 Lockable = !item.Locked || item.UserLock.Equals(userId),
-                LatestRevisionComm = revCmnt
+                LatestRevisionComm = revCmnt,
+                Favourite = fav,
+                FavId = fav ? favs.Id : -1
             };
                                  
             Folder par;
@@ -222,6 +227,8 @@ namespace Raf.FileMan.Classes
                 Path = a.Path
             }).ToList();
 
+            var favs = _db.Favourite.Where(a => a.UserId.Equals(userId) && a.ItemId == item.Id && a.ItemType == ItemType.Category).FirstOrDefault();
+            bool fav = favs != null;
 
             ItemViewModel ivm = new ItemViewModel()
             {
@@ -230,7 +237,9 @@ namespace Raf.FileMan.Classes
                 ChildrenFiles = childrenFil,
                 Breadcrumbs = bc,
                 UnassignedFiles = uncatVisible && !showUncatRoot ? unassigned : null,
-                FolderList = foldersList
+                FolderList = foldersList,
+                Favourite = fav,
+                FavId = fav ? favs.Id : -1
             };
             return ivm;
         }
@@ -460,12 +469,13 @@ namespace Raf.FileMan.Classes
                 if (fav.ItemType == ItemType.Category)
                 {
                     var folder = _db.Folder.Find(fav.ItemId);
+                    string extra = folder.IsRoot ? "" : folder.Path;
 
                     var item = new LinkItem()
                     {
                         Icon = "fa-folder", // use FontAwesome icon notation
                         Label = folder.Name,
-                        Extra = folder.Path,
+                        Extra = "\\" + extra,
                         Action = "goToFolder(" + folder.Id + ")"
                     };
                     folders.Add(item);

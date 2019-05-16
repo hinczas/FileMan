@@ -32,5 +32,7 @@ namespace Raf.FileMan.Models.ViewModels
         public bool Locked { get; set; }
         public string LockedBy { get; set; }
         public bool Lockable { get; set; }
+        public bool Favourite { get; set; }
+        public long FavId { get; set; }
     }
 }

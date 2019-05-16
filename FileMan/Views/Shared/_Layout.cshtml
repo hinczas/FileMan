@@ -115,7 +115,9 @@
     <!-- SIDEBAR -->
     <div class="sidebar-container" id="sidebar">
         <div class="main-sidebar">
-            @Html.Action("UserSidebar", "Home")
+            <div id="userSidebar">
+                @Html.Action("UserSidebar", "Home")
+            </div>            
             <!-- JSTree -->
             <div class="panel panel-side panel-tree">
                 <div class="panel-heading">

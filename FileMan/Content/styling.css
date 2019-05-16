@@ -768,3 +768,12 @@ legend {
     color: #9d9d9d;
 }
 /* Main sidebar END */
+
+.btn-fav {
+    vertical-align: middle;
+    font-size: 20px;
+    /*color: #fdd835;*/
+}
+    .btn-fav.yc {
+        color: #e4ba00;
+    }

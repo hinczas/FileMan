@@ -53,6 +53,16 @@
                 </h4>
                 <div class="dropdown pull-right">
                     <span>
+                        @if (Model.Favourite)
+                        {
+                            <i class="fas fa-star btn-fav cur-point" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star btn-fav cur-point" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 1)"></i>
+                        }
+                    </span>
+                    <span>
                         @if (Model.Locked)
                         {
                             <i class="fas fa-lock lock-lg" title="Locked by @Model.LockedBy"></i>
@@ -93,7 +103,6 @@
                             {
                                 <li>
                                     <span onclick="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="nor">Lock</span>
-                                    @*<span func="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="del" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Lock</span>*@
                                 </li>
                             }
 
