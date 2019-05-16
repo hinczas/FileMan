@@ -35,7 +35,7 @@ $(document)
 //    return event.keyCode != 13;
 //});
 
-$(document).on("keydown", ":input:not(textarea)", function (event) {
+$(document).on("keypress", ":input:not(textarea)", function (event) {
     return event.key != "Enter";
 })
 
@@ -84,6 +84,8 @@ $(function () {
         col.addEventListener('dragenter', handleDragEnter, false);
         col.addEventListener('dragleave', handleDragLeave, false);
     });
+
+    $('#breadCrumbs').scrollLeft = $('#breadCrumbs').scrollWidth;
 });
 
 $('#split-bar').mousedown(function (e) {

@@ -208,14 +208,15 @@ function goToEditFile(id, pid = null) {
 }
 
 function deleteCategory(id, redirect = false) {
-    var confirmed = confirm('Are you sure you wish to delete this Category?');
-
+    //var confirmed = confirm('Are you sure you wish to delete this Category?');
+    var confirmed = true;
     if (confirmed) {
         $.ajax({
             url: '/Folders/Delete/' + id,
             type: 'post',
             success: function (response) {
                 if (response.success) {
+                    _hideModal('#deleteModal');
                     if (redirect) {
                         goToFolder(response.parentId);
                     } else {

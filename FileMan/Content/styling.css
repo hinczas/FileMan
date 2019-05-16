@@ -258,6 +258,7 @@ input[hidden] {
 }
 .lock-lg {
     vertical-align: middle;
+    margin: 7px;
 }
 .lock-sm {
     font-size: 12px !important;
@@ -353,11 +354,25 @@ a[type="button"] {
     padding: 1px !important;
     margin-bottom: 10px !important;
     width: 100%;
-    h/*eight: 30px;*/
+    height: 30px;
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 .breadcrumbz .js-link {
     padding: 3px 5px !important;
 }
+.bread-index {
+    width: calc(100% - 60px);
+}
+.btn-bread {
+    padding: 6px;
+    max-height: 30px;
+    width: 30px;
+}
+    .btn-bread.bckg {
+        padding: 5px;
+        background-color: #efefef;
+    }
 
 legend {
     margin-bottom: 10px;
@@ -398,9 +413,13 @@ legend {
     padding: 5px 15px;
 }
 
-.modal-header-warning {
+.modal-header-danger {
     background-color: #c40400;
     color: white;
+}
+.modal-header-warning {
+    background-color: #ffdd71;
+    color: black;
 }
 .modal-header-info {
     background-color: #337ab7;
@@ -789,6 +808,9 @@ legend {
 .side-label-holder {
     float: left;
     width: 100px;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 .side-extra-holder {
     color: #9d9d9d;
@@ -800,9 +822,10 @@ legend {
     font-size: 20px;
     /*color: #fdd835;*/
 }
-    .btn-fav.yc {
-        color: #e4ba00;
-    }
+
+.yc {
+    color: #e4ba00;
+}
 
     .comment {
         max-height: 250px;

@@ -7,40 +7,70 @@
 
 <input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
-    <ol class="breadcrumbz">
-        @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
-        {
-            for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
+    <div class="bread-index float-l">
+        <ol class="breadcrumbz" id="breadCrumbs">
+            @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
             {
-                <li class="btn-group btn-group-sm bread-btn-grp">
-                    @if (!@Model.Breadcrumbs.ElementAt(i).Current)
-                    {
-                        <button type="button" class="btn" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn">@Model.Breadcrumbs.ElementAt(i).Name</button>
-                    }
-                    @if (Model.Breadcrumbs.ElementAt(i).HasChildren)
-                    {
-                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-caret-right"></i>
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-left">
-                            @foreach (var ch in Model.Breadcrumbs.ElementAt(i).Children)
-                            {
-                                <li><span class="nor nor-sm" onclick="goToFolder(@ch.Id)"><i class="fas fa-folder"></i> @ch.Name</span></li>
-                            }
-                        </ul>
-                    }
-                </li>
+                for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
+                {
+                    <li class="btn-group btn-group-sm bread-btn-grp">
+                        @if (!@Model.Breadcrumbs.ElementAt(i).Current)
+                        {
+                            <button type="button" class="btn" onclick="goToFolder(@Model.Breadcrumbs.ElementAt(i).Id)">@Model.Breadcrumbs.ElementAt(i).Name</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn">@Model.Breadcrumbs.ElementAt(i).Name</button>
+                        }
+                        @if (Model.Breadcrumbs.ElementAt(i).HasChildren)
+                        {
+                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-caret-right"></i>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-left">
+                                @foreach (var ch in Model.Breadcrumbs.ElementAt(i).Children)
+                                {
+                                    <li><span class="nor nor-sm" onclick="goToFolder(@ch.Id)"><i class="fas fa-folder"></i> <span>@ch.Name</span></span></li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
             }
+        </ol>
+    </div>
+    <div class="dropdown float-r">
+        <button class="btn btn-primary dropdown-toggle btn-bread" type="button" data-toggle="dropdown">
+            <i class="fas fa-cog"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li><span class="dis">Move</span></li>
+            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+
+            <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
+
+            <li role="separator" class="divider"></li>
+            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
+        </ul>
+    </div>
+    <div class="float-r">
+        @if (Model.Favourite)
+        {
+            <button class="btn btn-primary btn-bread" type="button" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)">
+                <i class="fas fa-star yc"></i>
+            </button>
         }
-    </ol>
+        else
+        {
+            <button class="btn btn-primary btn-bread" type="button" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 0)">
+                <i class="far fa-star yc"></i>
+            </button>
+        }
+    </div>
 </div>
+
 <div class="col-md-12">
-    @*<div class="row pl-30 tools-row">*@
     @{
         var ss = (SessionState)Session["SessionState"];
         bool search = ss.Location.Equals("search");
@@ -48,7 +78,7 @@
         {
             <p>Search results for: <b>@ss.Search</b> <a href="@ss."></a></p>
         }
-        else
+        @*else
         {
             <div class="float-l">
                 <div class="btn-group btn-group-sm btn-group-tools" role="group">
@@ -76,17 +106,18 @@
                         <ul class="dropdown-menu">
                             <li><span class="dis">Move</span></li>
                             <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+                            
                             <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
+                            
                             <li role="separator" class="divider"></li>
                             <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
                         </ul>
                     </div>
                 </div>
             </div>
-        }
+        }*@
     }
 </div>
-
 
 <!-- New Category -->
 <div class="col-sm-12">
@@ -198,7 +229,7 @@
     </table>
 </div>
 
-
+<!-- Unassigned -->
 @if (Model.UnassignedFiles != null && @Model.UnassignedFiles.Count() > 0)
 {
     using (Html.BeginForm("MoveFiles", "Folders", FormMethod.Post, new { enctype = "multipart/form-data", id = "moveFilesForm" }))
@@ -268,12 +299,13 @@
     }
 }
 
+
 <!-- Directory About Modal -->
 <div id="aboutModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-header-success">
                 <h4>@Model.Current.Name</h4>
             </div>
             <div class="modal-body">
@@ -299,7 +331,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-header-warning">
                 <h4>Renaming <b>@Model.Current.Name</b></h4>
             </div>
             <div class="modal-body">
@@ -326,7 +358,7 @@
             @using (Html.BeginForm("Create", "MasterFiles", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "newDocForm", @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="modal-header">
+                <div class="modal-header modal-header-info">
                     <h4>New Document</h4>
                 </div>
                 <div class="modal-body">
@@ -367,7 +399,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header modal-header-warning">
+            <div class="modal-header modal-header-danger">
                 <h4><i class="fas fa-exclamation-triangle fa-lg"></i> Delete <b>@Model.Current.Name</b></h4>
             </div>
             <div class="modal-body">
