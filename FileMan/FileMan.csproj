@@ -238,6 +238,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MasterFilesController.cs" />
+    <Compile Include="Controllers\NavigationHistoryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -261,10 +262,15 @@
     <Compile Include="Migrations\201905151333340_fixedFavs.Designer.cs">
       <DependentUpon>201905151333340_fixedFavs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201905170831354_navigationHistory.cs" />
+    <Compile Include="Migrations\201905170831354_navigationHistory.Designer.cs">
+      <DependentUpon>201905170831354_navigationHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Favourite.cs" />
     <Compile Include="Models\FileRevision.cs" />
+    <Compile Include="Models\NavigationHistory.cs" />
     <Compile Include="Models\SessionState.cs" />
     <Compile Include="Models\UserSetting.cs" />
     <Compile Include="Models\Folder.cs" />
@@ -538,6 +544,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Folders\" />
+    <Folder Include="Views\NavigationHistory\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -563,6 +570,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201905151333340_fixedFavs.resx">
       <DependentUpon>201905151333340_fixedFavs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905170831354_navigationHistory.resx">
+      <DependentUpon>201905170831354_navigationHistory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

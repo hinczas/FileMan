@@ -3,6 +3,61 @@
 ////
 var timer;
 
+function pushHistory(fun, man) {
+    var link = "/NavigationHistory/create/";
+    var dt = { jsfun: fun, manual: man };
+    $.ajax({
+        type: "post",
+        url: link,
+        data: dt,
+        success: function (succeeded) {
+            var smh = succeeded;
+        }
+    });
+}
+
+function goBack() {
+    var link = "/NavigationHistory/GetBackFunction/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (func) {
+            if (func !== "") {
+                var x = eval(func);
+            }
+        }
+    });
+}
+
+
+function performLogout(form) {
+    var link = "/NavigationHistory/ClearHistory/";
+    $.ajax({
+        type: "post",
+        url: link,
+        success: function (func) {
+            $(form).submit();
+        }
+    });
+}
+
+
+
+function goForth() {
+
+    var link = "/NavigationHistory/GetForthFunction/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (func) {
+            if (func !== "") {
+                var x = eval(func);
+            }
+        }
+    });
+
+}
+
 function addFavourite(itemId, itemType) {
     var link = "/Home/AddFavourite/";
     var dt = { id: itemId, itemType: itemType };
@@ -67,22 +122,23 @@ function getSidebard() {
 function mainSearch(_form) {
     var link = "/Home/TreeIndex/";
     var dt = $(_form).serialize();
-    $.ajax({
-        type: "get",
-        url: link,
-        data: dt,
-        success: function (d) {
-            /* d is the HTML of the returned response */
-            $('.sub-container').html(d); //replaces previous HTML with action
-            hideNavButton('#navDoc');
-            hideNavButton('#navCat');
-            hideNavButton('#navTools');
-        }
-    });
+    goToSearch(dt);
+    //$.ajax({
+    //    type: "get",
+    //    url: link,
+    //    data: dt,
+    //    success: function (d) {
+    //        /* d is the HTML of the returned response */
+    //        $('.sub-container').html(d); //replaces previous HTML with action
+    //        hideNavButton('#navDoc');
+    //        hideNavButton('#navCat');
+    //        hideNavButton('#navTools');
+    //    }
+    //});
 }
-function goToSearch(id, search, scope) {
+function goToSearch(dat, manual=true) {
     var link = "/Home/TreeIndex/";
-    var dt = { id: id, search: search, scope: scope };
+    var dt = dat;
     $.ajax({
         type: "get",
         url: link,
@@ -93,6 +149,7 @@ function goToSearch(id, search, scope) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
             hideNavButton('#navTools');
+            pushHistory("goToSearch('" +dat+ "', false)", manual);
         }
     });
 }
@@ -122,7 +179,7 @@ function renameCategory(_form) {
     }
 }
 
-function goToFolder(id, redirect = true) {
+function goToFolder(id, redirect = true, manual = true) {
     var link = "/Home/TreeIndex/"+id;
     $.ajax({
         type: "get",
@@ -134,13 +191,16 @@ function goToFolder(id, redirect = true) {
                 if (id == null) {
                     deselectTree();
                 } else {
-                    activateNode(id);
+                    //activateNode(id);
+                    selectNode(id);
                 }
                 ChangeUrl("Index", link);
             }
             showNavButton('#navDoc');
             showNavButton('#navCat');
             showNavButton('#navTools');
+
+            pushHistory("goToFolder(" + id + "," + redirect +",false)", manual);
         }
     });
 }
@@ -165,7 +225,7 @@ function lockDocument(id, doLock, pid) {
     });
 }
 
-function goToFile(id, pid=null) {
+function goToFile(id, pid = null, manual = true) {
     var link = "/MasterFiles/PartialDetails/";
     if (pid == null) {
         pid = -1;
@@ -182,11 +242,13 @@ function goToFile(id, pid=null) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
             hideNavButton('#navTools');
+
+            pushHistory("goToFile(" + id + "," + pid + ",false)", manual);
         }
     });
 }
 
-function goToEditFile(id, pid = null) {
+function goToEditFile(id, pid = null, manual = true) {
     var link = "/MasterFiles/PartialEdit/";
     if (pid == null) {
         pid = -1;
@@ -203,6 +265,7 @@ function goToEditFile(id, pid = null) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
             hideNavButton('#navTools');
+            pushHistory("goToEditFile(" + id + "," + pid + ", false)", manual);
         }
     });
 }
@@ -503,7 +566,7 @@ function addTableRow(id) {
     });
 }
 
-function goToManage(id) {
+function goToManage(id, manual = true) {
     var link = "/Manage/PartialIndex/";
     $.ajax({
         type: "get",
@@ -514,6 +577,7 @@ function goToManage(id) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
             hideNavButton('#navTools');
+            pushHistory("goToManage(" + id + ", false)", manual);
         }
     });
 }
@@ -563,6 +627,7 @@ function activateNode(id) {
 }
 
 function selectNode(id) {
+    deselectTree();
     $('#jstree_div').jstree('select_node', id);
 }
 

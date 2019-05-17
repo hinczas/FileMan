@@ -150,28 +150,36 @@ namespace Raf.FileMan.Classes
             file.RedirectId = par.Id;
             file.RedirectLabel = par.Name;
 
-            string retFun = "";
+            string retFun = "goBack()";
+            string retLabel = "previous page";
 
-            //switch(ss.ReturnTo)
+            //switch (ss.ReturnTo)
             //{
             //    case "folder":
-            //        retFun = string.Format("goToFolder({0})", ss.ReturnId);
+            //        retLabel = par.Name;
             //        break;
             //    case "file":
-            //        retFun = string.Format("goToFile({0},{1})", ss.ReturnId, ss.CatId);
+            //        retLabel = "previous document";
             //        break;
             //    case "search":
-            //        retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
-            //        file.RedirectLabel = "search";
+            //        retLabel = "search";
             //        break;
             //    default:
-            //        retFun = string.Format("goToFolder({0})", par.Id);
+            //        retFun = "";
             //        break;
             //}
 
-            retFun = string.Format("goToFolder({0})", ss.CatId);
 
+            //retFun = string.Format("goToFolder({0})", ss.CatId);
             file.RedirectFun = retFun;
+            file.RedirectLabel = retLabel;
+
+            //if (ss.ReturnTo.Equals("search"))
+            //{
+            //    file.RedirectLabel = "search";
+            //    file.RedirectFun = "goBack()";
+            //}
+
 
             return file;
         }
@@ -577,6 +585,7 @@ namespace Raf.FileMan.Classes
                 a_attr = new JSTAAttr()
                 {
                     href = "/Home/TreeIndex/"+id,
+                    //href = "goToFolder("+id+")",
                     data_quantity = fol.Files == null || fol.Files.Count < 1 ? "" : string.Format("({0})",fol.Files.Count)
                 }
                 

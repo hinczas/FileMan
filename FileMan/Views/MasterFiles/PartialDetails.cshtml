@@ -66,9 +66,12 @@
                 <li>
                     <span onclick="goToEditFile(@Model.Current.Id, @Model.RedirectId)" class="nor">Edit Document</span>
                 </li>
-                <li>
-                    <span data-toggle="modal" data-target="#editRevModal" class="nor">Edit Rev. comment</span>
-                </li>
+                if (Model.RevisionsCount > 0)
+                {
+                    <li>
+                        <span data-toggle="modal" data-target="#editRevModal" class="nor">Edit Rev. comment</span>
+                    </li>
+                }
                 <li role="separator" class="divider"></li>
                 if (Model.Locked)
                 {
@@ -119,17 +122,7 @@
                 <h4 class="cus-h4">
                     <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
                 </h4>
-                <div class="dropdown pull-right">
-                    @*<span>
-                        @if (Model.Favourite)
-                        {
-                            <i class="fas fa-star btn-fav cur-point" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)"></i>
-                        }
-                        else
-                        {
-                            <i class="far fa-star btn-fav cur-point" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 1)"></i>
-                        }
-                    </span>*@
+                <div class="dropdown pull-right">                    
                     <span>
                         @if (Model.Locked)
                         {
@@ -139,56 +132,7 @@
                         {
                             <i class="fas fa-lock-open lock-lg" title="Document unlocked"></i>
                         }
-                    </span>
-                    @*<button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-toggle="dropdown" alt="Tools">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><span data-toggle="modal" data-target="#shareModal" class="nor">Share</span></li>
-                        @if (Model.Lockable)
-                        {
-                            <li><span data-toggle="modal" data-target="#movModal" class="nor">Move</span></li>
-                            <li><span data-toggle="modal" data-target="#revModal" class="nor">Add draft</span></li>
-                            if (Model.Promote)
-                            {
-                                <li><span data-toggle="modal" data-target="#promModal" class="nor">Promote</span></li>
-                            }
-                            else
-                            {
-                                <li><span class="dis">Promote</span></li>
-                            }
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <span onclick="goToEditFile(@Model.Current.Id, @Model.RedirectId)" class="nor">Edit Document</span>
-                            </li>
-                            <li>
-                                <span data-toggle="modal" data-target="#editRevModal" class="nor">Edit Rev. comment</span>
-                            </li>
-                            <li role="separator" class="divider"></li>
-                            if (Model.Locked)
-                            {
-                                <li>
-                                    <span onclick="lockDocument(@Model.Current.Id, false, @Model.RedirectId)" class="nor">Unlock</span>
-                                </li>
-                            }
-                            else
-                            {
-                                <li>
-                                    <span onclick="lockDocument(@Model.Current.Id, true, @Model.RedirectId)" class="nor">Lock</span>
-                                </li>
-                            }
-                            if (Model.Current.Folders != null && Model.Current.Folders.Count() != 0)
-                            {
-                                <li>
-                                    <span func="uncategorise(@Model.Current.Id, @Model.RedirectId)" class="del" id="delSpan" onmouseover="mouseEnterHandler(this)" onmouseout="mouseLeaveHandler(this)">Uncategorise</span>
-                                </li>
-                            }
-                        }
-                        else
-                        {
-                            <li><span class="dis" title="Locked by @Model.LockedBy">Unlock</span></li>
-                        }
-                    </ul>*@
+                    </span>                    
                 </div>
             </div>
         </div>

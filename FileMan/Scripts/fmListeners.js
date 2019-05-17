@@ -10,6 +10,9 @@ window.onerror = function (message, url, lineNumber) {
     return true;
 };  
 
+
+window.onbeforeunload = performLogout('#logoutForm');
+
 $(document)
     .ajaxStart(function () {
         $('#workingDiv').show();
@@ -47,6 +50,7 @@ $(function () {
 
     $('#jstree_div').on("activate_node.jstree", function (e, data) {
         var link = data.node.a_attr.href;
+        var id = data.node.id;
         $.ajax({
             type: "get",
             url: link,
@@ -55,6 +59,7 @@ $(function () {
                 $('.sub-container').html(d); //replaces previous HTML with action
 
                 ChangeUrl("Index", link);
+                pushHistory("goToFolder(" + id + ", true, false)", true);
             }
         });
     });
@@ -86,6 +91,7 @@ $(function () {
     });
 
     $('#breadCrumbs').scrollLeft = $('#breadCrumbs').scrollWidth;
+
 });
 
 $('#split-bar').mousedown(function (e) {
