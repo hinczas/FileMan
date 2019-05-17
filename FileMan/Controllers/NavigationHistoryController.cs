@@ -52,15 +52,19 @@ namespace Raf.FileMan.Controllers
 
         }
 
-        //[HttpPost]
-        //public bool CreateFromUrl(string url)
-        //{
+        [HttpPost]
+        public void CreateFromUrl(string url)
+        {
 
-        //    var userId = User.Identity.GetUserId();
-        //    var sessID = HttpContext.Session.SessionID;
+            var userId = User.Identity.GetUserId();
+            var sessID = HttpContext.Session.SessionID;
+                        
+            if (Session["HistoryId"] == null)
+            {
 
-        //    return false;
-        //}
+            }
+
+        }
 
         [HttpGet]
         public string GetBackFunction()

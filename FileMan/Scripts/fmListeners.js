@@ -10,9 +10,6 @@ window.onerror = function (message, url, lineNumber) {
     return true;
 };  
 
-
-window.onbeforeunload = performLogout('#logoutForm');
-
 $(document)
     .ajaxStart(function () {
         $('#workingDiv').show();

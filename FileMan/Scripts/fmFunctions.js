@@ -11,7 +11,7 @@ function pushHistory(fun, man) {
         url: link,
         data: dt,
         success: function (succeeded) {
-            var smh = succeeded;
+            enableBack();
         }
     });
 }
@@ -24,24 +24,13 @@ function goBack() {
         success: function (func) {
             if (func !== "") {
                 var x = eval(func);
+                enableForth();
+            } else {
+                disableNav('#navBack');
             }
         }
     });
 }
-
-
-function performLogout(form) {
-    var link = "/NavigationHistory/ClearHistory/";
-    $.ajax({
-        type: "post",
-        url: link,
-        success: function (func) {
-            $(form).submit();
-        }
-    });
-}
-
-
 
 function goForth() {
 
@@ -52,10 +41,37 @@ function goForth() {
         success: function (func) {
             if (func !== "") {
                 var x = eval(func);
+            } else {
+                disableNav('#navForth');
             }
         }
     });
+}
 
+function disableNav(btn) {
+    $(btn).addClass("disabled");
+    $(btn).removeAttr("onclick");
+}
+
+function enableForth() {
+    $('#navForth').removeClass("disabled");
+    $('#navForth').attr("onclick","goForth()");
+}
+
+function enableBack() {
+    $('#navBack').removeClass("disabled");
+    $('#navBack').attr("onclick", "goBack()");
+}
+
+function performLogout(form) {
+    var link = "/NavigationHistory/ClearHistory/";
+    $.ajax({
+        type: "post",
+        url: link,
+        success: function (func) {
+            $(form).submit();
+        }
+    });
 }
 
 function addFavourite(itemId, itemType) {
@@ -148,7 +164,6 @@ function goToSearch(dat, manual=true) {
             $('.sub-container').html(d); //replaces previous HTML with action
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
-            hideNavButton('#navTools');
             pushHistory("goToSearch('" +dat+ "', false)", manual);
         }
     });
@@ -198,7 +213,6 @@ function goToFolder(id, redirect = true, manual = true) {
             }
             showNavButton('#navDoc');
             showNavButton('#navCat');
-            showNavButton('#navTools');
 
             pushHistory("goToFolder(" + id + "," + redirect +",false)", manual);
         }
@@ -241,7 +255,6 @@ function goToFile(id, pid = null, manual = true) {
             ChangeUrl("Details", link);
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
-            hideNavButton('#navTools');
 
             pushHistory("goToFile(" + id + "," + pid + ",false)", manual);
         }
@@ -264,7 +277,6 @@ function goToEditFile(id, pid = null, manual = true) {
             ChangeUrl("Edit", link);
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
-            hideNavButton('#navTools');
             pushHistory("goToEditFile(" + id + "," + pid + ", false)", manual);
         }
     });
@@ -911,9 +923,9 @@ function copyToClip(element) {
 }
 
 function hideNavButton(navId) {
-    $(navId).addClass('hidden');
+    $(navId).addClass('disabled');
 }
 
 function showNavButton(navId) {
-    $(navId).removeClass('hidden');
+    $(navId).removeClass('disabled');
 }
