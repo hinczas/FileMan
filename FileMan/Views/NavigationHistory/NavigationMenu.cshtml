@@ -1,0 +1,41 @@
+﻿@model Raf.FileMan.Models.ViewModels.NavigationViewModel
+
+<ul class="nav navbar-nav">
+    <li>
+        <div class="nav-btn" onclick="goToFolder()" id="navHome" title="Home">
+            <i class="fas fa-home nav-btn-icon"></i>
+            <span class="nav-btn-label">home</span>
+        </div>
+    </li>
+    <li>
+        <div class="nav-btn @Model.BackClass" onclick="goBack()" id="navBack" title="Go back one page">
+            <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
+            <span class="nav-btn-label">back</span>
+        </div>
+    </li>
+    <li>
+        <div class="nav-btn @Model.ForthClass" onclick="goForth()" id="navForth" title="Go forward one page">
+            <i class="fas fa-arrow-circle-right nav-btn-icon"></i>
+            <span class="nav-btn-label">forth</span>
+        </div>
+    </li>
+    <li>
+        <div class="nav-btn" onclick="location.reload()" id="navRefresh" title="Refresh">
+            <i class="fas fa-sync nav-btn-icon"></i>
+            <span class="nav-btn-label">reload</span>
+        </div>
+    </li>
+    <li class="nav-separator"></li>
+    <li>
+        <div class="nav-btn @Model.ButtonsClass" id="navDoc" data-toggle="modal" data-target="#filModal" title="New Document" data-extra="modal">
+            <i class="fas fa-file-medical nav-btn-icon"></i>
+            <span class="nav-btn-label">doc</span>
+        </div>
+    </li>
+    <li>
+        <div class="nav-btn @Model.ButtonsClass" id="navCat" data-toggle="collapse" data-target="#catCollapse" title="New Category" data-extra="collapse">
+            <i class="fas fa-folder-plus nav-btn-icon"></i>
+            <span class="nav-btn-label">cat</span>
+        </div>
+    </li>
+</ul>

@@ -144,10 +144,11 @@ namespace Raf.FileMan.Classes
                 par = _db.Folder.Find(pid);
             } else
             {
-                par = _db.Folder.Find(ss.CatId);
+                par = GetRoot();
             }
 
-            file.RedirectId = par.Id;
+            //file.RedirectId = par.Id;
+            file.RedirectId = pid == null ? -1 : (long)pid ;
             file.RedirectLabel = par.Name;
 
             string retFun = "goBack()";

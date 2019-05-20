@@ -22,6 +22,7 @@ namespace Raf.FileMan.Models
         public long? ParentId { get; set; }
         public string ParentIdStr { get; set; }
         public string JSFunction { get; set; }
+        public string Url { get; set; }
         public DateTime ActionDate { get; set; }
 
         [Required]

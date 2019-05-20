@@ -2,6 +2,7 @@
 using Raf.FileMan.Classes;
 using Raf.FileMan.Context;
 using Raf.FileMan.Models;
+using Raf.FileMan.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,33 @@ namespace Raf.FileMan.Controllers
         {
             _is = new ItemService();
             _db = new AppDbContext();
+        }
+
+        public PartialViewResult NavigationMenu()
+        {
+            var reqUrl = HttpContext.Request.Url.PathAndQuery;
+            var func = ParseUrl(reqUrl);
+
+            var model = new NavigationViewModel();
+
+            if (Session["HistoryId"] == null)
+            {
+                model.BackClass = "disabled";
+                model.ForthClass = "disabled";
+            }
+            else {
+                long id = (long)Session["HistoryId"];
+
+                bool hasNext = HasNext(id);
+                bool hasPrev = HasPrev(id);
+
+                model.BackClass = hasPrev ? "" : "disabled";
+                model.ForthClass = hasNext ? "" : "disabled"; 
+            }
+
+
+
+            return PartialView(model);
         }
 
         [HttpPost]
@@ -110,6 +138,26 @@ namespace Raf.FileMan.Controllers
             }
         }
 
+        [HttpGet]
+        public string GetCurrentFunction()
+        {
+            if (Session["HistoryId"] == null)
+            {
+                return string.Empty;
+            }
+
+            var histID = (long)Session["HistoryId"];
+            var histObj = GetCurrentHistoryItem(histID);
+
+            if (histObj == null)
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return histObj.JSFunction;
+            }
+        }
 
         [HttpPost]
         public bool ClearHistory()
@@ -130,9 +178,7 @@ namespace Raf.FileMan.Controllers
                 return false;
             }
         } 
-
-
-
+               
         private NavigationHistory GetPreviousHistoryItem(long id)
         {
             var userId = User.Identity.GetUserId();
@@ -172,6 +218,13 @@ namespace Raf.FileMan.Controllers
 
             return item;
         }
+        
+        private NavigationHistory GetCurrentHistoryItem(long id)
+        {
+            var item = _db.History.Find(id);
+
+            return item;
+        }
 
         private async Task<bool> DeleteForthHistoryAsync(long id)
         {
@@ -194,5 +247,84 @@ namespace Raf.FileMan.Controllers
             }
         }
 
+        private bool HasNext(long id)
+        {
+            var userId = User.Identity.GetUserId();
+            var sessID = HttpContext.Session.SessionID;
+
+            var history = _db.History
+                                    .Where(a => a.Id > id && a.UserId.Equals(userId) && a.SessionId.Equals(sessID))
+                                    .Select(s => s.Id);
+
+            if (history != null && history.Count() > 0)
+                return true;
+            else
+                return false;
+        }
+
+        private bool HasPrev(long id)
+        {
+            var userId = User.Identity.GetUserId();
+            var sessID = HttpContext.Session.SessionID;
+
+            var history = _db.History
+                                    .Where(a => a.Id < id && a.UserId.Equals(userId) && a.SessionId.Equals(sessID))
+                                    .Select(s => s.Id);
+
+            if (history != null && history.Count() > 0)
+                return true;
+            else
+                return false;
+        }
+
+        private string ParseUrl(string url)
+        {
+            if (url.Equals("/") || url.Equals("/Home/Index"))
+                return "goToFolder(undefined, true, false)";
+
+            if (url.Contains("/Home/Index/"))
+            {
+                int length = "/Home/Index/".Length;
+                
+
+                string fun = "goToFolder({0}, true, false)";
+
+                string itemId = url.Substring(length);
+
+                return string.Format(fun, itemId);
+            }
+
+
+            if (url.Contains("/MasterFile/Details/") || url.Contains("/Share/"))
+            {
+                int length = 0;
+                if (url.Contains("/MasterFile/Details/"))
+                    length = "/MasterFile/Details/".Length;
+
+
+                if (url.Contains("/Share/"))
+                    length = "/Share/".Length;
+
+
+                string fun = "goToFile({0},{1}, false)";
+
+                int loc = url.IndexOf("?pid=");
+
+                string itemId = "";
+                string pid = "-1";
+
+                if (loc == -1)
+                {
+                    itemId = url.Substring(length);
+
+                } else
+                {
+                    itemId = url.Substring(length, loc - length);
+                    pid = url.Substring(length + itemId.Length + "?pid=".Length);
+                }
+                return string.Format(fun, itemId, pid);
+            }
+            return "";
+        }
     }
 }

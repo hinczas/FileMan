@@ -53,59 +53,7 @@
             </div>
             <!-- NAVBAR-MENU -->
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <div class="nav-btn" onclick="goToFolder()" id="navHome" title="Home">
-                            <i class="fas fa-home nav-btn-icon"></i>
-                            <span class="nav-btn-label">home</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="nav-btn" onclick="goBack()" id="navBack" title="Go back one page">
-                            <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
-                            <span class="nav-btn-label">back</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="nav-btn" onclick="goForth()" id="navForth" title="Go forward one page">
-                            <i class="fas fa-arrow-circle-right nav-btn-icon"></i>
-                            <span class="nav-btn-label">forth</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="nav-btn" onclick="location.reload()" id="navRefresh" title="Refresh">
-                            <i class="fas fa-sync nav-btn-icon"></i>
-                            <span class="nav-btn-label">reload</span>
-                        </div>
-                    </li>
-                    <li class="nav-separator"></li>
-                    <li>
-                        <div class="nav-btn" id="navDoc" data-toggle="modal" data-target="#filModal" title="New Document" data-extra="modal">
-                            <i class="fas fa-file-medical nav-btn-icon"></i>
-                            <span class="nav-btn-label">doc</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="nav-btn" id="navCat" data-toggle="collapse" data-target="#catCollapse" title="New Category" data-extra="collapse">
-                            <i class="fas fa-folder-plus nav-btn-icon"></i>
-                            <span class="nav-btn-label">cat</span>
-                        </div>
-                    </li>
-                    @*<li class="nav-separator"></li>
-        <li class="dropdown nav-dropdown">
-            <div class="nav-btn" type="button" data-toggle="dropdown" id="navTools">
-                <i class="fas fa-cog nav-btn-icon"></i>
-                <span class="nav-btn-label">tools</span>
-            </div>
-            <ul class="dropdown-menu">
-                <li><span class="dis">Move</span></li>
-                <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
-                <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                <li role="separator" class="divider"></li>
-                <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-            </ul>
-        </li>*@
-                </ul>
+                @Html.Action("NavigationMenu", "NavigationHistory")
 
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm", @class = "navbar-form navbar-right" }))
                 {
