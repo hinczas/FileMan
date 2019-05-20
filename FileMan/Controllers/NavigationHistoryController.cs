@@ -34,9 +34,19 @@ namespace Raf.FileMan.Controllers
             {
                 model.BackClass = "disabled";
                 model.ForthClass = "disabled";
+
+                Create(func, true);
             }
             else {
                 long id = (long)Session["HistoryId"];
+
+                string sesFunc = GetCurrentFunction();
+
+                if(!sesFunc.Equals(func))
+                {
+                    Create(func, true);
+                    id = (long)Session["HistoryId"];
+                }
 
                 bool hasNext = HasNext(id);
                 bool hasPrev = HasPrev(id);
@@ -95,11 +105,12 @@ namespace Raf.FileMan.Controllers
         }
 
         [HttpGet]
-        public string GetBackFunction()
+        public JsonResult GetBackFunction()
         {
             if (Session["HistoryId"] == null)
             {
-                return string.Empty;
+                //return string.Empty;
+                return Json(new { success = false, func = "", dis = true }, JsonRequestBehavior.AllowGet);
             }
 
             var histID = (long)Session["HistoryId"];
@@ -107,21 +118,23 @@ namespace Raf.FileMan.Controllers
 
             if (histObj == null)
             {
-                return string.Empty;
+                return Json(new { success = false, func = "", dis = true }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 Session["HistoryId"] = histObj.Id;
-                return histObj.JSFunction;
+                bool hasPrev = HasPrev(histObj.Id);
+
+                return Json(new { success = true, func = histObj.JSFunction, dis = !hasPrev }, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpGet]
-        public string GetForthFunction()
+        public JsonResult GetForthFunction()
         {
             if (Session["HistoryId"] == null)
             {
-                return string.Empty;
+                return Json(new {success = false,  func = "", dis = true }, JsonRequestBehavior.AllowGet);
             }
 
             var histID = (long)Session["HistoryId"];
@@ -129,12 +142,14 @@ namespace Raf.FileMan.Controllers
 
             if (histObj == null)
             {
-                return string.Empty;
+                return Json(new { success = false, func = "", dis = true }, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 Session["HistoryId"] = histObj.Id;
-                return histObj.JSFunction;
+                bool hasNext = HasNext(histObj.Id);
+
+                return Json(new { success = true, func = histObj.JSFunction, dis = !hasNext }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -279,37 +294,64 @@ namespace Raf.FileMan.Controllers
 
         private string ParseUrl(string url)
         {
+            string pidStr = "?pid=";
+            string idStr = "?id=";
+            string srchStr = "?search=";
+
+            // goToManage()
+            if (url.Equals("/Manage/Index"))
+                return "goToManage(undefined, false)";
+            
+            // goToFolder()
             if (url.Equals("/") || url.Equals("/Home/Index"))
                 return "goToFolder(undefined, true, false)";
 
+            // goToSearch()
+            if(url.Contains(srchStr))
+            {
+                int length = srchStr.Length;
+                int loc = url.IndexOf(srchStr);
+                string query = url.Substring(loc + length);
+
+                string fun = "goToSearch('{0}', false)";
+                return string.Format(fun, query);
+            }
+
+            // goToFolder()
             if (url.Contains("/Home/Index/"))
             {
                 int length = "/Home/Index/".Length;
-                
+
+                if (url.Contains(idStr))
+                {
+                    length += idStr.Length;
+                    pidStr = "&pid=";
+                }
 
                 string fun = "goToFolder({0}, true, false)";
-
                 string itemId = url.Substring(length);
-
                 return string.Format(fun, itemId);
             }
 
-
-            if (url.Contains("/MasterFile/Details/") || url.Contains("/Share/"))
+            // goToFile()
+            if (url.Contains("/MasterFiles/Details/") || url.Contains("/Share/"))
             {
                 int length = 0;
-                if (url.Contains("/MasterFile/Details/"))
-                    length = "/MasterFile/Details/".Length;
-
-
+                if (url.Contains("/MasterFiles/Details/"))
+                    length = "/MasterFiles/Details/".Length;
+                
                 if (url.Contains("/Share/"))
                     length = "/Share/".Length;
 
 
+                if (url.Contains(idStr))
+                {
+                    length += idStr.Length;
+                    pidStr = "&pid=";
+                }
+
                 string fun = "goToFile({0},{1}, false)";
-
-                int loc = url.IndexOf("?pid=");
-
+                int loc = url.IndexOf(pidStr);
                 string itemId = "";
                 string pid = "-1";
 
@@ -320,7 +362,35 @@ namespace Raf.FileMan.Controllers
                 } else
                 {
                     itemId = url.Substring(length, loc - length);
-                    pid = url.Substring(length + itemId.Length + "?pid=".Length);
+                    pid = url.Substring(length + itemId.Length + pidStr.Length);
+                }
+                return string.Format(fun, itemId, pid);
+            }
+
+            // goToEditFile()
+            if (url.Contains("/MasterFiles/Edit/"))
+            {
+                int length = "/MasterFiles/Edit/".Length;
+
+                if (url.Contains(idStr))
+                {
+                    length += idStr.Length;
+                    pidStr = "&pid=";
+                }
+
+                string fun = "goToEditFile({0},{1}, false)";
+                int loc = url.IndexOf(pidStr);
+                string itemId = "";
+                string pid = "-1";
+
+                if (loc == -1)
+                {
+                    itemId = url.Substring(length);
+                }
+                else
+                {
+                    itemId = url.Substring(length, loc - length);
+                    pid = url.Substring(length + itemId.Length + pidStr.Length);
                 }
                 return string.Format(fun, itemId, pid);
             }

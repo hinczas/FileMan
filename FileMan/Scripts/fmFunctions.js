@@ -21,10 +21,13 @@ function goBack() {
     $.ajax({
         type: "get",
         url: link,
-        success: function (func) {
-            if (func !== "") {
-                var x = eval(func);
+        success: function (res) {
+            if (res.success) {
+                var x = eval(res.func);
                 enableForth();
+                if (res.dis) {
+                    disableNav('#navBack');
+                }
             } else {
                 disableNav('#navBack');
             }
@@ -38,9 +41,12 @@ function goForth() {
     $.ajax({
         type: "get",
         url: link,
-        success: function (func) {
-            if (func !== "") {
-                var x = eval(func);
+        success: function (res) {
+            if (res.success) {
+                var x = eval(res.func);
+                if (res.dis) {
+                    disableNav('#navForth');
+                }
             } else {
                 disableNav('#navForth');
             }
@@ -256,7 +262,7 @@ function goToFile(id, pid = null, manual = true) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
 
-            pushHistory("goToFile(" + id + "," + pid + ",false)", manual);
+            pushHistory("goToFile(" + id + "," + pid + ", false)", manual);
         }
     });
 }
