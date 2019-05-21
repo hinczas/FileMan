@@ -39,8 +39,12 @@ namespace Raf.FileMan.Controllers
             // Get the Document details
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
+            if (pid == null)
+            {
+                pid = -1;
+            }
             // Save session
-            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id);
+            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id, "goToFile("+id+","+pid+")");
 
             return View(file);
         }
@@ -53,8 +57,12 @@ namespace Raf.FileMan.Controllers
             // Get the Document details
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
+            if (pid == null)
+            {
+                pid = -1;
+            }
             // Save session
-            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id);
+            Session["SessionState"] = new SessionState("file", file.RedirectId, id, string.Empty, null, "file", id, "goToFile(" + id + "," + pid + ")");
 
             return PartialView(file);
         }
@@ -100,7 +108,12 @@ namespace Raf.FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
-            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
+            if (pid == null)
+            {
+                pid = -1;
+            }
+            // Save session
+            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id, "goToEditFile(" + id + "," + pid + ")");
 
             return View(file);
         }
@@ -115,7 +128,12 @@ namespace Raf.FileMan.Controllers
             string userId = User.Identity.GetUserId();
             MasterFileViewModel file = _is.GetMasterFileViewModel(id, userId, (SessionState)Session["SessionState"], pid);
 
-            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id);
+            if (pid == null)
+            {
+                pid = -1;
+            }
+            // Save session
+            Session["SessionState"] = new SessionState("edit", (long)pid, id, string.Empty, null, "edit", id, "goToEditFile(" + id + "," + pid + ")");
 
             return PartialView(file);
         }

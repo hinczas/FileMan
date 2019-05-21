@@ -144,11 +144,17 @@ namespace Raf.FileMan.Classes
                 par = _db.Folder.Find(pid);
             } else
             {
-                par = GetRoot();
+                if (ss.CatId < 1)
+                {
+                    par = GetRoot();
+                } else
+                {
+                    par = _db.Folder.Find(ss.CatId);
+                }
             }
 
             //file.RedirectId = par.Id;
-            file.RedirectId = pid == null ? -1 : (long)pid ;
+            file.RedirectId = par.Id;
             file.RedirectLabel = par.Name;
 
             string retFun = "goBack()";
@@ -171,9 +177,9 @@ namespace Raf.FileMan.Classes
             //}
 
 
-            //retFun = string.Format("goToFolder({0})", ss.CatId);
+            retFun = string.Format("goToFolder({0})", ss.CatId);
             file.RedirectFun = retFun;
-            file.RedirectLabel = retLabel;
+            file.RedirectLabel = par.Name;
 
             //if (ss.ReturnTo.Equals("search"))
             //{
@@ -442,6 +448,11 @@ namespace Raf.FileMan.Classes
         public Folder GetRoot()
         {
             return _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault();
+        }
+        public long GetRootId()
+        {
+            return _db.Folder.Where(a => a.Type.Equals("root")).FirstOrDefault().Id;
+
         }
 
         public UserSideBarVM GetSidebar(string userId)

@@ -8,16 +8,36 @@
         </div>
     </li>
     <li>
-        <div class="nav-btn @Model.BackClass" onclick="goBack()" id="navBack" title="Go back one page">
-            <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
-            <span class="nav-btn-label">back</span>
-        </div>
+        @if (Model.BackDisabled)
+        {
+            <div class="nav-btn @Model.BackClass" id="navBack" title="Go back one page">
+                <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
+                <span class="nav-btn-label">back</span>
+            </div>
+        }
+        else
+        {
+            <div class="nav-btn @Model.BackClass" onclick="goBack()" id="navBack" title="Go back one page">
+                <i class="fas fa-arrow-circle-left nav-btn-icon"></i>
+                <span class="nav-btn-label">back</span>
+            </div>
+        }
     </li>
     <li>
-        <div class="nav-btn @Model.ForthClass" onclick="goForth()" id="navForth" title="Go forward one page">
-            <i class="fas fa-arrow-circle-right nav-btn-icon"></i>
-            <span class="nav-btn-label">forth</span>
-        </div>
+        @if (Model.ForthDisabled)
+        {
+            <div class="nav-btn @Model.ForthClass" id="navForth" title="Go forward one page">
+                <i class="fas fa-arrow-circle-right nav-btn-icon"></i>
+                <span class="nav-btn-label">forth</span>
+            </div>
+        }
+        else
+        {
+            <div class="nav-btn @Model.ForthClass" onclick="goForth()" id="navForth" title="Go forward one page">
+                <i class="fas fa-arrow-circle-right nav-btn-icon"></i>
+                <span class="nav-btn-label">forth</span>
+            </div>
+        }
     </li>
     <li>
         <div class="nav-btn" onclick="location.reload()" id="navRefresh" title="Refresh">

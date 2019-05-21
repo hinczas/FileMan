@@ -3,6 +3,18 @@
 ////
 var timer;
 
+async function getNavigationMenu(url) {
+    
+    await $.ajax({
+        url: '/NavigationHistory/NavigationMenu/',
+        type: 'get',
+        data: {url: url},
+        success: function (data) {
+            $('#navigationMenu').html(data);
+        }
+    });
+}
+
 function pushHistory(fun, man) {
     var link = "/NavigationHistory/create/";
     var dt = { jsfun: fun, manual: man };
@@ -10,8 +22,19 @@ function pushHistory(fun, man) {
         type: "post",
         url: link,
         data: dt,
-        success: function (succeeded) {
-            enableBack();
+        success: function (result) {
+            if (result.success) {
+                if (result.back) {
+                    enableBack();
+                } else {
+                    disableNav('#navBack');
+                }
+                if (result.forth) {
+                    enableForth();
+                } else {
+                    disableNav('#navForth');
+                }
+            }
         }
     });
 }
@@ -24,7 +47,7 @@ function goBack() {
         success: function (res) {
             if (res.success) {
                 var x = eval(res.func);
-                enableForth();
+                //enableForth();
                 if (res.dis) {
                     disableNav('#navBack');
                 }
@@ -47,6 +70,7 @@ function goForth() {
                 if (res.dis) {
                     disableNav('#navForth');
                 }
+                //enableBack();
             } else {
                 disableNav('#navForth');
             }
@@ -220,7 +244,7 @@ function goToFolder(id, redirect = true, manual = true) {
             showNavButton('#navDoc');
             showNavButton('#navCat');
 
-            pushHistory("goToFolder(" + id + "," + redirect +",false)", manual);
+            pushHistory("goToFolder(" + id + ", " + redirect +", false)", manual);
         }
     });
 }
@@ -262,7 +286,7 @@ function goToFile(id, pid = null, manual = true) {
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
 
-            pushHistory("goToFile(" + id + "," + pid + ", false)", manual);
+            pushHistory("goToFile(" + id + ", " + pid + ", false)", manual);
         }
     });
 }
@@ -283,7 +307,7 @@ function goToEditFile(id, pid = null, manual = true) {
             ChangeUrl("Edit", link);
             hideNavButton('#navDoc');
             hideNavButton('#navCat');
-            pushHistory("goToEditFile(" + id + "," + pid + ", false)", manual);
+            pushHistory("goToEditFile(" + id + ", " + pid + ", false)", manual);
         }
     });
 }

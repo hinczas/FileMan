@@ -53,7 +53,8 @@
             </div>
             <!-- NAVBAR-MENU -->
             <div class="navbar-collapse collapse">
-                @Html.Action("NavigationMenu", "NavigationHistory")
+                <div id="navigationMenu"></div>
+                @*@Html.Action("NavigationMenu", "NavigationHistory")*@
 
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "mainSearchForm", @class = "navbar-form navbar-right" }))
                 {
@@ -189,7 +190,7 @@
                 var id = folId == "" ? -1 : Number(folId);
                 var url = "/Home/GetTree?id=" + id;
                 $.get(url,
-                    function (data) {
+                    async function (data) {
                         $('#jstree_div').jstree({
                             "plugins": ["search", "dnd", "sort"],
                             'core': {
@@ -198,6 +199,9 @@
                             }
                         });
                         //return data;
+                        var locat = "@Url.RequestContext.HttpContext.Request.Url.PathAndQuery";
+                        await getNavigationMenu(locat)
+
                         var my_timer = setTimeout(function () {
                             $('#loadingDiv').hide();
                             $('#hideAll').delay(100).fadeOut(100);

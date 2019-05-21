@@ -13,9 +13,10 @@ namespace Raf.FileMan.Models
         public string Search { get; set; }
         public int? Scope { get; set; }
         public string ReturnTo { get; set; }
+        public string ReturnFunction { get; set; }
         public long? ReturnId { get; set; }
 
-        public SessionState(string location, long catId, long docId, string search, int? scope = null, string returnTo = "", long? returnId = null)
+        public SessionState(string location, long catId, long docId, string search, int? scope = null, string returnTo = "", long? returnId = null, string returnFunction = "")
         {
             Location = location;
             CatId = catId;
@@ -24,6 +25,7 @@ namespace Raf.FileMan.Models
             Scope = scope;
             ReturnTo = returnTo;
             ReturnId = returnId;
+            ReturnFunction = returnFunction;
         }
     }
 }

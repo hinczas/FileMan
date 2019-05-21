@@ -23,28 +23,36 @@ namespace Raf.FileMan.Controllers
             _db = new AppDbContext();
         }
 
-        public PartialViewResult NavigationMenu()
+        [HttpGet]
+        public async Task<PartialViewResult> NavigationMenu(string url = "")
         {
             var reqUrl = HttpContext.Request.Url.PathAndQuery;
+            if (reqUrl.Contains("NavigationMenu"))
+                reqUrl = url;
+
             var func = ParseUrl(reqUrl);
 
             var model = new NavigationViewModel();
 
             if (Session["HistoryId"] == null)
             {
-                model.BackClass = "disabled";
-                model.ForthClass = "disabled";
+                await DeleteHistoryAsync();
 
-                Create(func, true);
+                model.BackClass = "disabled";
+                model.BackDisabled = true;
+                model.ForthClass = "disabled";
+                model.ForthDisabled = true;
+
+                await Create(func, true);
             }
             else {
                 long id = (long)Session["HistoryId"];
 
-                string sesFunc = GetCurrentFunction();
+                string sesFunc = await GetCurrentFunction();
 
                 if(!sesFunc.Equals(func))
                 {
-                    Create(func, true);
+                    await Create(func, true);
                     id = (long)Session["HistoryId"];
                 }
 
@@ -52,18 +60,23 @@ namespace Raf.FileMan.Controllers
                 bool hasPrev = HasPrev(id);
 
                 model.BackClass = hasPrev ? "" : "disabled";
-                model.ForthClass = hasNext ? "" : "disabled"; 
+                model.BackDisabled = !hasPrev;
+                model.ForthClass = hasNext ? "" : "disabled";
+                model.ForthDisabled = !hasNext;
             }
-
-
-
             return PartialView(model);
         }
 
         [HttpPost]
-        public async Task<bool> Create(string jsfun, bool manual)
+        public async Task<JsonResult> Create(string jsfun, bool manual)
         {            
             var history = new NavigationHistory(User.Identity.GetUserId(), HttpContext.Session.SessionID);
+
+            if (jsfun.Contains("undefined"))
+            {
+                var root = _is.GetRootId();
+                jsfun = jsfun.Replace("undefined", root.ToString());
+            }
             history.JSFunction = jsfun;
 
             if (manual)
@@ -72,21 +85,35 @@ namespace Raf.FileMan.Controllers
                 {
                     if (Session["HistoryId"] != null)
                     {
-                        await DeleteForthHistoryAsync((long)Session["HistoryId"]);
+                        string sesFunc = await GetCurrentFunction();
+
+                        if (!sesFunc.Equals(jsfun))
+                        {
+                            await DeleteForthHistoryAsync((long)Session["HistoryId"]);
+
+                            _db.History.Add(history);
+                            _db.SaveChanges();
+                        }
+                    } else
+                    {
+                        _db.History.Add(history);
+                        _db.SaveChanges();
                     }
-                    _db.History.Add(history);
-                    _db.SaveChanges();
 
                     Session["HistoryId"] = history.Id;
 
-                    return true;
                 }
                 catch (Exception e)
                 {
-                    return false;
+                    return Json(new { success = false }, JsonRequestBehavior.AllowGet);
                 }
             }
-            return false;
+
+
+            bool hasNext = HasNext((long)Session["HistoryId"]);
+            bool hasPrev = HasPrev((long)Session["HistoryId"]);
+
+            return Json(new { success = true, back = hasPrev, forth = hasNext }, JsonRequestBehavior.AllowGet);
 
         }
 
@@ -105,7 +132,7 @@ namespace Raf.FileMan.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetBackFunction()
+        public async Task<JsonResult> GetBackFunction()
         {
             if (Session["HistoryId"] == null)
             {
@@ -114,7 +141,7 @@ namespace Raf.FileMan.Controllers
             }
 
             var histID = (long)Session["HistoryId"];
-            var histObj = GetPreviousHistoryItem(histID);
+            var histObj = await GetPreviousHistoryItem(histID);
 
             if (histObj == null)
             {
@@ -130,7 +157,7 @@ namespace Raf.FileMan.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetForthFunction()
+        public async Task<JsonResult> GetForthFunction()
         {
             if (Session["HistoryId"] == null)
             {
@@ -138,7 +165,7 @@ namespace Raf.FileMan.Controllers
             }
 
             var histID = (long)Session["HistoryId"];
-            var histObj = GetNextHistoryItem(histID);
+            var histObj = await GetNextHistoryItem(histID);
 
             if (histObj == null)
             {
@@ -154,7 +181,7 @@ namespace Raf.FileMan.Controllers
         }
 
         [HttpGet]
-        public string GetCurrentFunction()
+        public async Task<string> GetCurrentFunction()
         {
             if (Session["HistoryId"] == null)
             {
@@ -162,7 +189,7 @@ namespace Raf.FileMan.Controllers
             }
 
             var histID = (long)Session["HistoryId"];
-            var histObj = GetCurrentHistoryItem(histID);
+            var histObj = await GetCurrentHistoryItem(histID);
 
             if (histObj == null)
             {
@@ -194,7 +221,7 @@ namespace Raf.FileMan.Controllers
             }
         } 
                
-        private NavigationHistory GetPreviousHistoryItem(long id)
+        private async Task<NavigationHistory> GetPreviousHistoryItem(long id)
         {
             var userId = User.Identity.GetUserId();
             var sessID = HttpContext.Session.SessionID;
@@ -208,13 +235,13 @@ namespace Raf.FileMan.Controllers
 
             var histId = history.Max();
 
-            var item = _db.History.Find(histId);
+            var item = await _db.History.FindAsync(histId);
 
 
             return item;
         }
 
-        private NavigationHistory GetNextHistoryItem(long id)
+        private async Task<NavigationHistory> GetNextHistoryItem(long id)
         {
             var userId = User.Identity.GetUserId();
             var sessID = HttpContext.Session.SessionID;
@@ -228,15 +255,15 @@ namespace Raf.FileMan.Controllers
 
             var histId = history.Min();
 
-            var item = _db.History.Find(histId);
+            var item = await _db.History.FindAsync(histId);
 
 
             return item;
         }
         
-        private NavigationHistory GetCurrentHistoryItem(long id)
+        private async Task<NavigationHistory> GetCurrentHistoryItem(long id)
         {
-            var item = _db.History.Find(id);
+            var item = await _db.History.FindAsync(id);
 
             return item;
         }
@@ -257,6 +284,28 @@ namespace Raf.FileMan.Controllers
 
                 return true;
             } catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        private async Task<bool> DeleteHistoryAsync()
+        {
+            try
+            {
+                var userId = User.Identity.GetUserId();
+                var sessID = HttpContext.Session.SessionID;
+
+                var history = _db.History
+                                    .Where(a => a.UserId.Equals(userId) && a.SessionId.Equals(sessID))
+                                    .ToList();
+
+                _db.History.RemoveRange(history);
+                await _db.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception e)
             {
                 return false;
             }
@@ -297,14 +346,14 @@ namespace Raf.FileMan.Controllers
             string pidStr = "?pid=";
             string idStr = "?id=";
             string srchStr = "?search=";
-
+            long rootId = _is.GetRootId();
             // goToManage()
             if (url.Equals("/Manage/Index"))
-                return "goToManage(undefined, false)";
+                return "goToManage("+rootId.ToString()+", false)";
             
             // goToFolder()
             if (url.Equals("/") || url.Equals("/Home/Index"))
-                return "goToFolder(undefined, true, false)";
+                return "goToFolder(" + rootId.ToString() + ", true, false)";
 
             // goToSearch()
             if(url.Contains(srchStr))
@@ -350,7 +399,7 @@ namespace Raf.FileMan.Controllers
                     pidStr = "&pid=";
                 }
 
-                string fun = "goToFile({0},{1}, false)";
+                string fun = "goToFile({0}, {1}, false)";
                 int loc = url.IndexOf(pidStr);
                 string itemId = "";
                 string pid = "-1";
@@ -378,7 +427,7 @@ namespace Raf.FileMan.Controllers
                     pidStr = "&pid=";
                 }
 
-                string fun = "goToEditFile({0},{1}, false)";
+                string fun = "goToEditFile({0}, {1}, false)";
                 int loc = url.IndexOf(pidStr);
                 string itemId = "";
                 string pid = "-1";
