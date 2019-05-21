@@ -56,3 +56,24 @@
         </div>
     </div>
 </div>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document)
+        .ready(async function () {
+            await $.ajax({
+                url: '/Account/GetBackground/',
+                type: 'get',
+                //data: {'id': did, 'parentId': pid},
+                success: function (response) {
+                    if (response) {
+                        $('.main-body').css("background-image", "url(" + response + ")");
+                    } else {
+                        $('.main-body').css("background-image", "url('../../Content/Images/login_img.jpg')");                        
+                    }
+                },
+                error: function () {
+                        $('.main-body').css("background-image", "url('../../Content/Images/login_img.jpg')");
+                }
+            });
+        });
+</script>

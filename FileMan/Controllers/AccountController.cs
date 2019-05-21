@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Raf.FileMan.Classes;
 using Raf.FileMan.Models;
 
 namespace Raf.FileMan.Controllers
@@ -489,5 +490,15 @@ namespace Raf.FileMan.Controllers
             }
         }
         #endregion
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<string> GetBackground()
+        {
+            BingWallPaperClient bing = new BingWallPaperClient();
+            string img = await bing.GetDailyImage();
+            return img;
+            //document.body.style.backgroundImage = "url('img_tree.png')";
+        }
     }
 }
