@@ -34,6 +34,12 @@ namespace Raf.FileMan.Controllers
 
             var model = new NavigationViewModel();
 
+            if (url.Contains("MasterFiles") || url.Contains("Share")) {
+                model.ButtonsClass = "disabled";
+                model.ShowButtons = false;
+            }
+
+
             if (Session["HistoryId"] == null)
             {
                 await DeleteHistoryAsync();
@@ -358,9 +364,10 @@ namespace Raf.FileMan.Controllers
             // goToSearch()
             if(url.Contains(srchStr))
             {
-                int length = srchStr.Length;
+                //int length = srchStr.Length;
                 int loc = url.IndexOf(srchStr);
-                string query = url.Substring(loc + length);
+                string query = url.Substring(loc+1);
+                query = query.Replace("&amp;", "&");
 
                 string fun = "goToSearch('{0}', false)";
                 return string.Format(fun, query);

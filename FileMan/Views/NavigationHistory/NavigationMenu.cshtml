@@ -46,16 +46,34 @@
         </div>
     </li>
     <li class="nav-separator"></li>
-    <li>
-        <div class="nav-btn @Model.ButtonsClass" id="navDoc" data-toggle="modal" data-target="#filModal" title="New Document" data-extra="modal">
-            <i class="fas fa-file-medical nav-btn-icon"></i>
-            <span class="nav-btn-label">doc</span>
-        </div>
-    </li>
-    <li>
-        <div class="nav-btn @Model.ButtonsClass" id="navCat" data-toggle="collapse" data-target="#catCollapse" title="New Category" data-extra="collapse">
-            <i class="fas fa-folder-plus nav-btn-icon"></i>
-            <span class="nav-btn-label">cat</span>
-        </div>
-    </li>
+    @if (Model.ShowButtons)
+    {
+        <li>
+            <div class="nav-btn @Model.ButtonsClass" id="navDoc" data-toggle="modal" data-target="#filModal" title="New Document" data-extra="modal">
+                <i class="fas fa-file-medical nav-btn-icon"></i>
+                <span class="nav-btn-label">doc</span>
+            </div>
+        </li>
+        <li>
+            <div class="nav-btn @Model.ButtonsClass" id="navCat" data-toggle="collapse" data-target="#catCollapse" title="New Category" data-extra="collapse">
+                <i class="fas fa-folder-plus nav-btn-icon"></i>
+                <span class="nav-btn-label">cat</span>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li>
+            <div class="nav-btn @Model.ButtonsClass" id="navDoc" data-target="#filModal" title="New Document" data-extra="modal">
+                <i class="fas fa-file-medical nav-btn-icon"></i>
+                <span class="nav-btn-label">doc</span>
+            </div>
+        </li>
+        <li>
+            <div class="nav-btn @Model.ButtonsClass" id="navCat" data-target="#catCollapse" title="New Category" data-extra="collapse">
+                <i class="fas fa-folder-plus nav-btn-icon"></i>
+                <span class="nav-btn-label">cat</span>
+            </div>
+        </li>
+    }
 </ul>

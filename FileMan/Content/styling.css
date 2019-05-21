@@ -373,6 +373,25 @@ a[type="button"] {
         padding: 5px;
         background-color: #efefef;
     }
+    .btn-bread.inactive {
+        padding: 15px;
+        background-color: #efefef;
+    }
+    .btn-bread.inactive:hover {
+        background-color: #efefef;
+        cursor: default;
+
+    }
+.btn-cover-lg {
+    background-color: #efefef;
+    width: 60px;
+    height: 30px;
+}
+.btn-cover-sm {
+    background-color: #efefef;
+    width: 30px;
+    height: 30px;
+}
 
 legend {
     margin-bottom: 10px;

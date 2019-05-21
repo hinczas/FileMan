@@ -183,9 +183,6 @@
 
                 if (folNa !== "Home") {
                     folId = "@Request.QueryString["pid"]";
-                    hideNavButton('#navDoc');
-                    hideNavButton('#navCat');
-                    hideNavButton('#navTools');
                 }
                 var id = folId == "" ? -1 : Number(folId);
                 var url = "/Home/GetTree?id=" + id;
@@ -208,7 +205,11 @@
                             $('body').removeClass('modal-open');
                         }, 1000);
                     }
-                )
+                );
+                if (folNa !== "Home") {
+                    $('#navDoc').addClass('disabled');
+                    $('#navCat').addClass('disabled');
+                }
 
 
             });

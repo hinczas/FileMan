@@ -182,7 +182,8 @@ namespace Raf.FileMan.Classes
             {
                 try
                 {
-                    await DeleteChildCategoriesAsync(item.Id);
+                    await DeleteChildCategoriesAsync(item.Id, userId);
+
                     return new StatusResult(true, StatusCode.Success, "Category and all content deleted", pid);
                 }
                 catch (Exception e)
@@ -268,7 +269,7 @@ namespace Raf.FileMan.Classes
             return result;
         }
 
-        private async Task DeleteChildCategoriesAsync(long id)
+        private async Task DeleteChildCategoriesAsync(long id, string userId)
         {
             var category = _db.Folder.Find(id);
             var children = category.Children.ToList();
@@ -276,14 +277,18 @@ namespace Raf.FileMan.Classes
             {
                 if (subCategory.Children.Count() > 0)
                 {
-                    await DeleteChildCategoriesAsync(subCategory.Id);
+                    await DeleteChildCategoriesAsync(subCategory.Id, userId);
                 }
                 else
                 {
+                    var favs = _db.Favourite.Where(a => a.UserId.Equals(userId) && a.ItemType == ItemType.Category && a.ItemId == subCategory.Id).ToList();
+                    _db.Favourite.RemoveRange(favs);
                     _db.Folder.Remove(subCategory);
                     await _db.SaveChangesAsync();
                 }
             }
+            var favz = _db.Favourite.Where(a => a.UserId.Equals(userId) && a.ItemType == ItemType.Category && a.ItemId == id).ToList();
+            _db.Favourite.RemoveRange(favz);
             _db.Folder.Remove(category);
             await _db.SaveChangesAsync();
         }

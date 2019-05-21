@@ -8,7 +8,7 @@
 <input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
     <div class="bread-index float-l">
-        <ol class="breadcrumbz" >
+        <ol class="breadcrumbz">
             @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
             {
                 for (int i = @Model.Breadcrumbs.Count() - 1; i >= 0; i--)
@@ -40,34 +40,42 @@
             }
         </ol>
     </div>
-    <div class="dropdown float-r">
-        <button class="btn btn-primary dropdown-toggle btn-bread" type="button" data-toggle="dropdown">
-            <i class="fas fa-cog"></i>
-        </button>
-        <ul class="dropdown-menu">
-            <li><span class="dis">Move</span></li>
-            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-
-            <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
-
-            <li role="separator" class="divider"></li>
-            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-        </ul>
-    </div>
-    <div class="float-r">
-        @if (Model.Favourite)
-        {
-            <button class="btn btn-primary btn-bread" type="button" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)">
-                <i class="fas fa-star yc"></i>
+    @if (Model.Search)
+    {
+        <div class="btn-cover-lg float-r"></div>
+    }
+    else
+    {
+        <div class="dropdown float-r">
+            <button class="btn btn-primary dropdown-toggle btn-bread" type="button" data-toggle="dropdown">
+                <i class="fas fa-cog"></i>
             </button>
-        }
-        else
-        {
-            <button class="btn btn-primary btn-bread" type="button" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 0)">
-                <i class="far fa-star yc"></i>
-            </button>
-        }
-    </div>
+            <ul class="dropdown-menu">
+                <li><span class="dis">Move</span></li>
+                <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
+
+                <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
+
+                <li role="separator" class="divider"></li>
+                <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
+            </ul>
+        </div>
+        <div class="float-r">
+            @if (Model.Favourite)
+            {
+                <button class="btn btn-primary btn-bread" type="button" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)">
+                    <i class="fas fa-star yc"></i>
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-primary btn-bread" type="button" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 0)">
+                    <i class="far fa-star yc"></i>
+                </button>
+            }
+        </div>
+
+    }
 </div>
 
 <div class="col-md-12">

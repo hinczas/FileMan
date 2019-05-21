@@ -48,10 +48,12 @@ namespace Raf.FileMan.Controllers
                     ivm = _is.GetItemViewModel(id, userId);
                 }
                 location = "folder";
+                ivm.Search = false;
             } else
             {                
                 ivm = _is.GetItemViewModel(search, (int)scope);
                 location = "search";
+                ivm.Search = true;
             }
 
             Session["SessionState"] = new SessionState(location, ivm.Current.Id,-1,search, scope, location, ivm.Current.Id); 
@@ -82,11 +84,13 @@ namespace Raf.FileMan.Controllers
                     ivm = _is.GetItemViewModel(id, userId);
                 }
                 location = "folder";
+                ivm.Search = false;
             }
             else
             {
                 ivm = _is.GetItemViewModel(search, (int)scope);
                 location = "search";
+                ivm.Search = true;
             }
 
             Session["SessionState"] = new SessionState(location, ivm.Current.Id, -1, search, scope, location, ivm.Current.Id);

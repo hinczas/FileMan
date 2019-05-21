@@ -954,6 +954,7 @@ function copyToClip(element) {
 
 function hideNavButton(navId) {
     $(navId).addClass('disabled');
+    $(navId).removeAttr('data-toggle');
 }
 
 function showNavButton(navId) {

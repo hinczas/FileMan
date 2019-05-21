@@ -206,6 +206,8 @@ namespace Raf.FileMan.Classes
             else
             {
                 item = _db.Folder.Find(id);
+                if (item == null)
+                    item = GetRoot();
             }
             
             ApplicationUser user = GetASPUser(userId);
