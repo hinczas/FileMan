@@ -85,45 +85,7 @@
         if (search)
         {
             <p>Search results for: <b>@ss.Search</b> <a href="@ss."></a></p>
-        }
-        @*else
-        {
-            <div class="float-l">
-                <div class="btn-group btn-group-sm btn-group-tools" role="group">
-                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#filModal" title="New Document"><i class="fas fa-file-medical"></i></button>
-                    <button class="btn btn-default" type="button" data-toggle="collapse" data-target="#catCollapse" title="New Category"><i class="fas fa-folder-plus"></i></button>
-                </div>
-            </div>
-            <div class="float-r">
-                <div class="btn-group btn-group-sm btn-group-options" role="group">
-                    <span><b>@Model.Current.Name</b></span>
-                    <span>
-                        @if (Model.Favourite)
-                        {
-                            <i class="fas fa-star btn-fav yc cur-point" title="Remove from favourites" onclick="delFavourite(@Model.Current.Id, @Model.FavId)"></i>
-                        }
-                        else
-                        {
-                            <i class="far fa-star btn-fav yc cur-point" title="Add to favourites" onclick="addFavourite(@Model.Current.Id, 0)"></i>
-                        }
-                    </span>
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><span class="dis">Move</span></li>
-                            <li><span class="nor" data-toggle="modal" data-target="#renameModal" title="Rename category">Rename</span></li>
-                            
-                            <li><span class="nor-del" data-toggle="modal" data-target="#deleteModal" title="Delete category">Delete</span></li>
-                            
-                            <li role="separator" class="divider"></li>
-                            <li><span class="nor" data-toggle="modal" data-target="#aboutModal" title="About this category">About</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        }*@
+        }        
     }
 </div>
 
