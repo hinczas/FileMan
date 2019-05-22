@@ -9,6 +9,13 @@
 
 <div class="container">
     <div class="main-body">
+        <div class="wall-panel-info">
+            <div class="wall-cp">
+                <img src="~/Content/Images/Icons/bing.png" id="bingIcon" />
+                <a id="cpLink" href="#" target="_blank">
+                </a>
+            </div>
+        </div>
         <div class="login-panel">
             <div class="login-box">
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -56,24 +63,7 @@
         </div>
     </div>
 </div>
+
+
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-<script>
-    $(document)
-        .ready(async function () {
-            await $.ajax({
-                url: '/Account/GetBackground/',
-                type: 'get',
-                //data: {'id': did, 'parentId': pid},
-                success: function (response) {
-                    if (response) {
-                        $('.main-body').css("background-image", "url(" + response + ")");
-                    } else {
-                        $('.main-body').css("background-image", "url('../../Content/Images/login_img.jpg')");                        
-                    }
-                },
-                error: function () {
-                        $('.main-body').css("background-image", "url('../../Content/Images/login_img.jpg')");
-                }
-            });
-        });
-</script>
+<script src="~/Scripts/fmLogin.js"></script>

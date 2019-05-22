@@ -14,6 +14,8 @@ namespace Raf.FileMan.Classes
         private string _strRegion = "en-GB";
         private int _numOfImages = 1;
         private string _imgUrl = "";
+        private string _cpRight = "";
+        private string _cpRightUrl = "";
 
 
         private async Task GetImageAsync()
@@ -40,19 +42,29 @@ namespace Raf.FileMan.Classes
                 foreach (var image in jResults["images"])
                 {
                     _imgUrl = (string)image["url"];
+                    _cpRight = (string)image["copyright"];
+                    _cpRightUrl = (string)image["copyrightlink"];
                 }
             }
         }
 
-        public async Task<string> GetDailyImage()
+        public async Task<string[]> GetDailyImage()
         {
+            string[] result = new string[3];
+
             await GetImageAsync();
             await ParseImage();
 
             if (_imgUrl.Equals(""))
                 return null;
             else
-                return "https://www.bing.com" + _imgUrl;
+            {
+                result[0] = _imgUrl;
+                result[1] = _cpRight;
+                result[2] = _cpRightUrl;
+
+                return result;
+            }
         }
     }
 }

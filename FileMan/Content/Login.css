@@ -231,7 +231,7 @@ a {
     font-family: Nunito;
     font-size: 16px;
     padding: 4px 0px;
-    height: 30px !important;
+    /*height: 30px !important;*/
     text-decoration: none !important;
 }
 
@@ -252,4 +252,37 @@ a {
 }
 .input-line {
     position: relative;
+}
+
+.wall-panel-info {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 15px;
+    background-color: rgba(255,255,255, 0.25);
+    transition: all .5s linear;
+    -webkit-transition: all .2s linear;
+    width: 25px;
+}
+    .wall-panel-info:hover {
+        width: auto;
+        height: auto;
+        background-color: rgba(255,255,255, 0.75);
+    }
+#cpLink, #cpLink:hover {
+    color: black;
+}
+
+.wall-cp, .wall-cp img, .wall-cp a {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 600;
+}
+
+#bingIcon {
+    width: 30px;
+    height: 30px;
+    margin: -5px 5px -5px 0px;
 }

@@ -9,6 +9,13 @@
 
 <div class="container">
     <div class="main-body">
+        <div class="wall-panel-info">
+            <div class="wall-cp">
+                <img src="~/Content/Images/Icons/bing.png" id="bingIcon" />
+                <a id="cpLink" href="#" target="_blank">
+                </a>
+            </div>
+        </div>
         <div class="login-panel">
             <div class="login-box">
                 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -66,3 +73,6 @@
         </div>
     </div>
 </div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/fmLogin.js"></script>

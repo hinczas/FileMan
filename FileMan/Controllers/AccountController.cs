@@ -493,12 +493,16 @@ namespace Raf.FileMan.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<string> GetBackground()
+        public async Task<JsonResult> GetBackground()
         {
             BingWallPaperClient bing = new BingWallPaperClient();
-            string img = await bing.GetDailyImage();
-            return img;
-            //document.body.style.backgroundImage = "url('img_tree.png')";
+            string[] img = await bing.GetDailyImage();
+            if (img == null || string.IsNullOrEmpty(img[0]))
+            {
+                return Json( new { success = false });
+            }
+
+            return Json(new { success = true, image = "https://www.bing.com/"+img[0], cpRight = img[1], cpLink = img[2] }, JsonRequestBehavior.AllowGet);
         }
     }
 }
