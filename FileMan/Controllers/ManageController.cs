@@ -244,6 +244,7 @@ namespace Raf.FileMan.Controllers
             UserSetting settings = _db.UserSetting.Find(Id);
             if (settings!=null)
             {
+                settings.Theme = Settings.Theme;
                 settings.ShowChangelog = Settings.ShowChangelog;
                 settings.ShowUncategorisedRoot = Settings.ShowUncategorisedRoot;
                 settings.UncategorisedVisible = Settings.UncategorisedVisible;
@@ -256,6 +257,7 @@ namespace Raf.FileMan.Controllers
                 _db.SaveChanges();
                 return Json(new { success = true, responseText = "Settings saved", reload = false }, JsonRequestBehavior.AllowGet);
             }
+            Session["theme"] = Settings.Theme;
             return Json(new { success = false, responseText = "User settings not found", reload = true }, JsonRequestBehavior.AllowGet);
         }
 

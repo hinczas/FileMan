@@ -14,6 +14,7 @@ namespace Raf.FileMan.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 Id { get; set; }
         
+        public string Theme { get; set; }
         public bool ShowChangelog { get; set; }
         public bool ShowUncategorisedRoot { get; set; }
         public bool UncategorisedVisible { get; set; }
