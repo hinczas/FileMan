@@ -441,6 +441,9 @@
     <Content Include="Content\loaders.css" />
     <Content Include="Content\Login.css" />
     <Content Include="Content\LoginStyling.css" />
+    <Content Include="Content\styling_bckp.css" />
+    <Content Include="Content\theme-default.css" />
+    <Content Include="Content\theme-dark.css" />
     <Content Include="Content\styling.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

@@ -12,6 +12,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    background:white;
     z-index:9998;
 }
 input[hidden] {
@@ -29,6 +30,7 @@ input[hidden] {
     /*border-radius: 3px;*/
     /*margin-left: 15px;*/
     margin-right: 15px;
+    background-color: #f5f5f5;
     width: -webkit-fill-available;
     width:100%;
 }
@@ -39,6 +41,7 @@ input[hidden] {
     height: 30px;
 }
     .row-menu input[disabled] {
+        background-color: white !important;
         cursor:default;
     }
     .row-menu .input-lg {
@@ -57,6 +60,7 @@ input[hidden] {
     border-top: 0;
     border-left: 0;
     border-right: 0;
+    border-bottom: 1px solid #42a5f5;
     padding: 5px 10px 5px 10px;
 }
     .in-card-search:focus {
@@ -79,6 +83,7 @@ input[hidden] {
         content: attr(data_quantity);
         margin-left:5px;
         font-weight:700;
+        color: #8e002b;
         font-size: 13px;
         /*position: absolute;
         top: 0px;
@@ -114,8 +119,10 @@ input[hidden] {
 }
 .js-link {
     cursor: pointer;
+    color: royalblue;
 }
 .js-link:hover {
+    color: navy;
     text-decoration:none;
 }
 
@@ -178,28 +185,76 @@ input[hidden] {
     font-size:16px;
 }
 
+.fa-folder {
+    color: #fdd835;
+}
+
+.fa-copy {
+    color: #6b00ac;
+}
+
+.fa-file {
+    color: #607d8b;
+}
+
+.fa-cogs {
+    color: #009700;
+}
+
+.fa-tasks {
+    color: #0075d8;
+}
+
+.fa-archive {
+    color: #c40400;
+}
+
+.fa-pen-square {
+    color: #8bc34a;
+}
+
 .fa-folder-plus {
     /* Have to override font size as folder icon too small */
     font-size: 21px; 
     margin-top: -2px;
+    color: #c8b900;
+}
+.fa-file-upload {
+    color: #607d8b;
 }
 .fa-reply {
     transform: rotate(90deg);
 }
+.fa-file-medical {
+    color: #34515e;
+}
 .fa-info-circle {
+    color: #1e88e5;
     font-size: 20px;
 }
 .fa-trash-alt {
+    color: #607d8b;
     font-size: 20px;
 }
+.fa-trash-alt:hover {
+    color: #b91511;
+}
 .fa-pen-square {
+    color: #8bc34a;
     font-size: 20px;
 }
 /*.fa-angle-double-up, .fa-angle-double-down, .fa-sync {
     color: black;
 }*/
 .fa-exclamation-triangle {
+    color: #fca020;
     margin-right: 5px;
+}
+.fa-lock {
+    color: #c40400;
+}
+.fa-lock-open {
+    color: #0075d8;
 }
 .lock-lg {
     vertical-align: middle;
@@ -211,9 +266,11 @@ input[hidden] {
 .info-icon-inside {
     right: 12px;
     top: 6px;
+    color: rgba(0,0,0,0.5);
 }
 .info-icon-inside:hover {
     cursor:help;
+    color: rgba(0,0,0,0.8);
 }
 .info-input-icon {
     padding-right: 24px !important;
@@ -246,6 +303,21 @@ a[type="button"] {
     padding-top: 6px !important;
 }
 
+.panel-info > .panel-heading {
+    color: white !important;
+    background-color: #42a5f5 !important;
+}
+.panel-warning > .panel-heading {
+    color: black;
+    background-color: #fff5c1;
+}
+.panel-warning > .panel-heading a {
+    color: black;
+}
+.panel-success > .panel-heading {
+    color: black;
+    background-color: #a6dead;
+}
 .panel-heading {
     /*font-size: 16px;*/
     padding: 0px 0px 0px 15px;
@@ -277,13 +349,14 @@ a[type="button"] {
     transition: none !important;
 }
 .breadcrumbz {
+    background-color: #efefef;
     margin-bottom: 10px;
     padding: 1px !important;
     margin-bottom: 10px !important;
     width: 100%;
     height: 30px;
-    /*white-space: nowrap;
-    overflow-x: hidden;*/
+    white-space: nowrap;
+    overflow-x: hidden;
 }
 .breadcrumbz .js-link {
     padding: 3px 5px !important;
@@ -298,19 +371,24 @@ a[type="button"] {
 }
     .btn-bread.bckg {
         padding: 5px;
+        background-color: #efefef;
     }
     .btn-bread.inactive {
         padding: 15px;
+        background-color: #efefef;
     }
     .btn-bread.inactive:hover {
+        background-color: #efefef;
         cursor: default;
 
     }
 .btn-cover-lg {
+    background-color: #efefef;
     width: 60px;
     height: 30px;
 }
 .btn-cover-sm {
+    background-color: #efefef;
     width: 30px;
     height: 30px;
 }
@@ -325,6 +403,7 @@ legend {
     clear: both;
     font-weight: 400;
     line-height: 1.42857143;
+    color: #333333;
     white-space: nowrap;
     font-size: 16px;
     margin: 0px;
@@ -341,6 +420,9 @@ legend {
 .dropdown-menu .divider {
     margin: 0px;
 }
+    .dropdown-menu > li:hover {
+        background-color: #e0e0e0;
+    }
 
 
 .modal-content {
@@ -353,6 +435,22 @@ legend {
     padding: 5px 15px;
 }
 
+.modal-header-danger {
+    background-color: #c40400;
+    color: white;
+}
+.modal-header-warning {
+    background-color: #ffdd71;
+    color: black;
+}
+.modal-header-info {
+    background-color: #337ab7;
+    color: white;
+}
+.modal-header-success {
+    background-color: #008000;
+    color: white;
+}
 /* navbar header */
 .navbar {
     min-height: 74px !important;
@@ -398,19 +496,25 @@ legend {
     min-width: 50px;
     max-width: 75px;
     padding: 5px;
+    color: #9d9d9d;
     text-align: center;
     font-family: "Nunito";
     margin-right: 5px;
 }
     .nav-btn:hover {
         cursor: pointer;
+        color: #42a5f5 !important;
         transform: scale(1.05);
+    }
+    .nav-btn:hover > .nav-btn-icon {
+        color: #42a5f5;
     }
 .nav-btn-icon {
     text-align: center;
     font-size: 22px;
     height: 30px;
     vertical-align: bottom;
+    color: #9d9d9d;
     margin-top: 0 !important;
 }
 .nav-btn-label {
@@ -421,7 +525,14 @@ legend {
 
 .nav-btn.disabled:hover {
     cursor: default;
+    color: #6b6b6b !important;
     transform: none;
+}
+.nav-btn.disabled {
+    color: #6b6b6b;
+}
+.nav-btn.disabled .nav-btn-icon {
+    color: #6b6b6b;
 }
 /* Bootstrap override END */
 
@@ -432,6 +543,20 @@ legend {
     height: 10px;
 }
 
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb, scrollbar-thumb {
+    background: #addaff;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #42a5f5;
+    }
     ::-webkit-scrollbar-thumb:horizontal {
         position: absolute;
         bottom:5px;
@@ -439,13 +564,27 @@ legend {
 /* Scroll bar end */
 
 .dis {
+    color: gray !important;
     cursor: not-allowed;
 }
-
+.del {
+    font-weight: 500;
+    cursor: not-allowed;
+    background: linear-gradient(to right, #c40400 50%, white 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
+}
+    .del:hover {
+        color: white;
+        background-position: left bottom;
+        transition: all 2s linear;
+    }
 .nor:hover {
+    background-color: #e0e0e0;
     cursor: pointer;
 }
 .nor-del:hover {
+    background-color: #c40400;
     cursor: pointer;
 }
 
@@ -485,6 +624,7 @@ legend {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: 10px;
+    border: 1px solid #ddd;
     max-height: 30px;
 }
     .btn-group-options span, .btn-group-options .dropdown {
@@ -513,6 +653,9 @@ legend {
 #mainSearchForm {
     margin-top: 10px !important;
 }
+.border-ccc {
+    border: 1px solid #ccc !important;
+}
 .input-wide {
     max-width:100%;
     width: 100%;
@@ -521,18 +664,22 @@ legend {
 .danger {
     font-weight:600;
     font-size: 14px;
+    color: #e30e4e;
 }
 
 .complex-a {
     display: inline-block;
     vertical-align: middle;
     text-decoration: none;
+    color: black !important;
 }
     .complex-a:hover {
         text-decoration: none;
+        color: blue !important;
     }
     .complex-a:hover > img, .complex-a:hover > span, .complex-a:hover > i {
         text-decoration: none;
+        color: blue !important;
     }
     .complex-a > img, .complex-a > span, .complex-a > i {
         display: inline-block;
@@ -541,8 +688,12 @@ legend {
     .complex-a > i {
         display: inline-block;
         vertical-align: middle;
+        color: #607d8b;
     }
 
+.draggable.over {
+    background-color: rgba(253, 216, 53, 0.4);
+}
 
 .fixed-ft {
     position: fixed;
@@ -560,6 +711,8 @@ legend {
     position: relative;
     width: 100%;
     height: 100%;
+    background-color: #0c5e5e;
+    color: #fafafa !important;
     font-family: "Nunito";
     font-size: 14px;
     font-weight: 400;
@@ -587,14 +740,24 @@ legend {
     margin-right: -4px;
 }
 
+.bread-btn-grp > button{
+    background-color: #efefef;
+}
     .bread-btn-grp > .btn {
         padding: 5px !important;
     }
     .bread-btn-grp > button > i{
         font-size: 12px !important;
     }
+    .bread-btn-grp:hover > button {
+        background-color: #e0e0e0;
+    }
+        .bread-btn-grp:hover > button:hover {
+            background-color: #d1d1d1;
+        }
 
 .cp-link {
+    background-color: #fff !important;
     border: none !important;
 }
 
@@ -606,6 +769,8 @@ legend {
     top: 0; /* Stay at the top */
     left: 0;
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    background-color: #efefef;
+    box-shadow: 0px 0px 2px 0px grey;
 }
 .main-sidebar {
     height: 100%;
@@ -617,6 +782,7 @@ legend {
     padding: 79px 0px 0px 0px;
 }
 #split-bar {
+    border-left: 1px solid #ccc;
     height: 100%;
     height: calc(100% - 25px); /* Full-height: remove this if you want "auto" height */
     float: right;
@@ -624,8 +790,10 @@ legend {
     cursor: col-resize;
 }
 .panel-side {
+    background: inherit !important;
     font-family: Nunito;
     font-size: 14px;
+    color: #222;    
 }
 .panel-side.panel-tree {
     margin-bottom: 0px;
@@ -633,6 +801,7 @@ legend {
     .panel-side a {
         font-size: 14px;
         font-weight:600;
+        color: #222;
     }
 .panel-side > .panel-heading {
     padding: 5px 15px;
@@ -640,6 +809,9 @@ legend {
     .panel-side > .panel-heading .fas {
         font-size: 14px;
     }
+.panel-side > .panel-heading:hover {
+    background: #aaa;
+}
     .panel-side > .panel-heading span {
         margin-top: 0px;
     }
@@ -676,12 +848,19 @@ legend {
     overflow-x: hidden;
     text-overflow: ellipsis;
 }
+.side-extra-holder {
+    color: #9d9d9d;
+}
 /* Main sidebar END */
 
 .btn-fav {
     vertical-align: middle;
     font-size: 20px;
     /*color: #fdd835;*/
+}
+
+.yc {
+    color: #e4ba00;
 }
 
     .comment {

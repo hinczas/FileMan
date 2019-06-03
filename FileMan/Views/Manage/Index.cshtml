@@ -77,24 +77,36 @@
             <hr />
             @using (Html.BeginForm("SaveSettings", "Manage", FormMethod.Post, new { style = "padding-left: 0px;", id = "userSettingsForm" }))
             {
+                <h5>Theme</h5>
+                <dl class="dl-horizontal">
+                    <dt>
+                    </dt>
+                    <dd>
+                        <select>
+                            <option value="0">Light</option>
+                            <option value="1">Dark</option>
+                        </select>
+                    </dd>
+                </dl>
+
                 <h5>Layout</h5>
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" value=@Model.SettingsId />
                 <dl class="dl-horizontal toggleDiv">
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.UncategorisedVisible)
+                        @Html.CheckBoxFor(model => model.Settings.UncategorisedVisible)
                     </dt>
                     <dd>
                         Show <b>uncategorised</b> documents
                     </dd>
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.ShowUncategorisedRoot)
+                        @Html.CheckBoxFor(model => model.Settings.ShowUncategorisedRoot)
                     </dt>
                     <dd>
                         Show <b>uncategorised</b> documents in the root directory <b>only</b>
                     </dd>
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.ShowChangelog)
+                        @Html.CheckBoxFor(model => model.Settings.ShowChangelog)
                     </dt>
                     <dd>
                         Show <b>changelog</b> on document details page
@@ -104,25 +116,25 @@
                 <h5>Navigation tree</h5>
                 <dl class="dl-horizontal">
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.TreeSearch)
+                        @Html.CheckBoxFor(model => model.Settings.TreeSearch)
                     </dt>
                     <dd>
                         Enable tree search
                     </dd>
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.TreeDnD)
+                        @Html.CheckBoxFor(model => model.Settings.TreeDnD)
                     </dt>
                     <dd>
                         Enable drag 'n' drop categories
                     </dd>
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.TreeSort)
+                        @Html.CheckBoxFor(model => model.Settings.TreeSort)
                     </dt>
                     <dd>
                         Auto-sort tree
                     </dd>
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.TreeContext)
+                        @Html.CheckBoxFor(model => model.Settings.TreeContext)
                     </dt>
                     <dd>
                         Use context menu
@@ -133,7 +145,7 @@
                 <h5>Miscellaneous</h5>
                 <dl class="dl-horizontal">
                     <dt>
-                            @Html.CheckBoxFor(model => model.Settings.ForceDelete)
+                        @Html.CheckBoxFor(model => model.Settings.ForceDelete)
                     </dt>
                     <dd>
                         Enable force delete categories <br /><span class="danger">This will allow deleting non-empty categories! <br />All sub-categories will be recursively deleted. <br />All documents will be recursively uncategorised!</span>
