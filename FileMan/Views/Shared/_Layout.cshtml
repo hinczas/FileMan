@@ -10,7 +10,14 @@
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/loaders.css" rel="stylesheet" />
     <link href="~/Content/styling.css" rel="stylesheet" />
-    <link href="~/Content/theme-dark.css" rel="stylesheet" />
+    @if (Session["theme"] == null)
+    {
+        @Styles.Render("~/Content/theme-light.css")
+    }
+    else
+    {
+        @Styles.Render("~/Content/theme-"+ @Session["theme"] + ".css")
+    }
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />

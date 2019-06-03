@@ -76,6 +76,17 @@
             <hr />
             @using (Html.BeginForm("SaveSettings", "Manage", FormMethod.Post, new { style = "padding-left: 0px;", id = "userSettingsForm" }))
             {
+                <h5>Theme</h5>
+                <dl class="dl-horizontal">
+                    <dt>
+                    </dt>
+                    <dd>
+                        <select>
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </dd>
+                </dl>
                 <h5>Layout</h5>
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" value=@Model.SettingsId />

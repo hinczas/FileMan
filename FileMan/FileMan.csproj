@@ -442,7 +442,7 @@
     <Content Include="Content\Login.css" />
     <Content Include="Content\LoginStyling.css" />
     <Content Include="Content\styling_bckp.css" />
-    <Content Include="Content\theme-default.css" />
+    <Content Include="Content\theme-light.css" />
     <Content Include="Content\theme-dark.css" />
     <Content Include="Content\styling.css" />
     <Content Include="favicon.ico" />
