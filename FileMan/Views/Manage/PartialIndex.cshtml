@@ -82,10 +82,7 @@
                     <dt>
                     </dt>
                     <dd>
-                        <select name="Settings.Theme" id="themeSelect">
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                        </select>
+                        @Html.DropDownList("Settings.Theme", new SelectList(new List<string>() { "light", "dark" }, Model.Settings.Theme), new { @id = "themeSelect"})
                     </dd>
                 </dl>
                 <h5>Layout</h5>
