@@ -692,3 +692,6 @@ legend {
         overflow-y: auto;
     }
     
+    .settings {
+        margin-bottom: 25px;
+    }
