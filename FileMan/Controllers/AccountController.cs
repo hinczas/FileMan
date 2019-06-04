@@ -100,6 +100,13 @@ namespace Raf.FileMan.Controllers
             Session["theme"] = settings.Theme;
         }
 
+        public async Task LoadTheme()
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            UserSetting settings = user.UserSetting;
+            Session["theme"] = settings.Theme;
+        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
