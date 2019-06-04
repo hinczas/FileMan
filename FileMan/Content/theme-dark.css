@@ -397,7 +397,7 @@ table > tbody > tr > td, .table > tfoot > tr > td {
     }
 
 .draggable.over {
-    background-color: rgba(253, 216, 53, 0.4);
+    background-color: rgba(11, 116, 1, 0.4) !important;
 }
 
 .dropdown-menu .divider {
