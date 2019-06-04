@@ -242,6 +242,7 @@ namespace Raf.FileMan.Controllers
         {
             AppDbContext _db = new AppDbContext();
             UserSetting settings = _db.UserSetting.Find(Id);
+            bool rel = false;
             if (settings!=null)
             {
                 settings.Theme = Settings.Theme;
@@ -255,10 +256,11 @@ namespace Raf.FileMan.Controllers
                 settings.ForceDelete = Settings.ForceDelete;
 
                 _db.SaveChanges();
-                return Json(new { success = true, responseText = "Settings saved", reload = false }, JsonRequestBehavior.AllowGet);
+                rel = !Settings.Theme.Equals((string)Session["theme"]);
+                Session["theme"] = Settings.Theme;
+                return Json(new { success = true, responseText = "Settings saved", reload = rel, id = Id }, JsonRequestBehavior.AllowGet);
             }
-            Session["theme"] = Settings.Theme;
-            return Json(new { success = false, responseText = "User settings not found", reload = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { success = false, responseText = "User settings not found", reload = true, id = Id }, JsonRequestBehavior.AllowGet);
         }
 
         //

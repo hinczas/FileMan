@@ -636,6 +636,9 @@ function saveSettings(_form) {
             if (response.success) {
                 //alert(response.responseText);
                 ftInfo(response.responseText);
+                //if (response.reload) {
+                //    location.reload();
+                //}
             } else {
                 alert(response.responseText);
                 ftError(response.responseText);
@@ -959,4 +962,6 @@ function hideNavButton(navId) {
 
 function showNavButton(navId) {
     $(navId).removeClass('disabled');
+    var ex = $(navId).data("extra");
+    $(navId).attr("data-toggle", ex);
 }

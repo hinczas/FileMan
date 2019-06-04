@@ -80,6 +80,7 @@ namespace Raf.FileMan.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    await ThemeLoad(model.Email, model.Password);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -90,6 +91,13 @@ namespace Raf.FileMan.Controllers
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
+        }
+
+        public async Task ThemeLoad(string email, string pass)
+        {
+            var user = await UserManager.FindAsync(email, pass);
+            UserSetting settings = user.UserSetting;
+            Session["theme"] = settings.Theme;
         }
 
         //
@@ -156,7 +164,8 @@ namespace Raf.FileMan.Controllers
                 {
                     ShowChangelog = false,
                     ShowUncategorisedRoot = true,
-                    UncategorisedVisible = true
+                    UncategorisedVisible = true,
+                    Theme = "light"
                 };
                 var joinDate = DateTime.Now;
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings, JoinDate = joinDate, FirstName = model.FirstName, Surname = model.Surname };

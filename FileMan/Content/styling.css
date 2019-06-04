@@ -594,10 +594,13 @@ legend {
         font-size: 12px !important;
     }
 
-.cp-link {
+/*.cp-link {
     border: none !important;
-}
+}*/
 
+#themeSelect {
+    min-width:100px;
+}
 /* Main sidebar */
 .sidebar-container {
     height: 100%; /* Full-height: remove this if you want "auto" height */
