@@ -100,9 +100,9 @@ namespace Raf.FileMan.Controllers
             Session["theme"] = settings.Theme;
         }
 
-        public async Task LoadTheme()
+        public void LoadTheme()
         {
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.Identity.GetUserId());
             UserSetting settings = user.UserSetting;
             Session["theme"] = settings.Theme;
         }

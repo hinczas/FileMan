@@ -12,11 +12,7 @@
     <link href="~/Content/styling.css" rel="stylesheet" />
     @if (Session["theme"] == null)
     {
-        @Styles.Render("~/Content/theme-light.css")
-    }
-    else
-    {
-        @Styles.Render("~/Content/theme-" + @Session["theme"] + ".css")
+        @Html.Action("LoadTheme", "Account")
     }
 
     @Styles.Render("~/Content/theme-" + @Session["theme"] + ".css")
