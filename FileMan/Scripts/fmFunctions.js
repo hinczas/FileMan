@@ -224,6 +224,13 @@ function renameCategory(_form) {
     }
 }
 
+function scrollBread() {
+    var i = document.getElementById('breadCont');
+    var width = i.scrollWidth;
+
+    $(i).scrollLeft(width);
+}
+
 function goToFolder(id, redirect = true, manual = true) {
     var link = "/Home/TreeIndex/"+id;
     $.ajax({
@@ -243,7 +250,7 @@ function goToFolder(id, redirect = true, manual = true) {
             }
             showNavButton('#navDoc');
             showNavButton('#navCat');
-
+            scrollBread();
             pushHistory("goToFolder(" + id + ", " + redirect +", false)", manual);
         }
     });

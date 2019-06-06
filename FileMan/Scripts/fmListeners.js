@@ -87,7 +87,10 @@ $(function () {
         col.addEventListener('dragleave', handleDragLeave, false);
     });
 
-    $('#breadCrumbs').scrollLeft = $('#breadCrumbs').scrollWidth;
+    var i = document.getElementById('breadCont');
+    var width = i.scrollWidth;
+
+    $(i).scrollLeft(width);
 
 });
 

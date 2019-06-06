@@ -7,7 +7,7 @@
 
 <input type="text" value="@Model.Current.Id" id="currentPid" hidden />
 <div class="col-md-12">
-    <div class="bread-index float-l">
+    <div class="bread-index float-l" id="breadCont">
         <ol class="breadcrumbz" id="breadCrumbs">
             @if (@Model.Breadcrumbs != null || @Model.Breadcrumbs.Count() > 0)
             {
