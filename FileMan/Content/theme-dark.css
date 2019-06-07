@@ -482,3 +482,7 @@ table > tbody > tr > td, .table > tfoot > tr > td {
     color: #ababab;
     background-color: #3e3e3e;
 }
+
+.label {
+    color: #1e1e1e;
+}
