@@ -20,7 +20,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44370</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -438,6 +438,14 @@
     <Content Include="Content\Images\Icons\edit.png" />
     <Content Include="Content\Images\Icons\file.png" />
     <Content Include="Content\Images\Icons\folder.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_dark_disabled_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_dark_focus_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_dark_normal_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_dark_pressed_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_light_disabled_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_light_focus_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_light_normal_web.png" />
+    <Content Include="Content\Images\Icons\Google\btn_google_signin_light_pressed_web.png" />
     <Content Include="Content\Images\Icons\info.png" />
     <Content Include="Content\Images\Icons\pencil2.png" />
     <Content Include="Content\Images\login_img.jpg" />

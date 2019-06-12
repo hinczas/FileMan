@@ -1,4 +1,5 @@
-﻿@model Raf.FileMan.Models.LoginViewModel
+﻿@using Raf.FileMan.Models
+@model Raf.FileMan.Models.LoginViewModel
 @{
     ViewBag.Title = "Log in";
     Layout = null;
@@ -55,6 +56,9 @@
                         <input type="submit" class="btn btn-login" value="Log in" />
                     </div>
                 }
+                <section id="socialLoginForm">
+                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                </section>
                     <div class="login-footer">
                         &copy; @DateTime.Now.Year - Rafal Maricnek <a href="mailto:hinczas@gmail.com"><i class="fas fa-envelope fa-xs"></i></a>                    
                     </div>

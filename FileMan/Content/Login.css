@@ -286,3 +286,22 @@ a {
     height: 30px;
     margin: -5px 5px -5px 0px;
 }
+
+
+#Google {
+    float:right;
+    width: 150px;
+    height: 36px;
+    background-image: url('Images/Icons/Google/btn_google_signin_dark_normal_web.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    outline: none;
+    cursor:pointer;
+}
+/*#Google:focus {
+    background-image: url('Images/Icons/Google/btn_google_signin_dark_focus_web.png');
+}*/
+    #Google:active, #Google:hover {
+        background-image: url('Images/Icons/Google/btn_google_signin_dark_pressed_web.png');
+    }
