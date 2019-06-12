@@ -53,7 +53,7 @@
                     }
                     else
                     {
-                        @Html.ActionLink("Create", "SetPassword")
+                        <a href="#" data-toggle="modal" data-target="#setPasswordModal">Set password</a>
                     }
                     ]
                 </dd>
@@ -63,13 +63,13 @@
                     @Html.ActionLink("Manage", "ManageLogins") ]
                 </dd>*@
 
-                <dt>Two-Factor Auth:</dt>
+                @*<dt>Two-Factor Auth:</dt>
                 <dd>
                     <p>
                         There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
                         for details on setting up this ASP.NET application to support two-factor authentication.
                     </p>
-                </dd>
+                </dd>*@
             </dl>
 
 
@@ -186,6 +186,37 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" name="action" value="cp" class="btn btn-primary" onclick="changePassword('#passwordForm')">Save</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="setPasswordModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            @using (Html.BeginForm("SetPassword", "Manage", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data", id = "setPasswordForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-header modal-header-warning">
+                    <h4>Set password</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12" style="float:none">
+                        <input type="hidden" class="form-control" name="Id" value="@Model.Id" />
+                        <dl class="row">
+                            <dt class="col-sm-3">New Password</dt>
+                            <dd class="col-sm-9"><input type="password" class="form-control" name="NewPassword" value="" /></dd>
+
+                            <dt class="col-sm-3">Confirm</dt>
+                            <dd class="col-sm-9"><input type="password" class="form-control" name="ConfirmPassword" value="" /></dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" name="action" value="cp" class="btn btn-primary" onclick="setPassword('#setPasswordForm')">Save</button>
                 </div>
             }
         </div>

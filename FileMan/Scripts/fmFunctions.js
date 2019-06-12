@@ -485,6 +485,24 @@ function changePassword(_form) {
     });
 }
 
+function setPassword(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/Manage/SetPassword/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#setPasswordModal');
+                ftInfo(response.responseText);
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
 function moveDnDDocument(id, opid, npid) {
     $.ajax({
         url: '/MasterFiles/MoveFileAsync/',
