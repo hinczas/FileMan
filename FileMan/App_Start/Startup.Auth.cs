@@ -62,8 +62,8 @@ namespace Raf.FileMan
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "831845253624-e0fdkllkoogc7av3sk5n5el4dbfohvrf.apps.googleusercontent.com",
-                ClientSecret = "kSEyqq65E-yArCqf5yJo-zFs"
+                ClientId = "831845253624***",
+                ClientSecret = "kSE***"
             });
         }
     }
