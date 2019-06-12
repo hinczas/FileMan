@@ -467,6 +467,24 @@ function moveDocument(_form) {
     });
 }
 
+function changePassword(_form) {
+    var dt = $(_form).serialize();
+    $.ajax({
+        url: '/Manage/ChangePassword/',
+        type: 'post',
+        data: dt,
+        success: function (response) {
+            if (response.success) {
+                _hideModal('#passwordModal');
+                ftInfo(response.responseText);
+            } else {
+                alert(response.responseText);
+                ftError(response.responseText);
+            }
+        }
+    });
+}
+
 function moveDnDDocument(id, opid, npid) {
     $.ajax({
         url: '/MasterFiles/MoveFileAsync/',

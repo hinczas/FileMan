@@ -56,7 +56,7 @@ namespace Raf.FileMan.Controllers
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Index(ManageMessageId? message, string id = "")
         {
             string retTo = "folder";
             long? retId = -1;
@@ -106,11 +106,12 @@ namespace Raf.FileMan.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
-            var userId = User.Identity.GetUserId();
+            var userId = string.IsNullOrEmpty(id) ? User.Identity.GetUserId() : id;
             var user = await UserManager.FindByIdAsync(userId);
 
             var model = new IndexViewModel
             {
+                Id = userId,
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
@@ -130,7 +131,7 @@ namespace Raf.FileMan.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> PartialIndex(ManageMessageId? message)
+        public async Task<ActionResult> PartialIndex(ManageMessageId? message, string id = "")
         {
             string retTo = "folder";
             long? retId = -1;
@@ -180,11 +181,12 @@ namespace Raf.FileMan.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
-            var userId = User.Identity.GetUserId();
+            var userId = string.IsNullOrEmpty(id) ? User.Identity.GetUserId() : id;
             var user = await UserManager.FindByIdAsync(userId);
 
             var model = new IndexViewModel
             {
+                Id = userId,
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
@@ -385,20 +387,23 @@ namespace Raf.FileMan.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return Json(new { success = false, responseText = "Invalid model parameters" }, JsonRequestBehavior.AllowGet);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            var result = await UserManager.ChangePasswordAsync(model.Id, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-                if (user != null)
+                if (model.Id.Equals(User.Identity.GetUserId()))
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    if (user != null)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                return Json(new { success = true, responseText = "Password updated" }, JsonRequestBehavior.AllowGet);
             }
             AddErrors(result);
-            return View(model);
+            return Json(new { success = false, responseText = "Error occured" }, JsonRequestBehavior.AllowGet);
         }
 
         //

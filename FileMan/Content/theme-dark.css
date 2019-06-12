@@ -429,10 +429,10 @@ table > tbody > tr > td, .table > tfoot > tr > td {
     color: #a23f3f;
 }
 
-.cp-link {
-    /*background-color: #fff !important;
-    border: none !important;*/
-}
+/*.cp-link {
+    background-color: #fff !important;
+    border: none !important;
+}*/
 
 /* Main sidebar */
 .sidebar-container {

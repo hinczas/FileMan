@@ -8,6 +8,7 @@ namespace Raf.FileMan.Models
 {
     public class IndexViewModel
     {
+        public string Id { get; set; }
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
@@ -54,8 +55,11 @@ namespace Raf.FileMan.Models
     public class ChangePasswordViewModel
     {
         [Required]
+        public string Id { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "Old password")]
         public string OldPassword { get; set; }
 
         [Required]
@@ -65,7 +69,7 @@ namespace Raf.FileMan.Models
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
+        [Display(Name = "Confirm ")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
