@@ -100,6 +100,8 @@ namespace Raf.FileMan.Controllers
             Session["theme"] = settings.Theme;
         }
 
+
+        [AllowAnonymous]
         public void LoadTheme()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -391,7 +393,17 @@ namespace Raf.FileMan.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                var settings = new UserSetting()
+                {
+                    ShowChangelog = false,
+                    ShowUncategorisedRoot = true,
+                    UncategorisedVisible = true,
+                    Theme = "light"
+                };
+                var joinDate = DateTime.Now;
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserSetting = settings, JoinDate = joinDate, FirstName = model.FirstName, Surname = model.Surname };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -399,7 +411,7 @@ namespace Raf.FileMan.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
+                        return RedirectToAction("Index", "Manage");
                     }
                 }
                 AddErrors(result);

@@ -31,7 +31,7 @@ namespace Raf.FileMan
                 defaults: new { controller = "MasterFiles", action = "Details" }
             );
 
-            
+
         }
     }
 }

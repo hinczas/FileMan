@@ -7,7 +7,7 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using Raf.FileMan.Models;
 using Raf.FileMan.Context;
-
+using System.Configuration;
 
 namespace Raf.FileMan
 {
@@ -59,12 +59,11 @@ namespace Raf.FileMan
             //app.UseFacebookAuthentication(
             //   appId: "",
             //   appSecret: "");
-
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "831845253624***",
-                ClientSecret = "kSE***"
-            });
+                ClientId = ConfigurationManager.AppSettings["GOGL_CLIENT_ID"],
+                ClientSecret = ConfigurationManager.AppSettings["GOGL_CLIENT_SECRET"]
+        });
         }
     }
 }

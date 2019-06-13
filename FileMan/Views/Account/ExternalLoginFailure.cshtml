@@ -1,8 +1,46 @@
 ﻿@{
     ViewBag.Title = "Login Failure";
+    Layout = null;
 }
+<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link href="~/Content/Login.css" rel="stylesheet" />
 
-<hgroup>
-    <h2>@ViewBag.Title.</h2>
-    <h3 class="text-danger">Unsuccessful login with service.</h3>
-</hgroup>
+<div class="container">
+    <div class="main-body">
+        <div class="wall-panel-info">
+            <div class="wall-cp">
+                <img src="~/Content/Images/Icons/bing.png" id="bingIcon" />
+                <a id="cpLink" href="#" target="_blank">
+                </a>
+            </div>
+        </div>
+        <div class="login-panel">
+            <div class="login-box">
+                    <div class="app-name">FileMan</div>
+                    <div class="app-icons">
+                        <div class="icons">
+                            <i class="fas fa-folder"></i>
+                            <i class="fas fa-copy"></i>
+                            <i class="fas fa-cogs"></i>
+                            <i class="fas fa-archive"></i>
+                            <i class="fas fa-tasks"></i>
+                            <i class="fas fa-file"></i>
+                        </div>
+                    </div>
+                    <div class="sub-text text-danger">Unsuccessful login with service.</div>
+                    <div class="buttons-bottom">
+                        @Html.ActionLink("< return to login", "Login")
+                        <input type="submit" class="btn btn-login" value="Register" />
+                    </div>
+                    <div class="login-footer">
+                        &copy; @DateTime.Now.Year - Rafal Maricnek <a href="mailto:hinczas@gmail.com"><i class="fas fa-envelope fa-xs"></i></a>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/fmLogin.js"></script>
