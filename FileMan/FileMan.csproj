@@ -235,6 +235,7 @@
     <Compile Include="Classes\StatusCode.cs" />
     <Compile Include="Context\AppDbContext.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\FileRevisionsController.cs" />
     <Compile Include="Controllers\FoldersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -564,6 +565,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Admin\" />
     <Folder Include="Views\Folders\" />
   </ItemGroup>
   <ItemGroup>
