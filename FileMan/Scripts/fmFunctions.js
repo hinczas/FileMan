@@ -667,6 +667,22 @@ function goToManage(id, manual = true) {
     });
 }
 
+function goToAdmin(id, manual = true) {
+    var link = "/Admin/Index/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
+            ChangeUrl("Admin", link);
+            pushHistory("goToAdmin(" + id + ", false)", manual);
+        }
+    });
+}
 
 function saveSettings(_form) {
     var dt = $(_form).serialize();

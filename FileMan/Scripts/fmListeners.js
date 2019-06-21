@@ -88,9 +88,11 @@ $(function () {
     });
 
     var i = document.getElementById('breadCont');
-    var width = i.scrollWidth;
+    if (i !== null) {
+        var width = i.scrollWidth;
+        $(i).scrollLeft(width);
+    }
 
-    $(i).scrollLeft(width);
 
 });
 

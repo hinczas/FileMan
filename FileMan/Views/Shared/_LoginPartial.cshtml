@@ -9,6 +9,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.GetUserName() <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><span class="nor" onclick="goToManage()" title="User management">Manage</span></li>
+                    <li><span class="nor" onclick="goToAdmin()" title="Admin panel">Admin</span></li>
                     <li role="separator" class="divider"></li>
                     <li><span class="nor" onclick="performLogout('#logoutForm')" title="Log off">Log off</span></li>
                 </ul>

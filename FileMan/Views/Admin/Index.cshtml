@@ -1,0 +1,106 @@
+﻿@model Raf.FileMan.Models.ViewModels.AdminIndexVM
+@{
+    ViewBag.Title = "Admin";
+}
+<div class="col-md-12">
+    <ol class="breadcrumbz" style="margin-bottom:10px;">
+        <li class="js-link disp-align-ver" onclick="@Model.ReturnFunction"><i class="fas fa-angle-left"></i>&emsp13;<span> back to <b>previous page</b></span></li>
+    </ol>
+</div>
+
+<div class="col-md-12">
+    <div class="settings">
+        <div>
+            <h4>Monthly stats</h4>
+            <p> * Categories, documents and revisions created in last 6 months</p>
+            <canvas id="monthlyChart" width="400" height="100"></canvas>
+            <hr />
+        </div>
+    </div>
+</div>
+
+<script>
+    var ctx = document.getElementById('monthlyChart').getContext('2d');
+    var months = JSON.parse('@Html.Raw(Json.Encode(@Model.MonthlyStats.Select(a => a.MonthName).ToList()))')
+    var docs = JSON.parse('@Html.Raw(Json.Encode(@Model.MonthlyStats.Select(a => a.NumDocs).ToList()))')
+    var cats = JSON.parse('@Html.Raw(Json.Encode(@Model.MonthlyStats.Select(a => a.NumCats).ToList()))')
+    var revs = JSON.parse('@Html.Raw(Json.Encode(@Model.MonthlyStats.Select(a => a.NumRevs).ToList()))')
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: months,
+        datasets: [{
+            label: '# of Categories',
+            data: cats,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(255, 99, 132, 0.5)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1
+        },
+        {
+            label: '# of Documents',
+            data: docs,
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(54, 162, 235, 0.5)'
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1
+            },
+            {
+                label: '# of Revisions',
+                data: revs,
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+            </script>

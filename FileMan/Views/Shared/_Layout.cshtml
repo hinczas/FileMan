@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/themes/default/style.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
 
@@ -80,13 +81,13 @@
             </div>
         </div>
     </div>
-    
+
     <!-- SIDEBAR -->
     <div class="sidebar-container" id="sidebar">
         <div class="main-sidebar">
             <div id="userSidebar">
                 @Html.Action("UserSidebar", "Home")
-            </div>            
+            </div>
             <!-- JSTree -->
             <div class="panel panel-side panel-tree">
                 <div class="panel-heading">
@@ -109,7 +110,7 @@
         </div>
         <div id="split-bar"></div>
     </div>
-    
+
 
     <div class="body-content" id="main">
         <!-- Loading page -->
@@ -141,7 +142,7 @@
             </div>
         </div>
         <!-- Main body -->
-        <div class="row">            
+        <div class="row">
             <div class="sub-container">
                 @RenderBody()
             </div>
@@ -172,7 +173,9 @@
     </div>
 
     @Scripts.Render("~/bundles/bootstrap")
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.8/jstree.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <script src="~/Scripts/fmFunctions.js"></script>
     <script src="~/Scripts/fmListeners.js"></script>
     <script src="~/Scripts/bootstrap-toggle.min.js"></script>
