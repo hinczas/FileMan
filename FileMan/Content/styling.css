@@ -708,3 +708,12 @@ legend {
     .settings {
         margin-bottom: 25px;
     }
+
+.chart-hold-pie {
+    margin: 5px 25px;
+    width: 250px;
+    height: 280px;
+}
+.chart-holder {
+    display: inline-flex;
+}

@@ -12,8 +12,6 @@ namespace Raf.FileMan.Controllers
 {
     public class AdminController : Controller
     {
-        private AppDbContext _db;
-
         // GET: Admin
         public ActionResult Index()
         {
@@ -59,34 +57,14 @@ namespace Raf.FileMan.Controllers
                     break;
             }
 
-            _db = new AppDbContext();
+            AdminService _as = new AdminService(new AppDbContext());
 
-            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = new List<MonthlyStatsVM>() };
+            var ms = _as.GetMonthlyStats();
+            var tu = _as.GetTopUsers();
 
-            DateTime date = DateTime.Now;
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = ms, TopUsers = tu };
 
-            for (int i =0; i< 6; i++)
-            {
-                int monthNum = firstDayOfMonth.Month;
-                string monthName = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(monthNum);
-                int numDocs = _db.MasterFile.Where(w => w.Added >= firstDayOfMonth && w.Added <= lastDayOfMonth).Count();
-                int numCats = _db.Folder.Where(w => w.Added >= firstDayOfMonth && w.Added <= lastDayOfMonth).Count();
-                int numRevs = _db.FileRevision.Where(w => w.Added >= firstDayOfMonth && w.Added <= lastDayOfMonth).Count();
-
-                model.MonthlyStats.Add(new MonthlyStatsVM()
-                {
-                    MonthName = monthName,
-                    MonthNum = monthNum,
-                    NumDocs = numDocs,
-                    NumCats = numCats,
-                    NumRevs = numRevs
-                });
-
-                firstDayOfMonth = firstDayOfMonth.AddMonths(-1);
-                lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            }
+            
 
             model.MonthlyStats = model.MonthlyStats.OrderBy(o => o.MonthNum).ToList();
             return PartialView(model);

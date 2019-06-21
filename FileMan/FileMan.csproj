@@ -225,6 +225,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Classes\AdminService.cs" />
     <Compile Include="Classes\PixabayWallPaperClient.cs" />
     <Compile Include="Classes\BingWallPaperClient.cs" />
     <Compile Include="Classes\CategoryService.cs" />
