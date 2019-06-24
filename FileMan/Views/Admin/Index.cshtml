@@ -10,18 +10,40 @@
 
 <div class="col-md-12">
     <div class="settings">
-        <div>
+        <div class="col-md-3">
+            <h4>Drive</h4>
+            <p> * Space on server drive</p>
+            <div class="chart-hold-pie">
+                <canvas id="driveSizeChart" width="50" height="50"></canvas>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h4>Totals</h4>
+            <p> * Current db status counts</p>
+            <div class="chart-hold-pie">
+                <ul>
+                    <li><span class="badge-holder"><span class="badge badge-user">Users</span></span> : @Model.NumUsers</li>
+                    <li><span class="badge-holder"><span class="badge badge-cat">Categories</span></span> : @Model.NumCats</li>
+                    <li><span class="badge-holder"><span class="badge badge-doc">Documents</span></span> : @Model.NumDocs</li>
+                    <li><span class="badge-holder"><span class="badge badge-rev">Revisions</span></span> : @Model.NumRevs</li>
+                    <li></li>
+                    <li><span class="badge-holder"><span class="badge badge-cat">Physical files</span></span> : @Model.NumPhisDocs</li>
+                    <li><span class="badge-holder"><span class="badge badge-doc">Logical files</span></span> : @Model.NumPhisCats</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
             <h4>Monthly stats</h4>
             <p> * Categories, documents and revisions created in last 6 months</p>
-            <canvas id="monthlyChart" width="400" height="100"></canvas>
-            <hr />
+            <canvas id="monthlyChart" width="200" height="100"></canvas>
         </div>
+        <hr />
     </div>
 </div>
 
 <div class="col-md-12">
-    <div class="settings">
-        <div>
+    <div class="settings">        
+        <div class="col-md-12">
             <h4>Top users</h4>
             <p> * Top 3 users with most docs, cats and revisions</p>
             <div class="chart-holder">
@@ -64,7 +86,7 @@
                     }
                 </div>
             </div>
-            
+
             <hr />
         </div>
     </div>
@@ -168,6 +190,23 @@
                     "rgb(255, 99, 132, 0.5)",
                     "rgb(54, 162, 235, 0.5)",
                     "rgb(255, 206, 86, 0.5)"]
+            }]
+
+        }
+    });
+
+    var dsCtx = document.getElementById('driveSizeChart').getContext('2d');
+
+    var sizes = [@Model.DriveUsed, @Model.DriveFree];
+    var driveChart = new Chart(dsCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Used space", "Free space"],
+            datasets: [{
+                data: sizes,
+			        backgroundColor: [
+                    "rgb(255, 99, 132, 0.5)",
+                    "rgb(0, 204, 102, 0.5)"]
             }]
 
         }

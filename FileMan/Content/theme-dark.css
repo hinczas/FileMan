@@ -486,3 +486,18 @@ table > tbody > tr > td, .table > tfoot > tr > td {
 .label {
     color: #1e1e1e;
 }
+.badge-user {
+    color: #fff;
+}
+
+.badge-cat {
+    color: #fff;
+}
+
+.badge-doc {
+    color: #fff;
+}
+
+.badge-rev {
+    color: #fff;
+}

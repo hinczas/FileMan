@@ -7,11 +7,15 @@ using Raf.FileMan.Classes;
 using Raf.FileMan.Models.ViewModels;
 using System.Globalization;
 using System.Collections.Generic;
+using System.IO;
+using System.Configuration;
 
 namespace Raf.FileMan.Controllers
 {
     public class AdminController : Controller
     {
+        private AppDbContext _db;
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -57,16 +61,40 @@ namespace Raf.FileMan.Controllers
                     break;
             }
 
-            AdminService _as = new AdminService(new AppDbContext());
+            _db = new AppDbContext();
+            AdminService _as = new AdminService(_db);
 
             var ms = _as.GetMonthlyStats();
             var tu = _as.GetTopUsers();
-
-            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = ms, TopUsers = tu };
-
-            
-
+                       
+            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = ms, TopUsers = tu };         
             model.MonthlyStats = model.MonthlyStats.OrderBy(o => o.MonthNum).ToList();
+            model.NumCats = _db.Folder.Count();
+            model.NumDocs = _db.MasterFile.Count();
+            model.NumRevs = _db.FileRevision.Count();
+            model.NumUsers = _db.Users.Count();
+
+            string dataPath = ConfigurationManager.AppSettings["ROOT_DIR"];
+            FileInfo f = new FileInfo(dataPath);
+            string driveLetter = Path.GetPathRoot(f.FullName);
+
+            int files = System.IO.Directory.GetFiles(dataPath, "*.*", SearchOption.AllDirectories).Count();
+            int dirs = System.IO.Directory.GetDirectories(dataPath, "*", SearchOption.AllDirectories).Count();
+
+            model.NumPhisCats = dirs;
+            model.NumPhisDocs = files;
+
+            DriveInfo[] drives = DriveInfo.GetDrives();
+
+            var drive = drives.Where(w => w.Name.Equals(driveLetter)).FirstOrDefault();
+
+            if(drive != null)
+            {
+                model.DriveSize = drive.TotalSize / 1024 / 1024 / 1024;
+                model.DriveFree = drive.AvailableFreeSpace / 1024 / 1024 / 1024;
+                model.DriveUsed = (drive.TotalSize - drive.AvailableFreeSpace) / 1024 / 1024 / 1024;
+            }
+
             return PartialView(model);
         }
     }
