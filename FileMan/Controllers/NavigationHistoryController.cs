@@ -34,7 +34,7 @@ namespace Raf.FileMan.Controllers
 
             var model = new NavigationViewModel();
 
-            if (url.Contains("MasterFiles") || url.Contains("Share")) {
+            if (url.Contains("MasterFiles") || url.Contains("Share") || url.Contains("Manage") || url.Contains("Admin")) {
                 model.ButtonsClass = "disabled";
                 model.ShowButtons = false;
             }
