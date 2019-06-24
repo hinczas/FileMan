@@ -319,6 +319,39 @@ function goToEditFile(id, pid = null, manual = true) {
     });
 }
 
+function goToManage(id, manual = true) {
+    var link = "/Manage/PartialIndex/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
+            pushHistory("goToManage(" + id + ", false)", manual);
+        }
+    });
+}
+
+function goToAdmin(id, manual = true) {
+    var link = "/Admin/PartialIndex/";
+    $.ajax({
+        type: "get",
+        url: link,
+        success: function (d) {
+            /* d is the HTML of the returned response */
+            $('.sub-container').html(d); //replaces previous HTML with action
+            hideNavButton('#navDoc');
+            hideNavButton('#navCat');
+            hideNavButton('#navTools');
+            //ChangeUrl("Admin", link);
+            pushHistory("goToAdmin(" + id + ", false)", manual);
+        }
+    });
+}
+
 function deleteCategory(id, redirect = false) {
     //var confirmed = confirm('Are you sure you wish to delete this Category?');
     var confirmed = true;
@@ -647,39 +680,6 @@ function addTableRow(id) {
         success: function (d) {
             /* d is the HTML of the returned response */
             $('#replaceDocTable').html(d); //replaces previous HTML with action
-        }
-    });
-}
-
-function goToManage(id, manual = true) {
-    var link = "/Manage/PartialIndex/";
-    $.ajax({
-        type: "get",
-        url: link,
-        success: function (d) {
-            /* d is the HTML of the returned response */
-            $('.sub-container').html(d); //replaces previous HTML with action
-            hideNavButton('#navDoc');
-            hideNavButton('#navCat');
-            hideNavButton('#navTools');
-            pushHistory("goToManage(" + id + ", false)", manual);
-        }
-    });
-}
-
-function goToAdmin(id, manual = true) {
-    var link = "/Admin/Index/";
-    $.ajax({
-        type: "get",
-        url: link,
-        success: function (d) {
-            /* d is the HTML of the returned response */
-            $('.sub-container').html(d); //replaces previous HTML with action
-            hideNavButton('#navDoc');
-            hideNavButton('#navCat');
-            hideNavButton('#navTools');
-            ChangeUrl("Admin", link);
-            pushHistory("goToAdmin(" + id + ", false)", manual);
         }
     });
 }

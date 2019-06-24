@@ -3,7 +3,6 @@
 @{
     ViewBag.Title = "Manage";
 }
-
 <div class="col-md-12">
     <ol class="breadcrumbz" style="margin-bottom:10px;">
         <li class="js-link disp-align-ver" onclick="@Model.ReturnFunction"><i class="fas fa-angle-left"></i>&emsp13;<span> back to <b>previous page</b></span></li>
@@ -86,7 +85,6 @@
                         @Html.DropDownList("Settings.Theme", new SelectList(new List<string>() { "light", "dark" }, Model.Settings.Theme), new { @id = "themeSelect" })
                     </dd>
                 </dl>
-
                 <h5>Layout</h5>
                 <input type="hidden" name="Id" value=@Model.SettingsId />
                 <dl class="dl-horizontal toggleDiv">

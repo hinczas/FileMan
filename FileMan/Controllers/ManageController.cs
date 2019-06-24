@@ -92,6 +92,9 @@ namespace Raf.FileMan.Controllers
                 case "search":
                     retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
                     break;
+                case "admin":
+                    retFun = string.Format("goToAdmin({0})", retId);
+                    break;
                 default:
                     retFun = string.Format("goToFolder({0})", retId);
                     break;
@@ -127,7 +130,7 @@ namespace Raf.FileMan.Controllers
                 ReturnFunction = retFun,
                 Settings = user.UserSetting
             };
-            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, retTo, retId);
+            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, "manage", retId);
             return View(model);
         }
 
@@ -167,6 +170,9 @@ namespace Raf.FileMan.Controllers
                 case "search":
                     retFun = string.Format("goToSearch({0},'{1}',{2})", ss.CatId, ss.Search, ss.Scope);
                     break;
+                case "admin":
+                    retFun = string.Format("goToAdmin({0})", retId);
+                    break;
                 default:
                     retFun = string.Format("goToFolder({0})", retId);
                     break;
@@ -203,7 +209,7 @@ namespace Raf.FileMan.Controllers
                 Settings = user.UserSetting
 
             };
-            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, retTo, retId);
+            Session["SessionState"] = new SessionState("manage", ss.CatId, ss.DocId, ss.Search, ss.Scope, "manage", retId);
             return PartialView(model);
         }
 

@@ -734,3 +734,10 @@ legend {
     background-color: rgba(255, 206, 86, 0.5);
     color: black;
 }
+.badge-holder {
+    text-align: right;
+    width: 150px;
+}
+.badge-holder > .badge {
+    float:left;
+}

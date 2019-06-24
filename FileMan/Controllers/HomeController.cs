@@ -140,6 +140,8 @@ namespace Raf.FileMan.Controllers
                     return RedirectToAction("Index", new { id = ss.CatId, search = ss.Search, scope = ss.Scope });
                 case "manage":
                     return RedirectToAction("Index", "Manage");
+                case "admin":
+                    return RedirectToAction("Index", "Admin");
                 default:
                     return RedirectToAction("Index");
             }
