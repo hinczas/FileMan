@@ -177,7 +177,7 @@
                         <i class="fas fa-file"></i>
                     </td>
                     <td style="cursor:pointer;" onclick="goToFile(@itm.Id, @Model.Current.Id)">
-                        @itm.Number
+                        <span class="pre-num">@itm.Number.Replace(itm.Number.TrimStart('0'), "")</span><b>@itm.Number.TrimStart('0')</b>
                         @if (itm.Locked)
                         {
                             <i class="fas fa-lock lock-sm" title="Locked"></i>

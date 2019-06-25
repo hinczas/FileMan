@@ -34,7 +34,7 @@
                 <div class="panel-heading panel-title">
                     <div class="container" style="align-items:center; width:100%; padding:0px;">
                         <h4 class="cus-h4">
-                            <b>@Model.Current.Number</b> - @Model.DraftVersion - @Model.Current.Name
+                            <span class="pre-num-head">@Model.Current.Number.Replace(Model.Current.Number.TrimStart('0'), "")</span><b>@Model.Current.Number.TrimStart('0')</b> - @Model.DraftVersion - @Model.Current.Name
                         </h4>
                         <div class="btn-group btn-group-sm pull-right" role="group" style="float:right;margin-top:0px;">
                             <button class="btn btn-sm btn-default" type="button" onclick="goToFile(@Model.Current.Id, @Model.RedirectId)">Cancel</button>

@@ -15,7 +15,7 @@
                 {
                 <li class="side-link" onclick="@f.Action" title="@f.Extra">
                     <span class="side-icon-holder"><i class="fas @f.Icon"></i></span>
-                    <span class="side-label-holder">@f.Label</span>
+                    <span class="side-label-holder"><span class="pre-num">@f.Label.Replace(@f.Label.TrimStart('0'), "")</span>@f.Label.TrimStart('0')</span>
                     <span class="side-extra-holder">- @f.Extra</span>
                 </li>
                 }
@@ -39,7 +39,7 @@
                 {
                 <li class="side-link" onclick="@f.Action" title="@f.Extra">
                     <span class="side-icon-holder"><i class="fas @f.Icon"></i></span>
-                    <span class="side-label-holder">@f.Label</span>
+                    <span class="side-label-holder"><span class="pre-num">@f.Label.Replace(@f.Label.TrimStart('0'), "")</span>@f.Label.TrimStart('0')</span>
                     <span class="side-extra-holder">- @f.Extra</span>
                 </li>
                 }

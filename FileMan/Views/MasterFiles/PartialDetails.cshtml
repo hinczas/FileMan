@@ -120,7 +120,7 @@
         <div class="panel-heading panel-title">
             <div class="container" style="align-items:center; width:100%; padding:0px;">
                 <h4 class="cus-h4">
-                    <b>@Model.Current.Number</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
+                    <span class="pre-num-head">@Model.Current.Number.Replace(Model.Current.Number.TrimStart('0'), "")</span><b>@Model.Current.Number.TrimStart('0')</b> - @(string.IsNullOrEmpty(Model.DraftVersion) ? Model.Current.Issue.ToString() : Model.DraftVersion) - @Model.Current.Name
                 </h4>
                 <div class="dropdown pull-right">                    
                     <span>
