@@ -18,3 +18,9 @@
             }
         });
     });
+
+
+function submitExternalForm(e) {
+    var form = $('#externalForm');
+    $(form).submit();
+}

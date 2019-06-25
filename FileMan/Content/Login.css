@@ -305,3 +305,35 @@ a {
     #Google:active, #Google:hover {
         background-image: url('Images/Icons/Google/btn_google_signin_dark_pressed_web.png');
     }
+
+.btn-google {
+    max-height: 30px;
+    background-color: #fff;
+    border: 1px solid #4285F4;
+    display: inline-flex;
+    border-radius:1px;
+    float:right;
+}
+.btn-google-logo {
+    padding: 6px 8px;
+}
+.btn-google-logo > img {
+    height: 18px;
+    width: 18px;
+}
+.btn-google-text {
+    background-color: #4285F4;
+    color: white;
+    padding: 6px 8px 6px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-google:hover {
+    border-color: #005bf2;
+    cursor: pointer;
+}
+    .btn-google:hover .btn-google-text {
+        background-color: #005bf2;
+    }

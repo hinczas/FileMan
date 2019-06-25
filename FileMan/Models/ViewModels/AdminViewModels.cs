@@ -10,6 +10,7 @@ namespace Raf.FileMan.Models.ViewModels
         public string ReturnFunction { get; set; }
         public List<MonthlyStatsVM> MonthlyStats { get; set; }
         public List<TopUserVM> TopUsers { get; set; }
+        public List<UserVM> Users { get; set; }
         public int NumDocs { get; set; }
         public int NumRevs { get; set; }
         public int NumCats { get; set; }
@@ -40,5 +41,16 @@ namespace Raf.FileMan.Models.ViewModels
         public int NumRevs { get; set; }
         public int NumCats { get; set; }
         public int NumTotal { get; set; }
+    }
+
+    public class UserVM
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public string DispplayName { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+        public DateTime JoinDate { get; set; }
+
     }
 }

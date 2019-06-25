@@ -5,6 +5,7 @@
     Layout = null;
 }
 <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 <link href="~/Content/Login.css" rel="stylesheet" />
 
@@ -59,9 +60,9 @@
                 <section id="socialLoginForm">
                     @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
                 </section>
-                    <div class="login-footer">
-                        &copy; @DateTime.Now.Year - Rafal Maricnek <a href="mailto:hinczas@gmail.com"><i class="fas fa-envelope fa-xs"></i></a>                    
-                    </div>
+                <div class="login-footer">
+                    &copy; @DateTime.Now.Year - Rafal Maricnek <a href="mailto:hinczas@gmail.com"><i class="fas fa-envelope fa-xs"></i></a>
+                </div>
             </div>
 
         </div>

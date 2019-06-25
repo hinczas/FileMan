@@ -449,6 +449,7 @@
     <Content Include="Content\Images\Icons\Google\btn_google_signin_light_focus_web.png" />
     <Content Include="Content\Images\Icons\Google\btn_google_signin_light_normal_web.png" />
     <Content Include="Content\Images\Icons\Google\btn_google_signin_light_pressed_web.png" />
+    <Content Include="Content\Images\Icons\Google\g-logo.png" />
     <Content Include="Content\Images\Icons\info.png" />
     <Content Include="Content\Images\Icons\pencil2.png" />
     <Content Include="Content\Images\login_img.jpg" />

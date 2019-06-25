@@ -1024,3 +1024,4 @@ function showNavButton(navId) {
     var ex = $(navId).data("extra");
     $(navId).attr("data-toggle", ex);
 }
+

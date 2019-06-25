@@ -6,14 +6,20 @@
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
     if (loginProviders.Count() != 0)
     {
-        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post, new { @id = "externalForm" }))
         {
             @Html.AntiForgeryToken()
             <div id="socialLoginList">
                 <p>
                     @foreach (AuthenticationDescription p in loginProviders)
                     {
-                        <button type="submit" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account"></button>
+                        <div class="btn-google" onclick="submitExternalForm(this)" name="provider" value="@p.AuthenticationType">
+                            <div class="btn-google-logo">
+                                <img src="~/Content/Images/Icons/Google/g-logo.png" />
+                            </div>
+                            <div class="btn-google-text">Sign in with Google</div>
+                            <input type="text" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" hidden/>
+                        </div>
                     }
                 </p>
             </div>

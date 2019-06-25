@@ -78,5 +78,21 @@ namespace Raf.FileMan.Classes
 
             return tu.OrderByDescending(o => o.NumTotal).Take(3).ToList();
         }
+
+        public List<UserVM> GetUsers()
+        {
+            List<UserVM> users = _db.Users.Select(s => new UserVM()
+            {
+                Id = s.Id,
+                Email = s.Email,
+                DispplayName = s.Surname+", "+s.FirstName,
+                FirstName = s.FirstName,
+                Surname = s.Surname,
+                JoinDate = s.JoinDate
+            })
+            .ToList();
+
+            return users;           
+        }
     }
 }

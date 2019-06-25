@@ -69,8 +69,9 @@ namespace Raf.FileMan.Controllers
 
             var ms = _as.GetMonthlyStats();
             var tu = _as.GetTopUsers();
-                       
-            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = ms, TopUsers = tu };         
+            var us = _as.GetUsers();
+
+            AdminIndexVM model = new AdminIndexVM() { ReturnFunction= retFun, MonthlyStats = ms, TopUsers = tu, Users = us };         
             model.MonthlyStats = model.MonthlyStats.OrderBy(o => o.MonthNum).ToList();
             model.NumCats = _db.Folder.Count();
             model.NumDocs = _db.MasterFile.Count();
@@ -154,8 +155,9 @@ namespace Raf.FileMan.Controllers
 
             var ms = _as.GetMonthlyStats();
             var tu = _as.GetTopUsers();
+            var us = _as.GetUsers();
 
-            AdminIndexVM model = new AdminIndexVM() { ReturnFunction = retFun, MonthlyStats = ms, TopUsers = tu };
+            AdminIndexVM model = new AdminIndexVM() { ReturnFunction = retFun, MonthlyStats = ms, TopUsers = tu, Users = us };
             model.MonthlyStats = model.MonthlyStats.OrderBy(o => o.MonthNum).ToList();
             model.NumCats = _db.Folder.Count();
             model.NumDocs = _db.MasterFile.Count();
